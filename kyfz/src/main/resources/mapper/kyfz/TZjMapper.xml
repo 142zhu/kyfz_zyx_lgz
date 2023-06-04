@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.TZjMapper">
+    
+    <resultMap type="TZj" id="TZjResult">
+        <result property="id"    column="id"    />
+        <result property="zjId"    column="zj_id"    />
+        <result property="xqId"    column="xq_id"    />
+        <result property="xm"    column="xm"    />
+        <result property="dh"    column="dh"    />
+        <result property="yx"    column="yx"    />
+        <result property="xy"    column="xy"    />
+        <result property="yjfx"    column="yjfx"    />
+        <result property="zc"    column="zc"    />
+        <result property="grjj"    column="grjj"    />
+        <result property="sffzr"    column="sffzr"    />
+        <result property="creatBy"    column="creat_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTZjVo">
+        select id, zj_id, xq_id, xm, dh, yx, xy, yjfx, zc, grjj, sffzr, creat_by, create_time, update_by, update_time from t_zj
+    </sql>
+
+    <select id="selectTZjList" parameterType="TZj" resultMap="TZjResult">
+        <include refid="selectTZjVo"/>
+        <where>  
+            <if test="zjId != null "> and zj_id = #{zjId}</if>
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="xm != null  and xm != ''"> and xm = #{xm}</if>
+            <if test="dh != null  and dh != ''"> and dh = #{dh}</if>
+            <if test="yx != null  and yx != ''"> and yx = #{yx}</if>
+            <if test="xy != null  and xy != ''"> and xy = #{xy}</if>
+            <if test="yjfx != null  and yjfx != ''"> and yjfx = #{yjfx}</if>
+            <if test="zc != null  and zc != ''"> and zc = #{zc}</if>
+            <if test="grjj != null  and grjj != ''"> and grjj = #{grjj}</if>
+            <if test="sffzr != null  and sffzr != ''"> and sffzr = #{sffzr}</if>
+            <if test="creatBy != null "> and creat_by = #{creatBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectTZjById" parameterType="Long" resultMap="TZjResult">
+        <include refid="selectTZjVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTZj" parameterType="TZj" useGeneratedKeys="true" keyProperty="id">
+        insert into t_zj
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="zjId != null">zj_id,</if>
+            <if test="xqId != null">xq_id,</if>
+            <if test="xm != null and xm != ''">xm,</if>
+            <if test="dh != null">dh,</if>
+            <if test="yx != null">yx,</if>
+            <if test="xy != null">xy,</if>
+            <if test="yjfx != null">yjfx,</if>
+            <if test="zc != null">zc,</if>
+            <if test="grjj != null">grjj,</if>
+            <if test="sffzr != null and sffzr != ''">sffzr,</if>
+            <if test="creatBy != null">creat_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="zjId != null">#{zjId},</if>
+            <if test="xqId != null">#{xqId},</if>
+            <if test="xm != null and xm != ''">#{xm},</if>
+            <if test="dh != null">#{dh},</if>
+            <if test="yx != null">#{yx},</if>
+            <if test="xy != null">#{xy},</if>
+            <if test="yjfx != null">#{yjfx},</if>
+            <if test="zc != null">#{zc},</if>
+            <if test="grjj != null">#{grjj},</if>
+            <if test="sffzr != null and sffzr != ''">#{sffzr},</if>
+            <if test="creatBy != null">#{creatBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTZj" parameterType="TZj">
+        update t_zj
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="zjId != null">zj_id = #{zjId},</if>
+            <if test="xqId != null">xq_id = #{xqId},</if>
+            <if test="xm != null and xm != ''">xm = #{xm},</if>
+            <if test="dh != null">dh = #{dh},</if>
+            <if test="yx != null">yx = #{yx},</if>
+            <if test="xy != null">xy = #{xy},</if>
+            <if test="yjfx != null">yjfx = #{yjfx},</if>
+            <if test="zc != null">zc = #{zc},</if>
+            <if test="grjj != null">grjj = #{grjj},</if>
+            <if test="sffzr != null and sffzr != ''">sffzr = #{sffzr},</if>
+            <if test="creatBy != null">creat_by = #{creatBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTZjById" parameterType="Long">
+        delete from t_zj where id = #{id}
+    </delete>
+
+    <delete id="deleteTZjByIds" parameterType="String">
+        delete from t_zj where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

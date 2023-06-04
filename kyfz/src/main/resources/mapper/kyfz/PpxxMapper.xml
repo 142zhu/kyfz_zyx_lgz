@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.PpxxMapper">
+    
+    <resultMap type="Ppxx" id="PpxxResult">
+        <result property="id"    column="id"    />
+        <result property="xqId"    column="xq_id"    />
+        <result property="zjId"    column="zj_id"    />
+        <result property="ppfz"    column="ppfz"    />
+        <result property="zynlpf"    column="zynlpf"    />
+        <result property="hydpf"    column="hydpf"    />
+        <result property="creatBy"    column="creat_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPpxxVo">
+        select id, xq_id, zj_id, ppfz, zynlpf, hydpf, creat_by, create_time, update_by, update_time from t_ppxx
+    </sql>
+
+    <select id="selectPpxxList" parameterType="Ppxx" resultMap="PpxxResult">
+        <include refid="selectPpxxVo"/>
+        <where>  
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="zjId != null "> and zj_id = #{zjId}</if>
+            <if test="ppfz != null  and ppfz != ''"> and ppfz = #{ppfz}</if>
+            <if test="zynlpf != null  and zynlpf != ''"> and zynlpf = #{zynlpf}</if>
+            <if test="hydpf != null  and hydpf != ''"> and hydpf = #{hydpf}</if>
+            <if test="creatBy != null "> and creat_by = #{creatBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectPpxxById" parameterType="Long" resultMap="PpxxResult">
+        <include refid="selectPpxxVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPpxx" parameterType="Ppxx" useGeneratedKeys="true" keyProperty="id">
+        insert into t_ppxx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">xq_id,</if>
+            <if test="zjId != null">zj_id,</if>
+            <if test="ppfz != null">ppfz,</if>
+            <if test="zynlpf != null">zynlpf,</if>
+            <if test="hydpf != null">hydpf,</if>
+            <if test="creatBy != null">creat_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">#{xqId},</if>
+            <if test="zjId != null">#{zjId},</if>
+            <if test="ppfz != null">#{ppfz},</if>
+            <if test="zynlpf != null">#{zynlpf},</if>
+            <if test="hydpf != null">#{hydpf},</if>
+            <if test="creatBy != null">#{creatBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePpxx" parameterType="Ppxx">
+        update t_ppxx
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xqId != null">xq_id = #{xqId},</if>
+            <if test="zjId != null">zj_id = #{zjId},</if>
+            <if test="ppfz != null">ppfz = #{ppfz},</if>
+            <if test="zynlpf != null">zynlpf = #{zynlpf},</if>
+            <if test="hydpf != null">hydpf = #{hydpf},</if>
+            <if test="creatBy != null">creat_by = #{creatBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePpxxById" parameterType="Long">
+        delete from t_ppxx where id = #{id}
+    </delete>
+
+    <delete id="deletePpxxByIds" parameterType="String">
+        delete from t_ppxx where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

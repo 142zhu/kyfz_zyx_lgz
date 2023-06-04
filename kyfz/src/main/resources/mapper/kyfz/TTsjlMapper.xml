@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.TTsjlMapper">
+    
+    <resultMap type="TTsjl" id="TTsjlResult">
+        <result property="id"    column="id"    />
+        <result property="xqId"    column="xq_id"    />
+        <result property="xqmc"    column="xqmc"    />
+        <result property="xqlx"    column="xqlx"    />
+        <result property="qymc"    column="qymc"    />
+        <result property="qyjj"    column="qyjj"    />
+        <result property="qygjc"    column="qygjc"    />
+        <result property="zczb"    column="zczb"    />
+        <result property="sfyd"    column="sfyd"    />
+        <result property="sffk"    column="sffk"    />
+        <result property="creatBy"    column="creat_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTTsjlVo">
+        select id, xq_id, xqmc, xqlx, qymc, qyjj, qygjc, zczb, sfyd, sffk, creat_by, create_time, update_by, update_time from t_tsjl
+    </sql>
+
+    <select id="selectTTsjlList" parameterType="TTsjl" resultMap="TTsjlResult">
+        <include refid="selectTTsjlVo"/>
+        <where>  
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="xqmc != null  and xqmc != ''"> and xqmc = #{xqmc}</if>
+            <if test="xqlx != null  and xqlx != ''"> and xqlx = #{xqlx}</if>
+            <if test="qymc != null  and qymc != ''"> and qymc = #{qymc}</if>
+            <if test="qyjj != null  and qyjj != ''"> and qyjj = #{qyjj}</if>
+            <if test="qygjc != null  and qygjc != ''"> and qygjc = #{qygjc}</if>
+            <if test="zczb != null  and zczb != ''"> and zczb = #{zczb}</if>
+            <if test="sfyd != null  and sfyd != ''"> and sfyd = #{sfyd}</if>
+            <if test="sffk != null  and sffk != ''"> and sffk = #{sffk}</if>
+            <if test="creatBy != null "> and creat_by = #{creatBy}</if>
+        </where>
+    </select>
+    
+    <select id="selectTTsjlById" parameterType="Long" resultMap="TTsjlResult">
+        <include refid="selectTTsjlVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTTsjl" parameterType="TTsjl" useGeneratedKeys="true" keyProperty="id">
+        insert into t_tsjl
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">xq_id,</if>
+            <if test="xqmc != null">xqmc,</if>
+            <if test="xqlx != null and xqlx != ''">xqlx,</if>
+            <if test="qymc != null and qymc != ''">qymc,</if>
+            <if test="qyjj != null and qyjj != ''">qyjj,</if>
+            <if test="qygjc != null">qygjc,</if>
+            <if test="zczb != null">zczb,</if>
+            <if test="sfyd != null and sfyd != ''">sfyd,</if>
+            <if test="sffk != null and sffk != ''">sffk,</if>
+            <if test="creatBy != null">creat_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">#{xqId},</if>
+            <if test="xqmc != null">#{xqmc},</if>
+            <if test="xqlx != null and xqlx != ''">#{xqlx},</if>
+            <if test="qymc != null and qymc != ''">#{qymc},</if>
+            <if test="qyjj != null and qyjj != ''">#{qyjj},</if>
+            <if test="qygjc != null">#{qygjc},</if>
+            <if test="zczb != null">#{zczb},</if>
+            <if test="sfyd != null and sfyd != ''">#{sfyd},</if>
+            <if test="sffk != null and sffk != ''">#{sffk},</if>
+            <if test="creatBy != null">#{creatBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTTsjl" parameterType="TTsjl">
+        update t_tsjl
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xqId != null">xq_id = #{xqId},</if>
+            <if test="xqmc != null">xqmc = #{xqmc},</if>
+            <if test="xqlx != null and xqlx != ''">xqlx = #{xqlx},</if>
+            <if test="qymc != null and qymc != ''">qymc = #{qymc},</if>
+            <if test="qyjj != null and qyjj != ''">qyjj = #{qyjj},</if>
+            <if test="qygjc != null">qygjc = #{qygjc},</if>
+            <if test="zczb != null">zczb = #{zczb},</if>
+            <if test="sfyd != null and sfyd != ''">sfyd = #{sfyd},</if>
+            <if test="sffk != null and sffk != ''">sffk = #{sffk},</if>
+            <if test="creatBy != null">creat_by = #{creatBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTTsjlById" parameterType="Long">
+        delete from t_tsjl where id = #{id}
+    </delete>
+
+    <delete id="deleteTTsjlByIds" parameterType="String">
+        delete from t_tsjl where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
