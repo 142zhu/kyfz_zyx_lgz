@@ -15,6 +15,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <!-- 按照需求新增的 -->
+        <!-- 企业需求（企业需求表）、企业名称（企业信息表）、专家姓名（专家信息表）、专家研究方向（专家信息表） -->
+        <!-- 需要做查询3个表：企业需求表、企业信息表、专家信息表 -->
+        <result property="mc"    column="mc"    />
+        <result property="qymc"    column="qymc"    />
+        <result property="xm"    column="xm"    />
+        <result property="yjfx"    column="yjfx"    />
     </resultMap>
 
     <sql id="selectPpxxVo">
@@ -90,4 +97,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <!-- 在这里添加 -->
+
+    <sql id="selectPpxxVo2">
+        select id, mc, qymc, xm,yjfx,ppfz, zynlpf, hydpf, creat_by, create_time, update_by, update_time from t_ppxx
+    </sql>
+
+    <select id="selectPpxxList" parameterType="Ppxx" resultMap="PpxxResult">
+        <include refid="selectPpxxVo2"/>
+        <where>  
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="zjId != null "> and zj_id = #{zjId}</if>
+            <if test="ppfz != null  and ppfz != ''"> and ppfz = #{ppfz}</if>
+            <if test="zynlpf != null  and zynlpf != ''"> and zynlpf = #{zynlpf}</if>
+            <if test="hydpf != null  and hydpf != ''"> and hydpf = #{hydpf}</if>
+            <if test="creatBy != null "> and creat_by = #{creatBy}</if>
+        </where>
+    </select>
 </mapper>
