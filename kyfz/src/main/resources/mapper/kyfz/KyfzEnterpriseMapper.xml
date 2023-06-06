@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzEnterpriseMapper">
+    
+    <resultMap type="KyfzEnterprise" id="KyfzEnterpriseResult">
+        <result property="enterpriseId"    column="enterprise_id"    />
+        <result property="enterpriseName"    column="enterprise_name"    />
+        <result property="enterpriseCreditCode"    column="enterprise_credit_code"    />
+        <result property="enterpriseDescribe"    column="enterprise_describe"    />
+        <result property="registeredCapital"    column="registered_capital"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectKyfzEnterpriseVo">
+        select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, create_by, create_time, update_by, update_time from kyfz_enterprise
+    </sql>
+
+    <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
+        <include refid="selectKyfzEnterpriseVo"/>
+        <where>  
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like concat('%', #{enterpriseName}, '%')</if>
+            <if test="enterpriseCreditCode != null  and enterpriseCreditCode != ''"> and enterprise_credit_code = #{enterpriseCreditCode}</if>
+            <if test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and enterprise_describe = #{enterpriseDescribe}</if>
+            <if test="registeredCapital != null  and registeredCapital != ''"> and registered_capital = #{registeredCapital}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzEnterpriseByEnterpriseId" parameterType="Long" resultMap="KyfzEnterpriseResult">
+        <include refid="selectKyfzEnterpriseVo"/>
+        where enterprise_id = #{enterpriseId}
+    </select>
+        
+    <insert id="insertKyfzEnterprise" parameterType="KyfzEnterprise" useGeneratedKeys="true" keyProperty="enterpriseId">
+        insert into kyfz_enterprise
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="enterpriseName != null">enterprise_name,</if>
+            <if test="enterpriseCreditCode != null">enterprise_credit_code,</if>
+            <if test="enterpriseDescribe != null">enterprise_describe,</if>
+            <if test="registeredCapital != null">registered_capital,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="enterpriseName != null">#{enterpriseName},</if>
+            <if test="enterpriseCreditCode != null">#{enterpriseCreditCode},</if>
+            <if test="enterpriseDescribe != null">#{enterpriseDescribe},</if>
+            <if test="registeredCapital != null">#{registeredCapital},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzEnterprise" parameterType="KyfzEnterprise">
+        update kyfz_enterprise
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="enterpriseName != null">enterprise_name = #{enterpriseName},</if>
+            <if test="enterpriseCreditCode != null">enterprise_credit_code = #{enterpriseCreditCode},</if>
+            <if test="enterpriseDescribe != null">enterprise_describe = #{enterpriseDescribe},</if>
+            <if test="registeredCapital != null">registered_capital = #{registeredCapital},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where enterprise_id = #{enterpriseId}
+    </update>
+
+    <delete id="deleteKyfzEnterpriseByEnterpriseId" parameterType="Long">
+        delete from kyfz_enterprise where enterprise_id = #{enterpriseId}
+    </delete>
+
+    <delete id="deleteKyfzEnterpriseByEnterpriseIds" parameterType="String">
+        delete from kyfz_enterprise where enterprise_id in 
+        <foreach item="enterpriseId" collection="array" open="(" separator="," close=")">
+            #{enterpriseId}
+        </foreach>
+    </delete>
+</mapper>

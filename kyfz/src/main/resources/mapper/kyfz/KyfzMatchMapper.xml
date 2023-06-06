@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzMatchMapper">
+    
+    <resultMap type="KyfzMatch" id="KyfzMatchResult">
+        <result property="matchId"    column="match_id"    />
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="matchScore"    column="match_score"    />
+        <result property="thesisId"    column="thesis_id"    />
+        <result property="workId"    column="work_id"    />
+        <result property="certificateId"    column="certificate_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectKyfzMatchVo">
+        select match_id, requirement_id, match_score, thesis_id, work_id, certificate_id, create_by, create_time, update_by, update_time from kyfz_match
+    </sql>
+
+    <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
+        <include refid="selectKyfzMatchVo"/>
+        <where>  
+            <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
+            <if test="matchScore != null  and matchScore != ''"> and match_score = #{matchScore}</if>
+            <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
+            <if test="workId != null  and workId != ''"> and work_id = #{workId}</if>
+            <if test="certificateId != null  and certificateId != ''"> and certificate_id = #{certificateId}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzMatchByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
+        <include refid="selectKyfzMatchVo"/>
+        where match_id = #{matchId}
+    </select>
+        
+    <insert id="insertKyfzMatch" parameterType="KyfzMatch" useGeneratedKeys="true" keyProperty="matchId">
+        insert into kyfz_match
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="requirementId != null">requirement_id,</if>
+            <if test="matchScore != null">match_score,</if>
+            <if test="thesisId != null">thesis_id,</if>
+            <if test="workId != null">work_id,</if>
+            <if test="certificateId != null">certificate_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="requirementId != null">#{requirementId},</if>
+            <if test="matchScore != null">#{matchScore},</if>
+            <if test="thesisId != null">#{thesisId},</if>
+            <if test="workId != null">#{workId},</if>
+            <if test="certificateId != null">#{certificateId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzMatch" parameterType="KyfzMatch">
+        update kyfz_match
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="requirementId != null">requirement_id = #{requirementId},</if>
+            <if test="matchScore != null">match_score = #{matchScore},</if>
+            <if test="thesisId != null">thesis_id = #{thesisId},</if>
+            <if test="workId != null">work_id = #{workId},</if>
+            <if test="certificateId != null">certificate_id = #{certificateId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where match_id = #{matchId}
+    </update>
+
+    <delete id="deleteKyfzMatchByMatchId" parameterType="Long">
+        delete from kyfz_match where match_id = #{matchId}
+    </delete>
+
+    <delete id="deleteKyfzMatchByMatchIds" parameterType="String">
+        delete from kyfz_match where match_id in 
+        <foreach item="matchId" collection="array" open="(" separator="," close=")">
+            #{matchId}
+        </foreach>
+    </delete>
+</mapper>

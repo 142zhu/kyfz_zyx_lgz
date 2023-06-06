@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzExpertMapper">
+    
+    <resultMap type="KyfzExpert" id="KyfzExpertResult">
+        <result property="expertId"    column="expert_id"    />
+        <result property="expertAccount"    column="expert_account"    />
+        <result property="expertName"    column="expert_name"    />
+        <result property="expertPosition"    column="expert_position"    />
+        <result property="expertAffiliation"    column="expert_affiliation"    />
+        <result property="primaryDiscipline"    column="primary_discipline"    />
+        <result property="secondaryDiscipline"    column="secondary_discipline"    />
+        <result property="tertiaryDiscipline"    column="tertiary_discipline"    />
+        <result property="researchDirection"    column="research_direction"    />
+        <result property="thesisId"    column="thesis_id"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="certificateId"    column="certificate_id"    />
+        <result property="workId"    column="work_id"    />
+        <result property="requirementId"    column="requirement_id"    />
+        <result property="expertTeams"    column="expert_teams"    />
+    </resultMap>
+
+    <sql id="selectKyfzExpertVo">
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams from kyfz_expert
+    </sql>
+
+    <select id="selectKyfzExpertList" parameterType="KyfzExpert" resultMap="KyfzExpertResult">
+        <include refid="selectKyfzExpertVo"/>
+        <where>  
+            <if test="expertAccount != null  and expertAccount != ''"> and expert_account = #{expertAccount}</if>
+            <if test="expertName != null  and expertName != ''"> and expert_name like concat('%', #{expertName}, '%')</if>
+            <if test="expertPosition != null  and expertPosition != ''"> and expert_position = #{expertPosition}</if>
+            <if test="expertAffiliation != null  and expertAffiliation != ''"> and expert_affiliation = #{expertAffiliation}</if>
+            <if test="primaryDiscipline != null  and primaryDiscipline != ''"> and primary_discipline = #{primaryDiscipline}</if>
+            <if test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and secondary_discipline = #{secondaryDiscipline}</if>
+            <if test="tertiaryDiscipline != null  and tertiaryDiscipline != ''"> and tertiary_discipline = #{tertiaryDiscipline}</if>
+            <if test="researchDirection != null  and researchDirection != ''"> and research_direction = #{researchDirection}</if>
+            <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+            <if test="certificateId != null  and certificateId != ''"> and certificate_id = #{certificateId}</if>
+            <if test="workId != null  and workId != ''"> and work_id = #{workId}</if>
+            <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
+            <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzExpertByExpertId" parameterType="Long" resultMap="KyfzExpertResult">
+        <include refid="selectKyfzExpertVo"/>
+        where expert_id = #{expertId}
+    </select>
+        
+    <insert id="insertKyfzExpert" parameterType="KyfzExpert" useGeneratedKeys="true" keyProperty="expertId">
+        insert into kyfz_expert
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="expertAccount != null">expert_account,</if>
+            <if test="expertName != null">expert_name,</if>
+            <if test="expertPosition != null">expert_position,</if>
+            <if test="expertAffiliation != null">expert_affiliation,</if>
+            <if test="primaryDiscipline != null">primary_discipline,</if>
+            <if test="secondaryDiscipline != null">secondary_discipline,</if>
+            <if test="tertiaryDiscipline != null">tertiary_discipline,</if>
+            <if test="researchDirection != null">research_direction,</if>
+            <if test="thesisId != null">thesis_id,</if>
+            <if test="projectId != null">project_id,</if>
+            <if test="certificateId != null">certificate_id,</if>
+            <if test="workId != null">work_id,</if>
+            <if test="requirementId != null">requirement_id,</if>
+            <if test="expertTeams != null">expert_teams,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="expertAccount != null">#{expertAccount},</if>
+            <if test="expertName != null">#{expertName},</if>
+            <if test="expertPosition != null">#{expertPosition},</if>
+            <if test="expertAffiliation != null">#{expertAffiliation},</if>
+            <if test="primaryDiscipline != null">#{primaryDiscipline},</if>
+            <if test="secondaryDiscipline != null">#{secondaryDiscipline},</if>
+            <if test="tertiaryDiscipline != null">#{tertiaryDiscipline},</if>
+            <if test="researchDirection != null">#{researchDirection},</if>
+            <if test="thesisId != null">#{thesisId},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="certificateId != null">#{certificateId},</if>
+            <if test="workId != null">#{workId},</if>
+            <if test="requirementId != null">#{requirementId},</if>
+            <if test="expertTeams != null">#{expertTeams},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzExpert" parameterType="KyfzExpert">
+        update kyfz_expert
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expertAccount != null">expert_account = #{expertAccount},</if>
+            <if test="expertName != null">expert_name = #{expertName},</if>
+            <if test="expertPosition != null">expert_position = #{expertPosition},</if>
+            <if test="expertAffiliation != null">expert_affiliation = #{expertAffiliation},</if>
+            <if test="primaryDiscipline != null">primary_discipline = #{primaryDiscipline},</if>
+            <if test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
+            <if test="tertiaryDiscipline != null">tertiary_discipline = #{tertiaryDiscipline},</if>
+            <if test="researchDirection != null">research_direction = #{researchDirection},</if>
+            <if test="thesisId != null">thesis_id = #{thesisId},</if>
+            <if test="projectId != null">project_id = #{projectId},</if>
+            <if test="certificateId != null">certificate_id = #{certificateId},</if>
+            <if test="workId != null">work_id = #{workId},</if>
+            <if test="requirementId != null">requirement_id = #{requirementId},</if>
+            <if test="expertTeams != null">expert_teams = #{expertTeams},</if>
+        </trim>
+        where expert_id = #{expertId}
+    </update>
+
+    <delete id="deleteKyfzExpertByExpertId" parameterType="Long">
+        delete from kyfz_expert where expert_id = #{expertId}
+    </delete>
+
+    <delete id="deleteKyfzExpertByExpertIds" parameterType="String">
+        delete from kyfz_expert where expert_id in 
+        <foreach item="expertId" collection="array" open="(" separator="," close=")">
+            #{expertId}
+        </foreach>
+    </delete>
+</mapper>
