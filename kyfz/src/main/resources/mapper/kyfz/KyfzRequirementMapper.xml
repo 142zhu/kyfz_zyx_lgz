@@ -3,50 +3,68 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.kyfz.mapper.KyfzRequirementMapper">
-    
+
     <resultMap type="KyfzRequirement" id="KyfzRequirementResult">
-        <result property="requirementId"    column="requirement_id"    />
-        <result property="projectName"    column="project_name"    />
-        <result property="contractNumber"    column="contract_number"    />
-        <result property="client"    column="client"    />
-        <result property="projectLeader"    column="project_leader"    />
-        <result property="projectLeaderJobNumber"    column="project_leader_job_number"    />
-        <result property="projectMembers"    column="project_members"    />
-        <result property="supportUnit"    column="support_unit"    />
-        <result property="supportUnitNumber"    column="support_unit_number"    />
-        <result property="projectCategory"    column="project_category"    />
-        <result property="projectType"    column="project_type"    />
-        <result property="projectClassification"    column="project_classification"    />
-        <result property="projectNature"    column="project_nature"    />
-        <result property="serviceNationalEconomy"    column="service_national_economy"    />
-        <result property="nationalEconomySubIndustry"    column="national_economy_sub_industry"    />
-        <result property="socioEconomicObjective"    column="socio_economic_objective"    />
-        <result property="startProjectTime"    column="start_project_time"    />
-        <result property="endProjectTime"    column="end_project_time"    />
-        <result property="totalBudget"    column="total_budget"    />
-        <result property="contractType"    column="contract_type"    />
-        <result property="firstDiscipline"    column="first_discipline"    />
-        <result property="secondaryDiscipline"    column="secondary_discipline"    />
-        <result property="projectLeaderUnit"    column="project_leader_unit"    />
-        <result property="enterpriseNumber"    column="enterprise_number"    />
-        <result property="campusMemberAccount"    column="campus_member_account"    />
-        <result property="requirementStatus"    column="requirement_status"    />
-        <result property="creatBy"    column="creat_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="requirementKeywords"    column="requirement_keywords"    />
-        <result property="requirementDescription"    column="requirement_description"    />
-        <result property="requirementReleaseTime"    column="requirement_release_time"    />
+        <result property="requirementId" column="requirement_id" />
+        <result property="projectName" column="project_name" />
+        <result property="contractNumber" column="contract_number" />
+        <result property="client" column="client" />
+        <result property="projectLeader" column="project_leader" />
+        <result property="projectLeaderJobNumber" column="project_leader_job_number" />
+        <result property="projectMembers" column="project_members" />
+        <result property="supportUnit" column="support_unit" />
+        <result property="supportUnitNumber" column="support_unit_number" />
+        <result property="projectCategory" column="project_category" />
+        <result property="projectType" column="project_type" />
+        <result property="projectClassification" column="project_classification" />
+        <result property="projectNature" column="project_nature" />
+        <result property="serviceNationalEconomy" column="service_national_economy" />
+        <result property="nationalEconomySubIndustry" column="national_economy_sub_industry" />
+        <result property="socioEconomicObjective" column="socio_economic_objective" />
+        <result property="startProjectTime" column="start_project_time" />
+        <result property="endProjectTime" column="end_project_time" />
+        <result property="totalBudget" column="total_budget" />
+        <result property="contractType" column="contract_type" />
+        <result property="firstDiscipline" column="first_discipline" />
+        <result property="secondaryDiscipline" column="secondary_discipline" />
+        <result property="projectLeaderUnit" column="project_leader_unit" />
+        <result property="enterpriseNumber" column="enterprise_number" />
+        <result property="campusMemberAccount" column="campus_member_account" />
+        <result property="requirementStatus" column="requirement_status" />
+        <result property="creatBy" column="creat_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="requirementKeywords" column="requirement_keywords" />
+        <result property="requirementDescription" column="requirement_description" />
+        <result property="requirementReleaseTime" column="requirement_release_time" />
+
+        <result property="enterpriseName" column="enterprise_name" />
+        <result property="enterpriseDescribe" column="enterprise_describe" />
+        <result property="registeredCapital" column="registered_capital" />
+
     </resultMap>
 
-    <sql id="selectKyfzRequirementVo">
+    <!-- <sql id="selectKyfzRequirementVo">
         select requirement_id, project_name, contract_number, client, project_leader, project_leader_job_number, project_members, support_unit, support_unit_number, project_category, project_type, project_classification, project_nature, service_national_economy, national_economy_sub_industry, socio_economic_objective, start_project_time, end_project_time, total_budget, contract_type, first_discipline, secondary_discipline, project_leader_unit, enterprise_number, campus_member_account, requirement_status, creat_by, create_time, update_by, update_time, requirement_keywords, requirement_description, requirement_release_time from kyfz_requirement
+    </sql> -->
+
+
+    <!-- 需求表左连接企业表 -->
+    <sql id="selectKyfzRequirementVo">
+        select requirement_id, project_name, contract_number, client, project_leader, project_leader_job_number, 
+        project_members, support_unit, support_unit_number, project_category, project_type, project_classification, 
+        project_nature, service_national_economy, national_economy_sub_industry, socio_economic_objective, start_project_time, 
+        end_project_time, total_budget, contract_type, first_discipline, secondary_discipline, project_leader_unit, enterprise_number, 
+        campus_member_account, requirement_status, kyfz_requirement.creat_by, kyfz_requirement.create_time, kyfz_requirement.update_by, kyfz_requirement.update_time, requirement_keywords, 
+        requirement_description, requirement_release_time, kyfz_enterprise.enterprise_name, kyfz_enterprise.enterprise_describe, kyfz_enterprise.registered_capital from kyfz_requirement
+        LEFT JOIN kyfz_enterprise
+        ON kyfz_requirement.enterprise_number = kyfz_enterprise.enterprise_id
     </sql>
 
     <select id="selectKyfzRequirementList" parameterType="KyfzRequirement" resultMap="KyfzRequirementResult">
         <include refid="selectKyfzRequirementVo"/>
-        <where>  
+        <where>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
             <if test="contractNumber != null  and contractNumber != ''"> and contract_number = #{contractNumber}</if>
             <if test="client != null  and client != ''"> and client = #{client}</if>
@@ -78,12 +96,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementReleaseTime != null "> and requirement_release_time = #{requirementReleaseTime}</if>
         </where>
     </select>
-    
+
     <select id="selectKyfzRequirementByRequirementId" parameterType="Long" resultMap="KyfzRequirementResult">
         <include refid="selectKyfzRequirementVo"/>
         where requirement_id = #{requirementId}
     </select>
-        
+
     <insert id="insertKyfzRequirement" parameterType="KyfzRequirement" useGeneratedKeys="true" keyProperty="requirementId">
         insert into kyfz_requirement
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -119,7 +137,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementKeywords != null">requirement_keywords,</if>
             <if test="requirementDescription != null">requirement_description,</if>
             <if test="requirementReleaseTime != null">requirement_release_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
             <if test="contractNumber != null">#{contractNumber},</if>
@@ -153,7 +171,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="requirementKeywords != null">#{requirementKeywords},</if>
             <if test="requirementDescription != null">#{requirementDescription},</if>
             <if test="requirementReleaseTime != null">#{requirementReleaseTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateKyfzRequirement" parameterType="KyfzRequirement">

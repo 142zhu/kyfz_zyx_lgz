@@ -1,51 +1,102 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="姓名" prop="expertName">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
+      <!-- <el-form-item label="姓名" prop="expertName">
         <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="专家账号" prop="expertAccount">
         <el-input v-model="queryParams.expertAccount" placeholder="请输入专家账号" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="职称" prop="expertPosition">
-        <el-input v-model="queryParams.expertPosition" placeholder="请输入专家职称" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.expertPosition"
+          placeholder="请输入专家职称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="学院" prop="expertAffiliation">
-        <el-input v-model="queryParams.expertAffiliation" placeholder="请输入专家所属单位" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.expertAffiliation"
+          placeholder="请输入专家所属单位"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-      <el-form-item label="研究方向" prop="researchDirection">
+      <!-- <el-form-item label="研究方向" prop="researchDirection">
         <el-input v-model="queryParams.researchDirection" placeholder="请输入研究方向" clearable
           @keyup.enter.native="handleQuery" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
+          >搜索</el-button
+        >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['kyfz:expert:add']">新增</el-button>
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['kyfz:expert:add']"
+          >新增</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['kyfz:expert:edit']">修改</el-button>
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+          v-hasPermi="['kyfz:expert:edit']"
+          >修改</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:expert:remove']">删除</el-button>
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['kyfz:expert:remove']"
+          >删除</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:expert:export']">导出</el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['kyfz:expert:export']"
+          >导出</el-button
+        >
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="expertList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="expertList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="专家姓名" align="center" prop="expertName" />
       <el-table-column label="专家账号" align="center" prop="expertAccount" />
@@ -54,19 +105,35 @@
       <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
       <el-table-column label="研究方向" align="center" prop="researchDirection" />
 
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:expert:edit']">修改</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:expert:remove']">删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:expert:edit']"
+            >修改</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['kyfz:expert:remove']"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 添加或修改专家管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -123,7 +190,13 @@
 </template>
 
 <script>
-import { listExpert, getExpert, delExpert, addExpert, updateExpert } from "@/api/kyfz/expert";
+import {
+  addExpert,
+  delExpert,
+  getExpert,
+  listExpert,
+  updateExpert,
+} from "@/api/kyfz/expert";
 
 export default {
   name: "Expert",
@@ -164,13 +237,12 @@ export default {
         certificateId: null,
         workId: null,
         requirementId: null,
-        expertTeams: null
+        expertTeams: null,
       },
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
+      rules: {},
     };
   },
   created() {
@@ -180,7 +252,7 @@ export default {
     /** 查询专家管理列表 */
     getList() {
       this.loading = true;
-      listExpert(this.queryParams).then(response => {
+      listExpert(this.queryParams).then((response) => {
         this.expertList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -208,7 +280,7 @@ export default {
         certificateId: null,
         workId: null,
         requirementId: null,
-        expertTeams: null
+        expertTeams: null,
       };
       this.resetForm("form");
     },
@@ -224,9 +296,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.expertId)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.expertId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -237,8 +309,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const expertId = row.expertId || this.ids
-      getExpert(expertId).then(response => {
+      const expertId = row.expertId || this.ids;
+      getExpert(expertId).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改专家管理";
@@ -246,16 +318,16 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.expertId != null) {
-            updateExpert(this.form).then(response => {
+            updateExpert(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addExpert(this.form).then(response => {
+            addExpert(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -267,19 +339,27 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const expertIds = row.expertId || this.ids;
-      this.$modal.confirm('是否确认删除专家管理编号为"' + expertIds + '"的数据项？').then(function () {
-        return delExpert(expertIds);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => { });
+      this.$modal
+        .confirm('是否确认删除专家管理编号为"' + expertIds + '"的数据项？')
+        .then(function () {
+          return delExpert(expertIds);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('kyfz/expert/export', {
-        ...this.queryParams
-      }, `expert_${new Date().getTime()}.xlsx`)
-    }
-  }
+      this.download(
+        "kyfz/expert/export",
+        {
+          ...this.queryParams,
+        },
+        `expert_${new Date().getTime()}.xlsx`
+      );
+    },
+  },
 };
 </script>
