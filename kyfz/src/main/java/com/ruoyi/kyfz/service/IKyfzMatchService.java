@@ -7,7 +7,7 @@ import com.ruoyi.kyfz.domain.KyfzMatch;
  * 匹配列表Service接口
  * 
  * @author ruoyi
- * @date 2023-06-06
+ * @date 2023-06-07
  */
 public interface IKyfzMatchService 
 {

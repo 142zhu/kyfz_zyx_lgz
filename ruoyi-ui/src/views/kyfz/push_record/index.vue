@@ -1,29 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="企业名" prop="enterpriseName">
-        <el-input
-          v-model="queryParams.enterpriseName"
-          placeholder="请输入企业名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="匹配编号" prop="matchId">
+        <el-input v-model="queryParams.matchId" placeholder="请输入匹配编号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="企业信用代码" prop="enterpriseCreditCode">
-        <el-input
-          v-model="queryParams.enterpriseCreditCode"
-          placeholder="请输入企业信用代码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+
+      <el-form-item label="需求" prop="projectName">
+        <el-input v-model="queryParams.matchId" placeholder="请输入需求" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="企业注册资本" prop="registeredCapital">
-        <el-input
-          v-model="queryParams.registeredCapital"
-          placeholder="请输入企业注册资本"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+
+      <el-form-item label="专家" prop="expertName">
+        <el-input v-model="queryParams.matchId" placeholder="请输入专家名称" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+
+      <el-form-item label="反馈状态" prop="feebback">
+        <el-input v-model="queryParams.feebback" placeholder="请输入反馈状态" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <el-form-item label="推送时间" prop="pushTime">
+        <el-date-picker clearable v-model="queryParams.pushTime" type="date" value-format="yyyy-MM-dd"
+          placeholder="请选择推送时间">
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -33,99 +29,52 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['kyfz:push_record:add']"
-        >新增</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['kyfz:record:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['kyfz:push_record:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['kyfz:push_record:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['kyfz:push_record:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['kyfz:record:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="push_recordList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="企业信息表的唯一表示符号" align="center" prop="enterpriseId" />
-      <el-table-column label="企业名" align="center" prop="enterpriseName" />
-      <el-table-column label="企业信用代码" align="center" prop="enterpriseCreditCode" />
-      <el-table-column label="企业描述" align="center" prop="enterpriseDescribe" />
-      <el-table-column label="企业注册资本" align="center" prop="registeredCapital" />
+      <el-table-column label="匹配编号" align="center" prop="matchId" />
+      <!-- 按照需求连接的两行 -->
+      <el-table-column label="需求" align="center" prop="projectName" />
+      <el-table-column label="专家" align="center" prop="expertName" />
+      <el-table-column label="反馈状态" align="center" prop="feebback" />
+      <el-table-column label="推送时间" align="center" prop="pushTime" width="180">
+        <template slot-scope="scope">
+          <span>{{ parseTime(scope.row.pushTime, '{y}-{m}-{d}') }}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:push_record:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:push_record:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:record:edit']">详细</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改推送记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="企业名" prop="enterpriseName">
-          <el-input v-model="form.enterpriseName" placeholder="请输入企业名" />
+        <el-form-item label="匹配id" prop="matchId">
+          <el-input v-model="form.matchId" placeholder="请输入匹配id" />
         </el-form-item>
-        <el-form-item label="企业信用代码" prop="enterpriseCreditCode">
-          <el-input v-model="form.enterpriseCreditCode" placeholder="请输入企业信用代码" />
+        <el-form-item label="推送时间" prop="pushTime">
+          <el-date-picker clearable v-model="form.pushTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择推送时间">
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="企业描述" prop="enterpriseDescribe">
-          <el-input v-model="form.enterpriseDescribe" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="企业注册资本" prop="registeredCapital">
-          <el-input v-model="form.registeredCapital" placeholder="请输入企业注册资本" />
+        <el-form-item label="反馈状态" prop="feebback">
+          <el-input v-model="form.feebback" placeholder="请输入反馈状态" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -137,10 +86,10 @@
 </template>
 
 <script>
-import { listPush_record, getPush_record, delPush_record, addPush_record, updatePush_record } from "@/api/kyfz/push_record";
+import { listRecord, getRecord, delRecord, addRecord, updateRecord } from "@/api/kyfz/push_record";
 
 export default {
-  name: "Push_record",
+  name: "Record",
   data() {
     return {
       // 遮罩层
@@ -156,7 +105,7 @@ export default {
       // 总条数
       total: 0,
       // 推送记录表格数据
-      push_recordList: [],
+      recordList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -165,10 +114,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        enterpriseName: null,
-        enterpriseCreditCode: null,
-        enterpriseDescribe: null,
-        registeredCapital: null,
+        matchId: null,
+        pushTime: null,
+        feebback: null,
       },
       // 表单参数
       form: {},
@@ -184,8 +132,8 @@ export default {
     /** 查询推送记录列表 */
     getList() {
       this.loading = true;
-      listPush_record(this.queryParams).then(response => {
-        this.push_recordList = response.rows;
+      listRecord(this.queryParams).then(response => {
+        this.recordList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -198,11 +146,10 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        enterpriseId: null,
-        enterpriseName: null,
-        enterpriseCreditCode: null,
-        enterpriseDescribe: null,
-        registeredCapital: null,
+        pushId: null,
+        matchId: null,
+        pushTime: null,
+        feebback: null,
         createBy: null,
         createTime: null,
         updateBy: null,
@@ -222,8 +169,8 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.enterpriseId)
-      this.single = selection.length!==1
+      this.ids = selection.map(item => item.pushId)
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -235,8 +182,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const enterpriseId = row.enterpriseId || this.ids
-      getPush_record(enterpriseId).then(response => {
+      const pushId = row.pushId || this.ids
+      getRecord(pushId).then(response => {
         this.form = response.data;
         this.open = true;
         this.title = "修改推送记录";
@@ -246,14 +193,14 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.enterpriseId != null) {
-            updatePush_record(this.form).then(response => {
+          if (this.form.pushId != null) {
+            updateRecord(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addPush_record(this.form).then(response => {
+            addRecord(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -264,19 +211,19 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const enterpriseIds = row.enterpriseId || this.ids;
-      this.$modal.confirm('是否确认删除推送记录编号为"' + enterpriseIds + '"的数据项？').then(function() {
-        return delPush_record(enterpriseIds);
+      const pushIds = row.pushId || this.ids;
+      this.$modal.confirm('是否确认删除推送记录编号为"' + pushIds + '"的数据项？').then(function () {
+        return delRecord(pushIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('kyfz/push_record/export', {
+      this.download('kyfz/record/export', {
         ...this.queryParams
-      }, `push_record_${new Date().getTime()}.xlsx`)
+      }, `record_${new Date().getTime()}.xlsx`)
     }
   }
 };

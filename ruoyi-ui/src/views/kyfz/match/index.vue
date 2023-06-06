@@ -1,46 +1,30 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="需求表的id" prop="requirementId">
-        <el-input
-          v-model="queryParams.requirementId"
-          placeholder="请输入需求表的id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="匹配编号" prop="matchId">
+        <el-input v-model="queryParams.matchId" placeholder="请输入匹配编号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
+      <el-form-item label="需求" prop="projectName">
+        <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+
+      <el-form-item label="企业" prop="client">
+        <el-input v-model="queryParams.client" placeholder="请输入企业名称" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+
+      <el-form-item label="推荐专家" prop="expertName">
+        <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+
+      <el-form-item label="研究方向" prop="researchDirection">
+        <el-input v-model="queryParams.researchDirection" placeholder="请输入专家研究方向" clearable
+          @keyup.enter.native="handleQuery" />
+      </el-form-item>
+
       <el-form-item label="匹配分值" prop="matchScore">
-        <el-input
-          v-model="queryParams.matchScore"
-          placeholder="请输入匹配分值"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.matchScore" placeholder="请输入匹配分值" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="相关论文" prop="thesisId">
-        <el-input
-          v-model="queryParams.thesisId"
-          placeholder="请输入相关论文"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="相关著作" prop="workId">
-        <el-input
-          v-model="queryParams.workId"
-          placeholder="请输入相关著作"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="相关证书" prop="certificateId">
-        <el-input
-          v-model="queryParams.certificateId"
-          placeholder="请输入相关证书"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -48,47 +32,14 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
+
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['kyfz:match:add']"
-        >新增</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handlePush"
+          v-hasPermi="['kyfz:match:push']">批量推送</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['kyfz:match:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['kyfz:match:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['kyfz:match:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['kyfz:match:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -96,42 +47,36 @@
     <el-table v-loading="loading" :data="matchList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="匹配编号" align="center" prop="matchId" />
-      <el-table-column label="需求表的id" align="center" prop="requirementId" />
+      <!-- 通过需求id获取需求表中的projectName -->
+      <el-table-column label="需求" align="center" prop="projectName" />
+      <!-- 通过需求id获取需求表中的委托单位 -->
+      <el-table-column label="企业" align="center" prop="client" />
+      <!-- 通过专家账号获取专家表中的专家姓名和研究方向 -->
+      <el-table-column label="推荐专家" align="center" prop="expertName" />
+      <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+
       <el-table-column label="匹配分值" align="center" prop="matchScore" />
-      <el-table-column label="相关论文" align="center" prop="thesisId" />
-      <el-table-column label="相关著作" align="center" prop="workId" />
-      <el-table-column label="相关证书" align="center" prop="certificateId" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:match:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:match:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:match:edit']">详细</el-button>
+
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:match:push']">推送</el-button>
+
         </template>
       </el-table-column>
     </el-table>
-    
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改匹配列表对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="专家账号" prop="expertAccount">
+          <el-input v-model="form.expertAccount" placeholder="请输入专家账号" />
+        </el-form-item>
         <el-form-item label="需求表的id" prop="requirementId">
           <el-input v-model="form.requirementId" placeholder="请输入需求表的id" />
         </el-form-item>
@@ -146,6 +91,9 @@
         </el-form-item>
         <el-form-item label="相关证书" prop="certificateId">
           <el-input v-model="form.certificateId" placeholder="请输入相关证书" />
+        </el-form-item>
+        <el-form-item label="相关项目" prop="projectId">
+          <el-input v-model="form.projectId" placeholder="请输入相关项目" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -185,11 +133,18 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        expertAccount: null,
         requirementId: null,
         matchScore: null,
         thesisId: null,
         workId: null,
         certificateId: null,
+        projectId: null,
+        projectName: null,//存需求
+        client: null,//存有需求的企业
+        expertName: null,//存专家名
+        researchDirection: null,//存专家研究方向
+
       },
       // 表单参数
       form: {},
@@ -220,11 +175,13 @@ export default {
     reset() {
       this.form = {
         matchId: null,
+        expertAccount: null,
         requirementId: null,
         matchScore: null,
         thesisId: null,
         workId: null,
         certificateId: null,
+        projectId: null,
         createBy: null,
         createTime: null,
         updateBy: null,
@@ -245,7 +202,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.matchId)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
@@ -287,12 +244,12 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const matchIds = row.matchId || this.ids;
-      this.$modal.confirm('是否确认删除匹配列表编号为"' + matchIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除匹配列表编号为"' + matchIds + '"的数据项？').then(function () {
         return delMatch(matchIds);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
-      }).catch(() => {});
+      }).catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {

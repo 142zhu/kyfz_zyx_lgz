@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzPushRecordMapper">
+    
+    <resultMap type="KyfzPushRecord" id="KyfzPushRecordResult">
+        <result property="pushId"    column="push_id"    />
+        <result property="matchId"    column="match_id"    />
+        <result property="pushTime"    column="push_time"    />
+        <result property="feebback"    column="feebback"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectKyfzPushRecordVo">
+        select push_id, match_id, push_time, feebback, create_by, create_time, update_by, update_time from kyfz_push_record
+    </sql>
+
+    <select id="selectKyfzPushRecordList" parameterType="KyfzPushRecord" resultMap="KyfzPushRecordResult">
+        <include refid="selectKyfzPushRecordVo"/>
+        <where>  
+            <if test="matchId != null "> and match_id = #{matchId}</if>
+            <if test="pushTime != null "> and push_time = #{pushTime}</if>
+            <if test="feebback != null  and feebback != ''"> and feebback = #{feebback}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzPushRecordByPushId" parameterType="Long" resultMap="KyfzPushRecordResult">
+        <include refid="selectKyfzPushRecordVo"/>
+        where push_id = #{pushId}
+    </select>
+        
+    <insert id="insertKyfzPushRecord" parameterType="KyfzPushRecord" useGeneratedKeys="true" keyProperty="pushId">
+        insert into kyfz_push_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="matchId != null">match_id,</if>
+            <if test="pushTime != null">push_time,</if>
+            <if test="feebback != null">feebback,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="matchId != null">#{matchId},</if>
+            <if test="pushTime != null">#{pushTime},</if>
+            <if test="feebback != null">#{feebback},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzPushRecord" parameterType="KyfzPushRecord">
+        update kyfz_push_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="matchId != null">match_id = #{matchId},</if>
+            <if test="pushTime != null">push_time = #{pushTime},</if>
+            <if test="feebback != null">feebback = #{feebback},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where push_id = #{pushId}
+    </update>
+
+    <delete id="deleteKyfzPushRecordByPushId" parameterType="Long">
+        delete from kyfz_push_record where push_id = #{pushId}
+    </delete>
+
+    <delete id="deleteKyfzPushRecordByPushIds" parameterType="String">
+        delete from kyfz_push_record where push_id in 
+        <foreach item="pushId" collection="array" open="(" separator="," close=")">
+            #{pushId}
+        </foreach>
+    </delete>
+</mapper>
