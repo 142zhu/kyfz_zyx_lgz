@@ -1,6 +1,8 @@
 package com.ruoyi.kyfz.mapper;
 
 import java.util.List;
+
+import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
 
 /**
@@ -9,8 +11,7 @@ import com.ruoyi.kyfz.domain.KyfzRequirement;
  * @author ruoyi
  * @date 2023-06-06
  */
-public interface KyfzRequirementMapper 
-{
+public interface KyfzRequirementMapper {
     /**
      * 查询需求管理
      * 
@@ -58,4 +59,12 @@ public interface KyfzRequirementMapper
      * @return 结果
      */
     public int deleteKyfzRequirementByRequirementIds(Long[] requirementIds);
+
+    /**
+     * 查询企业列表
+     * 
+     * @param kyfzEnterprise 企业列表
+     * @return 企业列表
+     */
+    public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise);
 }

@@ -1,12 +1,7 @@
 <template>
   <div class="login">
-    <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
-    >
-      <h3 class="title">科研辅助系统</h3>
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
+      <h3 class="title">中山大学有组织科研辅助系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="loginForm.username"
@@ -14,11 +9,7 @@
           auto-complete="off"
           placeholder="账号"
         >
-          <svg-icon
-            slot="prefix"
-            icon-class="user"
-            class="el-input__icon input-icon"
-          />
+          <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
         </el-input>
       </el-form-item>
       <el-form-item prop="password">
@@ -54,9 +45,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img" />
         </div>
       </el-form-item>
-      <el-checkbox
-        v-model="loginForm.rememberMe"
-        style="margin: 0px 0px 25px 0px"
+      <el-checkbox v-model="loginForm.rememberMe" style="margin: 0px 0px 25px 0px"
         >记住密码</el-checkbox
       >
       <el-form-item style="width: 100%">
@@ -71,9 +60,7 @@
           <span v-else>登 录 中...</span>
         </el-button>
         <div style="float: right" v-if="register">
-          <router-link class="link-type" :to="'/register'"
-            >立即注册</router-link
-          >
+          <router-link class="link-type" :to="'/register'">立即注册</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -86,8 +73,8 @@
 
 <script>
 import { getCodeImg } from "@/api/login";
+import { decrypt, encrypt } from "@/utils/jsencrypt";
 import Cookies from "js-cookie";
-import { encrypt, decrypt } from "@/utils/jsencrypt";
 
 export default {
   name: "Login",
@@ -102,12 +89,8 @@ export default {
         uuid: "",
       },
       loginRules: {
-        username: [
-          { required: true, trigger: "blur", message: "请输入您的账号" },
-        ],
-        password: [
-          { required: true, trigger: "blur", message: "请输入您的密码" },
-        ],
+        username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
+        password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
         code: [{ required: true, trigger: "change", message: "请输入验证码" }],
       },
       loading: false,
@@ -147,8 +130,7 @@ export default {
       const rememberMe = Cookies.get("rememberMe");
       this.loginForm = {
         username: username === undefined ? this.loginForm.username : username,
-        password:
-          password === undefined ? this.loginForm.password : decrypt(password),
+        password: password === undefined ? this.loginForm.password : decrypt(password),
         rememberMe: rememberMe === undefined ? false : Boolean(rememberMe),
       };
     },

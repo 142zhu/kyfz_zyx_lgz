@@ -392,6 +392,34 @@ public class KyfzRequirement extends BaseEntity {
         return requirementReleaseTime;
     }
 
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
+
+    public void setEnterpriseDescribe(String enterpriseDescribe) {
+        this.enterpriseDescribe = enterpriseDescribe;
+    }
+
+    public void setRegisteredCapital(String registeredCapital) {
+        this.registeredCapital = registeredCapital;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public String getEnterpriseDescribe() {
+        return enterpriseDescribe;
+    }
+
+    public String getRegisteredCapital() {
+        return registeredCapital;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)

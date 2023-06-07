@@ -1,11 +1,14 @@
 package com.ruoyi.kyfz.service.impl;
 
 import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.kyfz.mapper.KyfzRequirementMapper;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
+import com.ruoyi.kyfz.mapper.KyfzRequirementMapper;
 import com.ruoyi.kyfz.service.IKyfzRequirementService;
 
 /**
@@ -15,8 +18,7 @@ import com.ruoyi.kyfz.service.IKyfzRequirementService;
  * @date 2023-06-06
  */
 @Service
-public class KyfzRequirementServiceImpl implements IKyfzRequirementService 
-{
+public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     @Autowired
     private KyfzRequirementMapper kyfzRequirementMapper;
 
@@ -27,8 +29,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 需求管理
      */
     @Override
-    public KyfzRequirement selectKyfzRequirementByRequirementId(Long requirementId)
-    {
+    public KyfzRequirement selectKyfzRequirementByRequirementId(Long requirementId) {
         return kyfzRequirementMapper.selectKyfzRequirementByRequirementId(requirementId);
     }
 
@@ -39,8 +40,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 需求管理
      */
     @Override
-    public List<KyfzRequirement> selectKyfzRequirementList(KyfzRequirement kyfzRequirement)
-    {
+    public List<KyfzRequirement> selectKyfzRequirementList(KyfzRequirement kyfzRequirement) {
         return kyfzRequirementMapper.selectKyfzRequirementList(kyfzRequirement);
     }
 
@@ -51,8 +51,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 结果
      */
     @Override
-    public int insertKyfzRequirement(KyfzRequirement kyfzRequirement)
-    {
+    public int insertKyfzRequirement(KyfzRequirement kyfzRequirement) {
         kyfzRequirement.setCreateTime(DateUtils.getNowDate());
         return kyfzRequirementMapper.insertKyfzRequirement(kyfzRequirement);
     }
@@ -64,8 +63,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 结果
      */
     @Override
-    public int updateKyfzRequirement(KyfzRequirement kyfzRequirement)
-    {
+    public int updateKyfzRequirement(KyfzRequirement kyfzRequirement) {
         kyfzRequirement.setUpdateTime(DateUtils.getNowDate());
         return kyfzRequirementMapper.updateKyfzRequirement(kyfzRequirement);
     }
@@ -77,8 +75,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 结果
      */
     @Override
-    public int deleteKyfzRequirementByRequirementIds(Long[] requirementIds)
-    {
+    public int deleteKyfzRequirementByRequirementIds(Long[] requirementIds) {
         return kyfzRequirementMapper.deleteKyfzRequirementByRequirementIds(requirementIds);
     }
 
@@ -89,8 +86,18 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService
      * @return 结果
      */
     @Override
-    public int deleteKyfzRequirementByRequirementId(Long requirementId)
-    {
+    public int deleteKyfzRequirementByRequirementId(Long requirementId) {
         return kyfzRequirementMapper.deleteKyfzRequirementByRequirementId(requirementId);
+    }
+
+    /**
+     * 查询企业列表
+     * 
+     * @param kyfzEnterprise 企业列表
+     * @return 企业列表
+     */
+    @Override
+    public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise) {
+        return kyfzRequirementMapper.selectKyfzEnterpriseList(kyfzEnterprise);
     }
 }
