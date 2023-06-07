@@ -8,12 +8,6 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <!-- <el-form-item label="姓名" prop="expertName">
-        <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="专家账号" prop="expertAccount">
-        <el-input v-model="queryParams.expertAccount" placeholder="请输入专家账号" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item> -->
       <el-form-item label="职称" prop="expertPosition">
         <el-input
           v-model="queryParams.expertPosition"
@@ -30,10 +24,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="研究方向" prop="researchDirection">
-        <el-input v-model="queryParams.researchDirection" placeholder="请输入研究方向" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
           >搜索</el-button
@@ -41,7 +31,6 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button

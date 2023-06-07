@@ -8,16 +8,6 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <!-- <el-form-item label="需求名称" prop="projectName">
-        <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
-      <el-form-item label="合同号" prop="contractNumber">
-        <el-input v-model="queryParams.contractNumber" placeholder="请输入合同号" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item> -->
-      <!-- <el-form-item label="项目类别" prop="projectCategory">
-        <el-input v-model="queryParams.projectCategory" placeholder="请输入项目类别" clearable
-          @keyup.enter.native="handleQuery" />
-      </el-form-item> -->
       <el-form-item label="类型" prop="projectType">
         <el-input
           v-model="queryParams.projectType"
@@ -34,11 +24,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- <el-form-item label="发布时间" prop="requirementReleaseTime">
-        <el-date-picker clearable v-model="queryParams.requirementReleaseTime" type="date" value-format="yyyy-MM-dd"
-          placeholder="请选择发布时间">
-        </el-date-picker>
-      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
           >搜索</el-button
@@ -55,7 +40,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['kyfz:requirement:add']"
-          >新增</el-button
+          >上传</el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -149,43 +134,58 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改需求管理对话框 -->
+    <!-- 修改需求管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <div class="toggle-edit-button" style="position: absolute; top: 25px; right: 80px">
-        <el-button @click="toggleEdit">{{ editable ? "保存" : "编辑" }}</el-button>
+        <el-button type="primary" @click="toggleEdit">{{
+          editable ? "编辑" : "暂存"
+        }}</el-button>
       </div>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="需求编号" prop="requirementId">
+      <el-form ref="form" :model="form" :rules="rules" label-width="250px">
+        <el-form-item label="需求编号" prop="requirementId" class="inputDeep">
           <el-input
             v-model="form.requirementId"
-            placeholder="请输入需求编号"
-            :readonly="editable"
+            placeholder="无需填写（自动生成）"
+            :readonly="true"
             ref="idInput"
           />
         </el-form-item>
         <el-form-item label="需求名称" prop="projectName">
           <el-input
             v-model="form.projectName"
-            placeholder="请输入需求名称"
+            placeholder="NULL"
             :readonly="editable"
             ref="idInput"
+            style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="需求关键词" prop="requirementKeywords">
           <el-input
             v-model="form.requirementKeywords"
-            type="textarea"
-            placeholder="请输入内容"
+            placeholder="NULL"
             :readonly="editable"
             ref="idInput"
+            style="width: 600px"
+          />
+        </el-form-item>
+        <el-form-item label="需求描述" prop="requirementDescription">
+          <el-input
+            v-model="form.requirementDescription"
+            placeholder="NULL"
+            :readonly="editable"
+            ref="idInput"
+            style="width: 600px"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
           <el-input
             v-model="form.projectCategory"
-            placeholder="请输入需求类型"
+            placeholder="NULL"
             :readonly="editable"
             ref="idInput"
+            style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="需求发布时间" prop="requirementReleaseTime">
@@ -194,43 +194,70 @@
             v-model="form.requirementReleaseTime"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择需求发布时间"
-            :readonly="editable"
+            placeholder="NULL"
+            :readonly="true"
             ref="idInput"
+            style="width: 600px"
           >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="需求状态" prop="requirementStatus">
-          <el-input
+          <el-select
             v-model="form.requirementStatus"
-            placeholder="请输入需求状态"
-            :readonly="editable"
-            ref="idInput"
-          />
+            filterable
+            placeholder="请选择需求状态"
+            :disabled="editable"
+            style="width: 600px"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
-          <el-input
+          <el-select
             v-model="form.enterpriseName"
-            placeholder="请输入公司名称"
-            :readonly="editable"
-            ref="idInput"
-          />
+            filterable
+            placeholder="请选择已有公司"
+            :disabled="editable"
+            style="width: 600px"
+            @change="handleChange"
+          >
+            <el-option
+              v-for="item in enterpriseList"
+              :key="item.enterpriseName"
+              :label="item.enterpriseName"
+              :value="item.enterpriseName"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="公司简介" prop="enterpriseDescribe">
+        <el-form-item label="公司简介" prop="enterpriseDescribe" class="inputDeep">
           <el-input
             v-model="form.enterpriseDescribe"
-            placeholder="请输入公司简介"
-            :readonly="editable"
+            type="textarea"
+            placeholder="NULL"
+            :readonly="true"
             ref="idInput"
+            style="width: 600px"
+            :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </el-form-item>
-        <el-form-item label="注册资本" prop="registeredCapital">
+        <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
           <el-input
             v-model="form.registeredCapital"
-            placeholder="请输入注册资本"
-            :readonly="editable"
+            placeholder="NULL"
+            :readonly="true"
             ref="idInput"
+            style="width: 600px"
           />
+        </el-form-item>
+        <el-form-item label="公司编号" prop="enterpriseNumber" hidden>
+          <el-input v-model="form.enterpriseNumber" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -247,6 +274,7 @@ import {
   delRequirement,
   getRequirement,
   listRequirement,
+  listenterprise,
   updateRequirement,
 } from "@/api/kyfz/requirement";
 
@@ -254,7 +282,7 @@ export default {
   name: "Requirement",
   data() {
     return {
-      editable: false,
+      editable: true,
       // 遮罩层
       loading: true,
       // 选中数组
@@ -309,12 +337,26 @@ export default {
       },
       // 表单参数
       form: {},
+      //企业列表
+      enterpriseList: [],
       // 表单校验
       rules: {},
+
+      options: [
+        {
+          value: "已对接",
+          label: "已对接",
+        },
+        {
+          value: "待对接",
+          label: "待对接",
+        },
+      ],
     };
   },
   created() {
     this.getList();
+    this.getenterpriseList();
   },
   methods: {
     /** 切换编辑状态 */
@@ -326,7 +368,23 @@ export default {
         input.setAttribute("readonly", this.editable);
       });
     },
-
+    /** 查询所有企业名*/
+    getenterpriseList() {
+      this.loading = true;
+      listenterprise(this.queryParams).then((response) => {
+        this.enterpriseList = response.rows;
+        this.loading = false;
+      });
+    },
+    /** 选择企业列表后自动填充企业信息列表 */
+    handleChange(value) {
+      const selectedEnterprise = this.enterpriseList.find(
+        (item) => item.enterpriseName === value
+      );
+      this.form.enterpriseDescribe = selectedEnterprise.enterpriseDescribe;
+      this.form.registeredCapital = selectedEnterprise.registeredCapital;
+      this.form.enterpriseNumber = selectedEnterprise.enterpriseId;
+    },
     /** 查询需求管理列表 */
     getList() {
       this.loading = true;
@@ -400,7 +458,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加需求管理";
+      this.title = "上传需求管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -466,3 +524,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.inputDeep >>> .el-input__inner {
+  border: 0px;
+  box-shadow: 0 0 0 0px;
+}
+</style>

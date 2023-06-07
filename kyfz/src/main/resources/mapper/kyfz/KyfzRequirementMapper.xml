@@ -45,6 +45,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </resultMap>
 
+    <resultMap type="KyfzEnterprise" id="KyfzEnterpriseResult">
+        <result property="enterpriseId" column="enterprise_id" />
+        <result property="enterpriseName" column="enterprise_name" />
+        <result property="enterpriseCreditCode" column="enterprise_credit_code" />
+        <result property="enterpriseDescribe" column="enterprise_describe" />
+        <result property="registeredCapital" column="registered_capital" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
     <!-- <sql id="selectKyfzRequirementVo">
         select requirement_id, project_name, contract_number, client, project_leader, project_leader_job_number, project_members, support_unit, support_unit_number, project_category, project_type, project_classification, project_nature, service_national_economy, national_economy_sub_industry, socio_economic_objective, start_project_time, end_project_time, total_budget, contract_type, first_discipline, secondary_discipline, project_leader_unit, enterprise_number, campus_member_account, requirement_status, creat_by, create_time, update_by, update_time, requirement_keywords, requirement_description, requirement_release_time from kyfz_requirement
     </sql> -->
@@ -131,12 +143,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campusMemberAccount != null">campus_member_account,</if>
             <if test="requirementStatus != null">requirement_status,</if>
             <if test="creatBy != null">creat_by,</if>
-            <if test="createTime != null">create_time,</if>
+            create_time,
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="requirementKeywords != null">requirement_keywords,</if>
             <if test="requirementDescription != null">requirement_description,</if>
-            <if test="requirementReleaseTime != null">requirement_release_time,</if>
+            requirement_release_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
@@ -165,12 +177,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="campusMemberAccount != null">#{campusMemberAccount},</if>
             <if test="requirementStatus != null">#{requirementStatus},</if>
             <if test="creatBy != null">#{creatBy},</if>
-            <if test="createTime != null">#{createTime},</if>
+            sysdate(),
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="requirementKeywords != null">#{requirementKeywords},</if>
             <if test="requirementDescription != null">#{requirementDescription},</if>
-            <if test="requirementReleaseTime != null">#{requirementReleaseTime},</if>
+            sysdate()
         </trim>
     </insert>
 
@@ -223,4 +235,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{requirementId}
         </foreach>
     </delete>
+
+    <!-- 查找企业列表 -->
+    <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
+        select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, create_by, create_time, update_by, update_time from kyfz_enterprise
+        <where>
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like concat('%', #{enterpriseName}, '%')</if>
+            <if test="enterpriseCreditCode != null  and enterpriseCreditCode != ''"> and enterprise_credit_code = #{enterpriseCreditCode}</if>
+            <if test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and enterprise_describe = #{enterpriseDescribe}</if>
+            <if test="registeredCapital != null  and registeredCapital != ''"> and registered_capital = #{registeredCapital}</if>
+        </where>
+    </select>
 </mapper>
