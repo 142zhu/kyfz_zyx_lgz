@@ -88,12 +88,10 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="专家姓名" align="center" prop="expertName" />
-      <el-table-column label="专家账号" align="center" prop="expertAccount" />
-
+      <el-table-column label="专家编号" align="center" prop="expertId" />
       <el-table-column label="专家职称" align="center" prop="expertPosition" />
       <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
       <el-table-column label="研究方向" align="center" prop="researchDirection" />
-
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -125,50 +123,107 @@
     />
 
     <!-- 添加或修改专家管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="专家账号" prop="expertAccount">
-          <el-input v-model="form.expertAccount" placeholder="请输入专家账号" />
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="250px">
+        <el-form-item label="专家编号" prop="expertId" class="inputDeep">
+          <el-input
+            v-model="form.expertId"
+            placeholder="无需填写（自动生成）"
+            :readonly="true"
+            ref="idInput"
+          />
         </el-form-item>
         <el-form-item label="专家姓名" prop="expertName">
-          <el-input v-model="form.expertName" placeholder="请输入专家姓名" />
+          <el-input
+            v-model="form.expertName"
+            placeholder="请输入专家姓名"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="专家职称" prop="expertPosition">
-          <el-input v-model="form.expertPosition" placeholder="请输入专家职称" />
+          <el-input
+            v-model="form.expertPosition"
+            placeholder="请输入专家职称"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="专家所属单位" prop="expertAffiliation">
-          <el-input v-model="form.expertAffiliation" placeholder="请输入专家所属单位" />
+          <el-input
+            v-model="form.expertAffiliation"
+            placeholder="请输入专家所属单位"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="一级学科" prop="primaryDiscipline">
-          <el-input v-model="form.primaryDiscipline" placeholder="请输入一级学科" />
+          <el-input
+            v-model="form.primaryDiscipline"
+            placeholder="请输入一级学科"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="二级学科" prop="secondaryDiscipline">
-          <el-input v-model="form.secondaryDiscipline" placeholder="请输入二级学科" />
+          <el-input
+            v-model="form.secondaryDiscipline"
+            placeholder="请输入二级学科"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="三级学科" prop="tertiaryDiscipline">
-          <el-input v-model="form.tertiaryDiscipline" placeholder="请输入三级学科" />
+          <el-input
+            v-model="form.tertiaryDiscipline"
+            placeholder="请输入三级学科"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="研究方向" prop="researchDirection">
-          <el-input v-model="form.researchDirection" placeholder="请输入研究方向" />
+          <el-input
+            v-model="form.researchDirection"
+            placeholder="请输入研究方向"
+            style="width: 600px"
+          />
         </el-form-item>
-        <el-form-item label="论文id(多个)" prop="thesisId">
-          <el-input v-model="form.thesisId" placeholder="请输入论文id(多个)" />
+        <!-- <el-form-item label="论文id(多个)" prop="thesisId">
+          <el-input
+            v-model="form.thesisId"
+            placeholder="请输入论文id(多个)"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="项目id(多个)" prop="projectId">
-          <el-input v-model="form.projectId" placeholder="请输入项目id(多个)" />
+          <el-input
+            v-model="form.projectId"
+            placeholder="请输入项目id(多个)"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="证书id(多个)" prop="certificateId">
-          <el-input v-model="form.certificateId" placeholder="请输入证书id(多个)" />
+          <el-input
+            v-model="form.certificateId"
+            placeholder="请输入证书id(多个)"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="著作id(多个)" prop="workId">
-          <el-input v-model="form.workId" placeholder="请输入著作id(多个)" />
-        </el-form-item>
+          <el-input
+            v-model="form.workId"
+            placeholder="请输入著作id(多个)"
+            style="width: 600px"
+          />
+        </el-form-item> -->
         <el-form-item label="已对接需求" prop="requirementId">
-          <el-input v-model="form.requirementId" placeholder="请输入已对接需求" />
+          <el-input
+            v-model="form.requirementId"
+            placeholder="请输入已对接需求"
+            style="width: 600px"
+          />
         </el-form-item>
-        <el-form-item label="所属团队id" prop="expertTeams">
-          <el-input v-model="form.expertTeams" placeholder="请输入所属团队id" />
-        </el-form-item>
+        <!-- <el-form-item label="所属团队id" prop="expertTeams">
+          <el-input
+            v-model="form.expertTeams"
+            placeholder="请输入所属团队id"
+            style="width: 600px"
+          />
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -352,3 +407,10 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.inputDeep >>> .el-input__inner {
+  border: 0px;
+  box-shadow: 0 0 0 0px;
+}
+</style>
