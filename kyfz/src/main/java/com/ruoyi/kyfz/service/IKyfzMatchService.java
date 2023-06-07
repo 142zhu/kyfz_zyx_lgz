@@ -9,8 +9,7 @@ import com.ruoyi.kyfz.domain.KyfzMatch;
  * @author ruoyi
  * @date 2023-06-07
  */
-public interface IKyfzMatchService 
-{
+public interface IKyfzMatchService {
     /**
      * 查询匹配列表
      * 
@@ -58,4 +57,20 @@ public interface IKyfzMatchService
      * @return 结果
      */
     public int deleteKyfzMatchByMatchId(Long matchId);
+
+    /***************************************************
+     * 查询匹配详细列表
+     * 
+     * @param matchId 匹配列表主键
+     * @return 匹配列表
+     */
+    public KyfzMatch selectKyfzMatchDetailByMatchId(Long matchId);
+
+    /***************************************************
+     * 查询项目名称
+     * 
+     * @param projectId 项目表主键
+     * @return 项目名称
+     */
+    public String selectProjectName(Long projectId);
 }

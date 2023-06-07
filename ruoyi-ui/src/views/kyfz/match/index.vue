@@ -54,11 +54,10 @@
       <!-- 通过专家账号获取专家表中的专家姓名和研究方向 -->
       <el-table-column label="推荐专家" align="center" prop="expertName" />
       <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
-
       <el-table-column label="匹配分值" align="center" prop="matchScore" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)"
             v-hasPermi="['kyfz:match:detail']">详细</el-button>
 
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -72,29 +71,46 @@
       @pagination="getList" />
 
     <!-- 详细信息弹窗 -->
-    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
-      <el-table :data="gridData">
-        <el-table-column property="matchId" label="匹配编号" width="150"></el-table-column>
-        <el-table-column property="projectName" label="需求" width="200"></el-table-column>
-        <el-table-column property="client" label="企业"></el-table-column>
-        <el-table-column property="expertName" label="专家姓名" width="150"></el-table-column>
-        <el-table-column property="researchDirection" label="研究方向" width="200"></el-table-column>
-        <el-table-column property="matchScore" label="匹配分值"></el-table-column>
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
+      <div>
+        <span>{{ matchDetails.expertName }}<br></span>
+        <span>{{ matchDetails.expertName }}<br></span>
+        <span>{{ matchDetails.expertName }}<br></span>
+      </div>
+      <el-table :data="matchDetails">
+        <el-table-column label="匹配编号" align="center" prop="matchId" />
+        <!-- 通过需求id获取需求表中的projectName -->
+        <el-table-column label="需求" align="center" prop="projectName" />
+        <!-- 通过需求id获取需求表中的委托单位 -->
+        <el-table-column label="企业" align="center" prop="client" />
+
+        <el-table-column label="推荐专家" align="center" prop="expertName" />
+        <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+        <el-table-column label="匹配分值" align="center" prop="matchScore" />
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+              v-hasPermi="['kyfz:match:edit']">推送</el-button>
+          </template>
+        </el-table-column>
       </el-table>
-      <div style="border-top: 2px solid black;border-bottom: 2px solid black;padding:10px 10px">
+
+      <div style="border-top: 2px solid black;border-bottom: 2px solid black;padding:10px 10px;margin-top:20px;">
+
         <h4>需求关键词</h4>
         <div class="string-info">
-          <span v-for="item in stringArray" :key="item">{{ item }}</span>
+          <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
         </div>
       </div>
 
       <div style="border-bottom: 2px solid black;padding:10px 10px;">
         <h4>专家研究成果</h4>
-
+        <div class="string-info">
+          <span v-for="item in matchDetails.projectNamesArray" :key="item">{{ item }}</span>
+        </div>
       </div>
       <div style="padding:10px 10px;">
         <h4>专家团队</h4>
-
       </div>
     </el-dialog>
 
@@ -132,7 +148,7 @@
 </template>
 
 <script>
-import { listMatch, getMatch, delMatch, addMatch, updateMatch } from "@/api/kyfz/match";
+import { listMatch, getMatch, delMatch, addMatch, updateMatch, getMatchDetails } from "@/api/kyfz/match";
 
 export default {
   name: "Match",
@@ -152,10 +168,12 @@ export default {
       total: 0,
       // 匹配列表表格数据
       matchList: [],
+      matchDetails: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      openDetail: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -171,7 +189,8 @@ export default {
         client: null,//存有需求的企业
         expertName: null,//存专家名
         researchDirection: null,//存专家研究方向
-
+        requirementKeywords: '',//需求关键词
+        projectNames: '',//专家研究成果：项目（目前就做这个），论文，著作
       },
       // 表单参数
       form: {},
@@ -182,21 +201,10 @@ export default {
       //这里先写一些临时数据，还没从后端获取
       stringInfo: "新材料，鉴别信息，再回收材料",
       stringArray: [],
-      gridData: [{
-        matchId: '1220',
-        projectName: '张三',
-        client: '公司名字',
-        expertName: '科研辅助系统',
-        researchDirection: '计算机视觉',
-        matchScore: '9.9',
-      }],
     };
   },
   created() {
     this.getList();
-  },
-  mounted() {
-    this.stringArray = this.stringInfo.split("，");
   },
   methods: {
     /** 查询匹配列表列表 */
@@ -251,6 +259,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.openDetail = true;
       this.title = "添加匹配列表";
     },
     /** 修改按钮操作 */
@@ -301,21 +310,34 @@ export default {
     },
 
     /**详细信息按钮操作 */
-    handleDetail() {
+    handleDetail(row) {
       //表单内容重置
       this.reset();
+      this.loading = false;
       //获取到当前行匹配信息的id
-      const matchId = row.matchId || this.ids
+      const matchId = row.matchId || this.ids;
 
-      this.openDetail = true;
-      this.title = "详细信息";
-      //通过匹配id索引出弹窗需要的信息，因为接口还没做，先弹出对话框先
-      /*
       getMatchDetails(matchId).then(response => {
-        this.form = response.data;
+        this.matchDetails = response.data;
+        alert(this.matchDetails.matchId);
+
+
+        this.matchDetails.matchId = response.data.matchId;
+        this.matchDetails.projectName = response.data.projectName;
+        this.matchDetails.client = response.data.client;
+        this.matchDetails.expertName = response.data.expertName;
+        this.matchDetails.researchDirection = response.data.researchDirection;
+        this.matchDetails.matchScore = response.data.matchScore;
+
+
+        this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords.trim().split(/[,，]/);
+        this.matchDetails.projectNamesArray = response.data.projectNames.trim().split(/[,，]/);
         this.openDetail = true;
-        this.title = "";
-      });*/
+        //alert(this.matchDetails.requirementKeywords);
+
+        this.title = "详细信息";
+      });
+
     }
   }
 };
@@ -328,8 +350,9 @@ export default {
 }
 
 .string-info span {
-  margin-right: 10px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin: 10px;
+
   border: 1px solid gray;
   padding: 5px;
 }

@@ -15,8 +15,7 @@ import com.ruoyi.kyfz.service.IKyfzMatchService;
  * @date 2023-06-07
  */
 @Service
-public class KyfzMatchServiceImpl implements IKyfzMatchService 
-{
+public class KyfzMatchServiceImpl implements IKyfzMatchService {
     @Autowired
     private KyfzMatchMapper kyfzMatchMapper;
 
@@ -27,8 +26,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 匹配列表
      */
     @Override
-    public KyfzMatch selectKyfzMatchByMatchId(Long matchId)
-    {
+    public KyfzMatch selectKyfzMatchByMatchId(Long matchId) {
         return kyfzMatchMapper.selectKyfzMatchByMatchId(matchId);
     }
 
@@ -39,8 +37,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 匹配列表
      */
     @Override
-    public List<KyfzMatch> selectKyfzMatchList(KyfzMatch kyfzMatch)
-    {
+    public List<KyfzMatch> selectKyfzMatchList(KyfzMatch kyfzMatch) {
         return kyfzMatchMapper.selectKyfzMatchList(kyfzMatch);
     }
 
@@ -51,8 +48,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 结果
      */
     @Override
-    public int insertKyfzMatch(KyfzMatch kyfzMatch)
-    {
+    public int insertKyfzMatch(KyfzMatch kyfzMatch) {
         kyfzMatch.setCreateTime(DateUtils.getNowDate());
         return kyfzMatchMapper.insertKyfzMatch(kyfzMatch);
     }
@@ -64,8 +60,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 结果
      */
     @Override
-    public int updateKyfzMatch(KyfzMatch kyfzMatch)
-    {
+    public int updateKyfzMatch(KyfzMatch kyfzMatch) {
         kyfzMatch.setUpdateTime(DateUtils.getNowDate());
         return kyfzMatchMapper.updateKyfzMatch(kyfzMatch);
     }
@@ -77,8 +72,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 结果
      */
     @Override
-    public int deleteKyfzMatchByMatchIds(Long[] matchIds)
-    {
+    public int deleteKyfzMatchByMatchIds(Long[] matchIds) {
         return kyfzMatchMapper.deleteKyfzMatchByMatchIds(matchIds);
     }
 
@@ -89,8 +83,27 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService
      * @return 结果
      */
     @Override
-    public int deleteKyfzMatchByMatchId(Long matchId)
-    {
+    public int deleteKyfzMatchByMatchId(Long matchId) {
         return kyfzMatchMapper.deleteKyfzMatchByMatchId(matchId);
+    }
+
+    /**************************************
+     * 查询匹配详细列表
+     * 
+     * @param matchId 匹配列表主键
+     * @return 匹配列表
+     */
+    public KyfzMatch selectKyfzMatchDetailByMatchId(Long matchId) {
+        return kyfzMatchMapper.selectKyfzMatchDetailByMatchId(matchId);
+    }
+
+    /***************************************************
+     * 查询项目名称
+     * 
+     * @param projectId 项目表主键
+     * @return 项目名称
+     */
+    public String selectProjectName(Long projectId) {
+        return kyfzMatchMapper.selectProjectName(projectId);
     }
 }

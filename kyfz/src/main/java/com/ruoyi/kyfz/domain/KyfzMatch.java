@@ -45,6 +45,82 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "相关项目", readConverterExp = "多=个项目id")
     private String projectId;
 
+    /** 相关项目（多个项目名） */
+    @Excel(name = "相关项目的名称", readConverterExp = "多个项目名称合并在一起")
+    private String projectNames;
+
+    /*********************************************************** */
+    /** 根据需求添加的字段 */
+    /** 专家姓名 */
+    @Excel(name = "专家姓名")
+    private String expertName;
+    /** 专家研究方向 */
+    @Excel(name = "专家研究方向")
+    private String researchDirection;
+    /** 需求 */
+    @Excel(name = "需求")
+    private String projectName;
+    /** 下发需求的企业 */
+    @Excel(name = "企业")
+    private String client;
+    /** 需求关键词 */
+    @Excel(name = "需求关键词")
+    private String requirementKeywords;
+
+    /********************** 按照需求添加的get和set方法 */
+
+    public String getExpertName() {
+        return expertName;
+    }
+
+    public void setExpertName(String expertName) {
+        this.expertName = expertName;
+    }
+
+    public String getResearchDirection() {
+        return researchDirection;
+    }
+
+    public void setResearchDirection(String researchDirection) {
+        this.researchDirection = researchDirection;
+    }
+
+    /* 需求名 */
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    /* 相关项目名 */
+    public String getProjectNames() {
+        return projectNames;
+    }
+
+    public void setProjectNames(String projectNames) {
+        this.projectNames = projectNames;
+    }
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    public String getRequirementKeywords() {
+        return requirementKeywords;
+    }
+
+    public void setRequirementKeywords(String requirementKeywords) {
+        this.requirementKeywords = requirementKeywords;
+    }
+
+    /******************************************************* */
+
     public void setMatchId(Long matchId) {
         this.matchId = matchId;
     }

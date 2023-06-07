@@ -29,8 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/kyfz/match")
-public class KyfzMatchController extends BaseController
-{
+public class KyfzMatchController extends BaseController {
     @Autowired
     private IKyfzMatchService kyfzMatchService;
 
@@ -39,8 +38,7 @@ public class KyfzMatchController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:list')")
     @GetMapping("/list")
-    public TableDataInfo list(KyfzMatch kyfzMatch)
-    {
+    public TableDataInfo list(KyfzMatch kyfzMatch) {
         startPage();
         List<KyfzMatch> list = kyfzMatchService.selectKyfzMatchList(kyfzMatch);
         return getDataTable(list);
@@ -52,8 +50,7 @@ public class KyfzMatchController extends BaseController
     @PreAuthorize("@ss.hasPermi('kyfz:match:export')")
     @Log(title = "匹配列表", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, KyfzMatch kyfzMatch)
-    {
+    public void export(HttpServletResponse response, KyfzMatch kyfzMatch) {
         List<KyfzMatch> list = kyfzMatchService.selectKyfzMatchList(kyfzMatch);
         ExcelUtil<KyfzMatch> util = new ExcelUtil<KyfzMatch>(KyfzMatch.class);
         util.exportExcel(response, list, "匹配列表数据");
@@ -64,8 +61,7 @@ public class KyfzMatchController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:query')")
     @GetMapping(value = "/{matchId}")
-    public AjaxResult getInfo(@PathVariable("matchId") Long matchId)
-    {
+    public AjaxResult getInfo(@PathVariable("matchId") Long matchId) {
         return success(kyfzMatchService.selectKyfzMatchByMatchId(matchId));
     }
 
@@ -75,8 +71,7 @@ public class KyfzMatchController extends BaseController
     @PreAuthorize("@ss.hasPermi('kyfz:match:add')")
     @Log(title = "匹配列表", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody KyfzMatch kyfzMatch)
-    {
+    public AjaxResult add(@RequestBody KyfzMatch kyfzMatch) {
         return toAjax(kyfzMatchService.insertKyfzMatch(kyfzMatch));
     }
 
@@ -86,8 +81,7 @@ public class KyfzMatchController extends BaseController
     @PreAuthorize("@ss.hasPermi('kyfz:match:edit')")
     @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody KyfzMatch kyfzMatch)
-    {
+    public AjaxResult edit(@RequestBody KyfzMatch kyfzMatch) {
         return toAjax(kyfzMatchService.updateKyfzMatch(kyfzMatch));
     }
 
@@ -96,9 +90,50 @@ public class KyfzMatchController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:remove')")
     @Log(title = "匹配列表", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{matchIds}")
-    public AjaxResult remove(@PathVariable Long[] matchIds)
-    {
+    @DeleteMapping("/{matchIds}")
+    public AjaxResult remove(@PathVariable Long[] matchIds) {
         return toAjax(kyfzMatchService.deleteKyfzMatchByMatchIds(matchIds));
+    }
+
+    /**
+     * 获取匹配列表详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:match:detail')")
+    @GetMapping(value = "/2{matchId}")
+    public AjaxResult getDetailInfo(@PathVariable("matchId") Long matchId) {
+        // 先索引出所有信息
+        KyfzMatch match1 = kyfzMatchService.selectKyfzMatchDetailByMatchId(matchId);
+
+        // 从索引出的匹配表中获取匹配出来的id（多个id用逗号分隔开了）
+        String projectIds = match1.getProjectId();
+
+        // 把索引到的所有id用分隔函数分开，存在数组中
+        Long projectId[] = extractIds(projectIds);
+
+        String projectNames = "";
+        // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
+        for (int i = 0; i < projectId.length; i++) {
+            String projectName = kyfzMatchService.selectProjectName(projectId[i]);
+            projectNames += projectName + ",";
+        }
+        // 把projectNames变量传进工具类match1中
+        match1.setProjectNames(projectNames);
+
+        System.out.println(match1.getProjectNames());
+        System.out.println(projectNames);
+
+        return success(match1);
+    }
+
+    /************ 工具方法获取String projectId中的所有方法然后用Long 数组存起来 */
+    public Long[] extractIds(String projectId) {
+        String[] projectIds = projectId.split("[,，]");
+        Long[] Id = new Long[projectIds.length];
+
+        for (int i = 0; i < projectIds.length; i++) {
+            Id[i] = Long.parseLong(projectIds[i].trim());
+        }
+
+        return Id;
     }
 }

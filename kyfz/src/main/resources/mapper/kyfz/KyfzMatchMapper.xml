@@ -17,10 +17,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        
+        <!-- 按需求添加 -->
+        <result property="expertName"    column="expert_name"    />
+        <result property="researchDirection"    column="research_direction"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="client"    column="client"    />
+        <result property="requirementKeywords"    column="requirement_keywords"    />
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
         select match_id, expert_account, requirement_id, match_score, thesis_id, work_id, certificate_id, project_id, create_by, create_time, update_by, update_time from kyfz_match
+    </sql>
+    
+    <!-- 按照需求添加的 -->
+    <sql id="selectKyfzMatchVo2">
+        select m.match_id, m.expert_account, m.requirement_id, m.match_score,
+        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,
+        r.requirement_keywords
+        from kyfz_match m
+        left join kyfz_requirement r on m.requirement_id=r.requirement_id
+        left join kyfz_expert e on m.expert_account=e.expert_account
     </sql>
 
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
@@ -99,4 +116,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{matchId}
         </foreach>
     </delete>
+
+    <!-- 按照需求搜索详细信息 -->
+    <select id="selectKyfzMatchDetailByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
+        <include refid="selectKyfzMatchVo2"/>
+        where match_id = #{matchId}
+    </select>
+
+    <!-- 通过项目id搜索项目表中的项目名称 -->
+    <select id="selectProjectName" parameterType="Long" resultType="String">
+    select project_name from kyfz_project
+        where project_id = #{projectId}
+    </select>
 </mapper>

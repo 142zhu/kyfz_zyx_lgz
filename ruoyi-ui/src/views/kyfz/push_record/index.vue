@@ -54,7 +54,7 @@
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)"
             v-hasPermi="['kyfz:record:edit']">详细</el-button>
         </template>
       </el-table-column>
@@ -62,6 +62,35 @@
 
     <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
       @pagination="getList" />
+
+    <!-- 推送详情对话框 -->
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
+      <el-table :data="gridData">
+        <el-table-column property="matchId" label="匹配编号" width="150"></el-table-column>
+        <el-table-column property="projectName" label="需求" width="200"></el-table-column>
+        <el-table-column property="client" label="企业"></el-table-column>
+        <el-table-column property="expertName" label="专家姓名" width="150"></el-table-column>
+        <el-table-column property="researchDirection" label="研究方向" width="200"></el-table-column>
+        <el-table-column property="matchScore" label="匹配分值"></el-table-column>
+      </el-table>
+      <div style="border-top: 2px solid black;border-bottom: 2px solid black;padding:10px 10px">
+        <h4>需求关键词</h4>
+        <div class="string-info">
+          <span v-for="item in stringArray" :key="item">{{ item }}</span>
+        </div>
+      </div>
+
+      <div style="border-bottom: 2px solid black;padding:10px 10px;">
+        <h4>专家研究成果</h4>
+
+      </div>
+      <div style="padding:10px 10px;">
+        <h4>专家团队</h4>
+
+      </div>
+    </el-dialog>
+
+
 
     <!-- 添加或修改推送记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -110,6 +139,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      openDetail: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -122,7 +152,16 @@ export default {
       form: {},
       // 表单校验
       rules: {
-      }
+      },
+      matchDetail: null,
+      gridData: [{
+        matchId: '1220',
+        projectName: '张三',
+        client: '公司名字',
+        expertName: '科研辅助系统',
+        researchDirection: '计算机视觉',
+        matchScore: '9.9',
+      }],
     };
   },
   created() {
@@ -224,6 +263,23 @@ export default {
       this.download('kyfz/record/export', {
         ...this.queryParams
       }, `record_${new Date().getTime()}.xlsx`)
+    },
+    /**详细信息按钮操作 */
+    handleDetail() {
+      //表单内容重置
+      this.reset();
+      //获取到当前行匹配信息的id
+      //const matchId = row.matchId || this.ids
+
+      this.openDetail = true;
+      this.title = "详细信息";
+      //通过匹配id索引出弹窗需要的信息，因为接口还没做，先弹出对话框先
+      /*
+      getMatchDetails(matchId).then(response => {
+        this.form = response.data;
+        this.openDetail = true;
+        this.title = "";
+      });*/
     }
   }
 };
