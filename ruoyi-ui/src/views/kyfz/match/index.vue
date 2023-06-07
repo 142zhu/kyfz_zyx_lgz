@@ -72,76 +72,47 @@
 
     <!-- 详细信息弹窗 -->
     <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
-      <div>
-        <span>{{ matchDetails.expertName }}<br></span>
-        <span>{{ matchDetails.expertName }}<br></span>
-        <span>{{ matchDetails.expertName }}<br></span>
-      </div>
-      <el-table :data="matchDetails">
+
+
+      <el-table :data="[matchDetails]" style="margin-top:-20px;">
         <el-table-column label="匹配编号" align="center" prop="matchId" />
         <!-- 通过需求id获取需求表中的projectName -->
         <el-table-column label="需求" align="center" prop="projectName" />
         <!-- 通过需求id获取需求表中的委托单位 -->
         <el-table-column label="企业" align="center" prop="client" />
-
         <el-table-column label="推荐专家" align="center" prop="expertName" />
         <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
         <el-table-column label="匹配分值" align="center" prop="matchScore" />
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-              v-hasPermi="['kyfz:match:edit']">推送</el-button>
+            <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
+              v-hasPermi="['kyfz:match:push']">推送</el-button>
           </template>
         </el-table-column>
       </el-table>
-
-      <div style="border-top: 2px solid black;border-bottom: 2px solid black;padding:10px 10px;margin-top:20px;">
-
+      <div style="border-top: 1px solid black;border-bottom: 1px solid black;margin-top:10px;">
         <h4>需求关键词</h4>
         <div class="string-info">
           <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
         </div>
       </div>
-
-      <div style="border-bottom: 2px solid black;padding:10px 10px;">
+      <div style="border-bottom: 1px solid black;">
         <h4>专家研究成果</h4>
         <div class="string-info">
           <span v-for="item in matchDetails.projectNamesArray" :key="item">{{ item }}</span>
         </div>
       </div>
-      <div style="padding:10px 10px;">
+      <div>
         <h4>专家团队</h4>
+        <div class="string-info">
+          <span v-for="item in matchDetails.teamMembersArray" :key="item">{{ item }}</span>
+        </div>
       </div>
-    </el-dialog>
-
-    <!-- 添加或修改匹配列表对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="专家账号" prop="expertAccount">
-          <el-input v-model="form.expertAccount" placeholder="请输入专家账号" />
-        </el-form-item>
-        <el-form-item label="需求表的id" prop="requirementId">
-          <el-input v-model="form.requirementId" placeholder="请输入需求表的id" />
-        </el-form-item>
-        <el-form-item label="匹配分值" prop="matchScore">
-          <el-input v-model="form.matchScore" placeholder="请输入匹配分值" />
-        </el-form-item>
-        <el-form-item label="相关论文" prop="thesisId">
-          <el-input v-model="form.thesisId" placeholder="请输入相关论文" />
-        </el-form-item>
-        <el-form-item label="相关著作" prop="workId">
-          <el-input v-model="form.workId" placeholder="请输入相关著作" />
-        </el-form-item>
-        <el-form-item label="相关证书" prop="certificateId">
-          <el-input v-model="form.certificateId" placeholder="请输入相关证书" />
-        </el-form-item>
-        <el-form-item label="相关项目" prop="projectId">
-          <el-input v-model="form.projectId" placeholder="请输入相关项目" />
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+      <!-- 评分模块 -->
+      <div class="block" style="display:inline-block;position:absolute;top:30px;right:60px;">
+        <span style="vertical-align: middle;display:inline;margin-right:3px;">为匹配结果评分</span>
+        <el-rate v-model="value2" :colors="colors" style="display:inline;">
+        </el-rate>
       </div>
     </el-dialog>
   </div>
@@ -197,10 +168,9 @@ export default {
       // 表单校验
       rules: {
       },
-
-      //这里先写一些临时数据，还没从后端获取
-      stringInfo: "新材料，鉴别信息，再回收材料",
-      stringArray: [],
+      value1: null,
+      value2: null,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900']
     };
   },
   created() {
@@ -316,25 +286,12 @@ export default {
       this.loading = false;
       //获取到当前行匹配信息的id
       const matchId = row.matchId || this.ids;
-
       getMatchDetails(matchId).then(response => {
         this.matchDetails = response.data;
-        alert(this.matchDetails.matchId);
-
-
-        this.matchDetails.matchId = response.data.matchId;
-        this.matchDetails.projectName = response.data.projectName;
-        this.matchDetails.client = response.data.client;
-        this.matchDetails.expertName = response.data.expertName;
-        this.matchDetails.researchDirection = response.data.researchDirection;
-        this.matchDetails.matchScore = response.data.matchScore;
-
-
-        this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords.trim().split(/[,，]/);
-        this.matchDetails.projectNamesArray = response.data.projectNames.trim().split(/[,，]/);
+        this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords.trim().split(/[,，、]/);
+        this.matchDetails.projectNamesArray = response.data.projectNames.trim().split(/[,，、]/);
+        this.matchDetails.teamMembersArray = response.data.teamMembers.trim().split(/[,，、]/);
         this.openDetail = true;
-        //alert(this.matchDetails.requirementKeywords);
-
         this.title = "详细信息";
       });
 

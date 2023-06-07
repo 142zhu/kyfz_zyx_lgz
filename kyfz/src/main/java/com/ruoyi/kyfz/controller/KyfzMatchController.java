@@ -103,37 +103,31 @@ public class KyfzMatchController extends BaseController {
     public AjaxResult getDetailInfo(@PathVariable("matchId") Long matchId) {
         // 先索引出所有信息
         KyfzMatch match1 = kyfzMatchService.selectKyfzMatchDetailByMatchId(matchId);
-
         // 从索引出的匹配表中获取匹配出来的id（多个id用逗号分隔开了）
         String projectIds = match1.getProjectId();
-
         // 把索引到的所有id用分隔函数分开，存在数组中
-        Long projectId[] = extractIds(projectIds);
-
-        String projectNames = "";
-        // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
-        for (int i = 0; i < projectId.length; i++) {
-            String projectName = kyfzMatchService.selectProjectName(projectId[i]);
-            projectNames += projectName + ",";
+        if (projectIds != "0") {
+            // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
+            String projectNames = "";
+            Long projectId[] = extractIds(projectIds);
+            for (int i = 0; i < projectId.length; i++) {
+                String projectName = kyfzMatchService.selectProjectName(projectId[i]);
+                projectNames += projectName + ",";
+            }
+            match1.setProjectNames(projectNames);
         }
         // 把projectNames变量传进工具类match1中
-        match1.setProjectNames(projectNames);
-
-        System.out.println(match1.getProjectNames());
-        System.out.println(projectNames);
-
         return success(match1);
     }
 
     /************ 工具方法获取String projectId中的所有方法然后用Long 数组存起来 */
     public Long[] extractIds(String projectId) {
-        String[] projectIds = projectId.split("[,，]");
+        String[] projectIds = projectId.split("[,，、]");
         Long[] Id = new Long[projectIds.length];
 
         for (int i = 0; i < projectIds.length; i++) {
             Id[i] = Long.parseLong(projectIds[i].trim());
         }
-
         return Id;
     }
 }

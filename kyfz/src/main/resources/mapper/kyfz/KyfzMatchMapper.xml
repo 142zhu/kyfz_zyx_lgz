@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="projectName"    column="project_name"    />
         <result property="client"    column="client"    />
         <result property="requirementKeywords"    column="requirement_keywords"    />
+        <result property="teamMembers"    column="team_members"    />
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
@@ -33,23 +34,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
         select m.match_id, m.expert_account, m.requirement_id, m.match_score,
-        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,
-        r.requirement_keywords
+        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords
         from kyfz_match m
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
         left join kyfz_expert e on m.expert_account=e.expert_account
+        left join kyfz_team t on t.team_id=e.expert_teams
     </sql>
 
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
-        <include refid="selectKyfzMatchVo"/>
-        <where>  
-            <if test="expertAccount != null  and expertAccount != ''"> and expert_account = #{expertAccount}</if>
-            <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
+        <include refid="selectKyfzMatchVo2"/>
+        <where> 
+            <if test="matchId != null  and matchId != ''"> and match_id = #{matchId}</if>
+            <if test="projectName != null  and projectName != ''"> and r.project_name = #{projectName}</if>
+            <if test="client != null  and client != ''"> and r.client = #{client}</if>
+            <if test="expertName != null  and expertName != ''"> and e.expert_name = #{expertName}</if>
+            <if test="researchDirection != null  and researchDirection != ''"> and e.research_direction = #{researchDirection}</if>
             <if test="matchScore != null  and matchScore != ''"> and match_score = #{matchScore}</if>
-            <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
-            <if test="workId != null  and workId != ''"> and work_id = #{workId}</if>
-            <if test="certificateId != null  and certificateId != ''"> and certificate_id = #{certificateId}</if>
-            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
         </where>
     </select>
     
@@ -128,4 +128,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     select project_name from kyfz_project
         where project_id = #{projectId}
     </select>
+
 </mapper>

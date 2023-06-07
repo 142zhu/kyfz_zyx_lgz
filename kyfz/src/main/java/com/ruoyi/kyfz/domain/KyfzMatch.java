@@ -67,7 +67,19 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "需求关键词")
     private String requirementKeywords;
 
+    /** 专家所属团队的成员 */
+    @Excel(name = "专家所属团队的成员")
+    private String teamMembers;
+
     /********************** 按照需求添加的get和set方法 */
+
+    public String getTeamMembers() {
+        return teamMembers;
+    }
+
+    public void setTeamMembers(String teamMembers) {
+        this.teamMembers = teamMembers;
+    }
 
     public String getExpertName() {
         return expertName;
@@ -200,6 +212,11 @@ public class KyfzMatch extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("expertName", getExpertName())
+                .append("researchDirection", getResearchDirection())
+                .append("projectName", getProjectName())
+                .append("client", getClient())
+                .append("requirementKeywords", getRequirementKeywords())
                 .toString();
     }
 }
