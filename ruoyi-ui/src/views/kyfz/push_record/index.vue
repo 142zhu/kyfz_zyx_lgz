@@ -1,96 +1,204 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
       <el-form-item label="匹配编号" prop="matchId">
-        <el-input v-model="queryParams.matchId" placeholder="请输入匹配编号" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入匹配编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="需求" prop="projectName">
-        <el-input v-model="queryParams.matchId" placeholder="请输入需求" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入需求"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="专家" prop="expertName">
-        <el-input v-model="queryParams.matchId" placeholder="请输入专家名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入专家名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="反馈状态" prop="feebback">
-        <el-input v-model="queryParams.feebback" placeholder="请输入反馈状态" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.feebback"
+          placeholder="请输入反馈状态"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="推送时间" prop="pushTime">
-        <el-date-picker clearable v-model="queryParams.pushTime" type="date" value-format="yyyy-MM-dd"
-          placeholder="请选择推送时间">
+        <el-date-picker
+          clearable
+          v-model="queryParams.pushTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择推送时间"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:record:remove']">删除</el-button>
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['kyfz:record:remove']"
+          >删除</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:record:export']">导出</el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['kyfz:record:export']"
+          >导出</el-button
+        >
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar
+        :showSearch.sync="showSearch"
+        @queryTable="getList"
+      ></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="recordList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="匹配编号" align="center" prop="matchId" />
       <!-- 按照需求连接的两行 -->
       <el-table-column label="需求" align="center" prop="projectName" />
       <el-table-column label="专家" align="center" prop="expertName" />
       <el-table-column label="反馈状态" align="center" prop="feebback" />
-      <el-table-column label="推送时间" align="center" prop="pushTime" width="180">
+      <el-table-column
+        label="推送时间"
+        align="center"
+        prop="pushTime"
+        width="180"
+      >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.pushTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.pushTime, "{y}-{m}-{d}") }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)"
-            v-hasPermi="['kyfz:record:edit']">详细</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleDetail(scope.row)"
+            v-hasPermi="['kyfz:record:edit']"
+            >详细</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 推送详情对话框 -->
-    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="openDetail"
+      width="1000px"
+      append-to-body
+    >
       <el-table :data="gridData">
-        <el-table-column property="matchId" label="匹配编号" width="150"></el-table-column>
-        <el-table-column property="projectName" label="需求" width="200"></el-table-column>
+        <el-table-column
+          property="matchId"
+          label="匹配编号"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          property="projectName"
+          label="需求"
+          width="200"
+        ></el-table-column>
         <el-table-column property="client" label="企业"></el-table-column>
-        <el-table-column property="expertName" label="专家姓名" width="150"></el-table-column>
-        <el-table-column property="researchDirection" label="研究方向" width="200"></el-table-column>
-        <el-table-column property="matchScore" label="匹配分值"></el-table-column>
+        <el-table-column
+          property="expertName"
+          label="专家姓名"
+          width="150"
+        ></el-table-column>
+        <el-table-column
+          property="researchDirection"
+          label="研究方向"
+          width="200"
+        ></el-table-column>
+        <el-table-column
+          property="matchScore"
+          label="匹配分值"
+        ></el-table-column>
       </el-table>
-      <div style="border-top: 2px solid black;border-bottom: 2px solid black;padding:10px 10px">
+      <div
+        style="
+          border-top: 2px solid black;
+          border-bottom: 2px solid black;
+          padding: 10px 10px;
+        "
+      >
         <h4>需求关键词</h4>
         <div class="string-info">
           <span v-for="item in stringArray" :key="item">{{ item }}</span>
         </div>
       </div>
 
-      <div style="border-bottom: 2px solid black;padding:10px 10px;">
+      <div style="border-bottom: 2px solid black; padding: 10px 10px">
         <h4>专家研究成果</h4>
-
       </div>
-      <div style="padding:10px 10px;">
+      <div style="padding: 10px 10px">
         <h4>专家团队</h4>
-
       </div>
     </el-dialog>
-
-
 
     <!-- 添加或修改推送记录对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
@@ -99,7 +207,13 @@
           <el-input v-model="form.matchId" placeholder="请输入匹配id" />
         </el-form-item>
         <el-form-item label="推送时间" prop="pushTime">
-          <el-date-picker clearable v-model="form.pushTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择推送时间">
+          <el-date-picker
+            clearable
+            v-model="form.pushTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请选择推送时间"
+          >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="反馈状态" prop="feebback">
@@ -115,7 +229,13 @@
 </template>
 
 <script>
-import { listRecord, getRecord, delRecord, addRecord, updateRecord } from "@/api/kyfz/push_record";
+import {
+  listRecord,
+  getRecord,
+  delRecord,
+  addRecord,
+  updateRecord,
+} from "@/api/kyfz/push_record";
 
 export default {
   name: "Record",
@@ -151,17 +271,18 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      },
+      rules: {},
       matchDetail: null,
-      gridData: [{
-        matchId: '1220',
-        projectName: '张三',
-        client: '公司名字',
-        expertName: '科研辅助系统',
-        researchDirection: '计算机视觉',
-        matchScore: '9.9',
-      }],
+      gridData: [
+        {
+          matchId: "1220",
+          projectName: "张三",
+          client: "公司名字",
+          expertName: "中山大学有组织科研辅助系统",
+          researchDirection: "计算机视觉",
+          matchScore: "9.9",
+        },
+      ],
     };
   },
   created() {
@@ -171,7 +292,7 @@ export default {
     /** 查询推送记录列表 */
     getList() {
       this.loading = true;
-      listRecord(this.queryParams).then(response => {
+      listRecord(this.queryParams).then((response) => {
         this.recordList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -192,7 +313,7 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
-        updateTime: null
+        updateTime: null,
       };
       this.resetForm("form");
     },
@@ -208,9 +329,9 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.pushId)
-      this.single = selection.length !== 1
-      this.multiple = !selection.length
+      this.ids = selection.map((item) => item.pushId);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
     /** 新增按钮操作 */
     handleAdd() {
@@ -221,8 +342,8 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const pushId = row.pushId || this.ids
-      getRecord(pushId).then(response => {
+      const pushId = row.pushId || this.ids;
+      getRecord(pushId).then((response) => {
         this.form = response.data;
         this.open = true;
         this.title = "修改推送记录";
@@ -230,16 +351,16 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form"].validate((valid) => {
         if (valid) {
           if (this.form.pushId != null) {
-            updateRecord(this.form).then(response => {
+            updateRecord(this.form).then((response) => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addRecord(this.form).then(response => {
+            addRecord(this.form).then((response) => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -251,18 +372,26 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const pushIds = row.pushId || this.ids;
-      this.$modal.confirm('是否确认删除推送记录编号为"' + pushIds + '"的数据项？').then(function () {
-        return delRecord(pushIds);
-      }).then(() => {
-        this.getList();
-        this.$modal.msgSuccess("删除成功");
-      }).catch(() => { });
+      this.$modal
+        .confirm('是否确认删除推送记录编号为"' + pushIds + '"的数据项？')
+        .then(function () {
+          return delRecord(pushIds);
+        })
+        .then(() => {
+          this.getList();
+          this.$modal.msgSuccess("删除成功");
+        })
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('kyfz/record/export', {
-        ...this.queryParams
-      }, `record_${new Date().getTime()}.xlsx`)
+      this.download(
+        "kyfz/record/export",
+        {
+          ...this.queryParams,
+        },
+        `record_${new Date().getTime()}.xlsx`
+      );
     },
     /**详细信息按钮操作 */
     handleDetail() {
@@ -280,7 +409,7 @@ export default {
         this.openDetail = true;
         this.title = "";
       });*/
-    }
-  }
+    },
+  },
 };
 </script>

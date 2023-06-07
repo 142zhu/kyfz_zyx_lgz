@@ -70,7 +70,7 @@ export default {
   },
   data() {
     return {
-      title: "科研辅助系统",
+      title: "中山大学有组织科研辅助系统",
       logo: logoImg,
     };
   },

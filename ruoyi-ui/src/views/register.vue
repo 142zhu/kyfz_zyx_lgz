@@ -6,7 +6,7 @@
       :rules="registerRules"
       class="register-form"
     >
-      <h3 class="title">科研辅助系统</h3>
+      <h3 class="title">中山大学有组织科研辅助系统</h3>
       <el-form-item prop="username">
         <el-input
           v-model="registerForm.username"
