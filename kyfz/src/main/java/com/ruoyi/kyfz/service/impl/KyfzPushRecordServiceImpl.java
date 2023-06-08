@@ -86,4 +86,14 @@ public class KyfzPushRecordServiceImpl implements IKyfzPushRecordService {
     public int deleteKyfzPushRecordByPushId(Long pushId) {
         return kyfzPushRecordMapper.deleteKyfzPushRecordByPushId(pushId);
     }
+
+    /***************************************************
+     * 添加推送记录
+     * 
+     * @param pushRecords 推送记录list（多条或1条）
+     * @return 结果
+     */
+    public int batchInsert(List<KyfzPushRecord> pushRecords) {
+        return kyfzPushRecordMapper.batchInsert(pushRecords);
+    }
 }

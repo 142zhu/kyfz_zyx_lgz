@@ -13,14 +13,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+
+        <!-- 按需求添加 -->
+        <result property="projectName"    column="project_name"    />
+        <result property="client"    column="client"    />
+        <result property="expertName"    column="expert_name"    />
     </resultMap>
 
     <sql id="selectKyfzPushRecordVo">
         select push_id, match_id, push_time, feebback, create_by, create_time, update_by, update_time from kyfz_push_record
     </sql>
 
+    <sql id="selectKyfzPushRecordVo2">
+        select push_id, p.match_id, push_time, feebback ,r.project_name,r.client,e.expert_name
+        from kyfz_push_record p
+        left join kyfz_match m on m.match_id=p.match_id
+        left join kyfz_requirement r on m.requirement_id=r.requirement_id
+        left join kyfz_expert e on m.expert_account=e.expert_account
+    </sql>
+
     <select id="selectKyfzPushRecordList" parameterType="KyfzPushRecord" resultMap="KyfzPushRecordResult">
-        <include refid="selectKyfzPushRecordVo"/>
+        <include refid="selectKyfzPushRecordVo2"/>
         <where>  
             <if test="matchId != null "> and match_id = #{matchId}</if>
             <if test="pushTime != null "> and push_time = #{pushTime}</if>
@@ -79,4 +92,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{pushId}
         </foreach>
     </delete>
+ 
+     <!-- 批量推送 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO kyfz_push_record (match_id, push_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.matchId}, #{item.pushTime})
+        </foreach>
+    </insert>
 </mapper>

@@ -32,6 +32,45 @@ public class KyfzPushRecord extends BaseEntity {
     @Excel(name = "数据字典", readConverterExp = "未=点击、有意向、无意向")
     private String feebback;
 
+    /**************** 按需求添加的字段 */
+    /** 需求 */
+    @Excel(name = "需求", readConverterExp = "项目名")
+    private String projectName;
+
+    /** 需求 */
+    @Excel(name = "专家", readConverterExp = "专家的姓名")
+    private String expertName;
+
+    /** 提出需求的企业 */
+    @Excel(name = "企业", readConverterExp = "提出需求的企业")
+    private String client;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getExpertName() {
+        return expertName;
+    }
+
+    public void setExpertName(String expertName) {
+        this.expertName = expertName;
+    }
+
+    public String getClient() {
+        return client;
+    }
+
+    public void setClient(String client) {
+        this.client = client;
+    }
+
+    /**************** **************** */
+
     public void setPushId(Long pushId) {
         this.pushId = pushId;
     }
@@ -75,6 +114,8 @@ public class KyfzPushRecord extends BaseEntity {
                 .append("createTime", getCreateTime())
                 .append("updateBy", getUpdateBy())
                 .append("updateTime", getUpdateTime())
+                .append("projectName", getProjectName())
+                .append("expertName", getExpertName())
                 .toString();
     }
 }

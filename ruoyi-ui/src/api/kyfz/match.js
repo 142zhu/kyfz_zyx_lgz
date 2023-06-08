@@ -55,3 +55,11 @@ export function getMatchDetails(matchId) {
     method: 'get'
   })
 }
+
+// 推送记录匹配列表
+export function pushMatch(matchId) {
+  return request({
+    url: '/kyfz/match/' + matchId,
+    method: 'put',
+  })
+}

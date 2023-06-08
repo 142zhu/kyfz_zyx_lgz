@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
 import com.ruoyi.kyfz.domain.KyfzMatch;
+import com.ruoyi.kyfz.domain.KyfzPushRecord;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 
 /**
@@ -106,4 +107,15 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
     public String selectProjectName(Long projectId) {
         return kyfzMatchMapper.selectProjectName(projectId);
     }
+
+    /***************************************************
+     * 添加推送记录
+     * 
+     * @param pushRecords 推送记录list（多条或1条）
+     * @return 结果
+     */
+    public int batchInsert(List<KyfzPushRecord> pushRecords) {
+        return kyfzMatchMapper.batchInsert(pushRecords);
+    }
+
 }

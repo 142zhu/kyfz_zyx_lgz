@@ -60,9 +60,8 @@
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)"
             v-hasPermi="['kyfz:match:detail']">详细</el-button>
 
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
             v-hasPermi="['kyfz:match:push']">推送</el-button>
-
         </template>
       </el-table-column>
     </el-table>
@@ -119,7 +118,7 @@
 </template>
 
 <script>
-import { listMatch, getMatch, delMatch, addMatch, updateMatch, getMatchDetails } from "@/api/kyfz/match";
+import { listMatch, getMatch, delMatch, addMatch, updateMatch, getMatchDetails, pushMatch } from "@/api/kyfz/match";
 
 export default {
   name: "Match",
@@ -295,6 +294,14 @@ export default {
         this.title = "详细信息";
       });
 
+    },
+    handlePush(row) {
+      const matchIds = row.matchId || this.ids;
+      this.$modal.confirm('是否确认推送所选中的匹配列表？').then(function () {
+        return pushMatch(matchIds);
+      }).then(() => {
+        this.$modal.msgSuccess("推送成功");
+      }).catch(() => { });
     }
   }
 };

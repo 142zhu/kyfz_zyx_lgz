@@ -2,6 +2,7 @@ package com.ruoyi.kyfz.service;
 
 import java.util.List;
 import com.ruoyi.kyfz.domain.KyfzMatch;
+import com.ruoyi.kyfz.domain.KyfzPushRecord;
 
 /**
  * 匹配列表Service接口
@@ -73,4 +74,13 @@ public interface IKyfzMatchService {
      * @return 项目名称
      */
     public String selectProjectName(Long projectId);
+
+    /***************************************************
+     * 添加推送记录
+     * 
+     * @param pushRecords 推送记录list（多条或1条）
+     * @return 结果
+     */
+    public int batchInsert(List<KyfzPushRecord> pushRecords);
+
 }

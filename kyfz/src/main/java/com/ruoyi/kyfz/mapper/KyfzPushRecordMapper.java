@@ -57,4 +57,12 @@ public interface KyfzPushRecordMapper {
      * @return 结果
      */
     public int deleteKyfzPushRecordByPushIds(Long[] pushIds);
+
+    /***************************************************
+     * 添加推送记录
+     * 
+     * @param pushRecords 推送记录list（多条或1条）
+     * @return 结果
+     */
+    public int batchInsert(List<KyfzPushRecord> pushRecords);
 }

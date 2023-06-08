@@ -129,4 +129,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where project_id = #{projectId}
     </select>
 
+    <!-- 批量推送 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO kyfz_push_record (match_id, push_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.matchId}, #{item.pushTime})
+        </foreach>
+    </insert>
 </mapper>
