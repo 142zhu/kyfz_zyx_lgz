@@ -51,7 +51,6 @@ public class KyfzMatchController extends BaseController {
     public TableDataInfo list(KyfzMatch kyfzMatch) {
         startPage();
         List<KyfzMatch> list = kyfzMatchService.selectKyfzMatchList(kyfzMatch);
-        System.out.println(list.get(0).getClient());
         return getDataTable(list);
     }
 
@@ -126,8 +125,14 @@ public class KyfzMatchController extends BaseController {
     public AjaxResult getDetailInfo(@PathVariable("matchId") Long matchId) {
         // 先索引出所有信息
         KyfzMatch match1 = kyfzMatchService.selectKyfzMatchDetailByMatchId(matchId);
-        // 从索引出的匹配表中获取匹配出来的id（多个id用逗号分隔开了）
+        // 从索引出的匹配表中获取匹配出来的项目id（多个id用逗号分隔开了）
         String projectIds = match1.getProjectId();
+        // 从索引出的匹配表中获取匹配出来的论文id（多个id用逗号分隔开了）
+        String thesiseIds = match1.getThesisId();
+        // 从索引出的匹配表中获取匹配出来的著作id（多个id用逗号分隔开了）
+        String workIds = match1.getWorkId();
+        // 从索引出的匹配表中获取匹配出来的证书id（多个id用逗号分隔开了）
+        String certificateIds = match1.getCertificateId();
         // 把索引到的所有id用分隔函数分开，存在数组中
         if (projectIds != "0") {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
@@ -135,11 +140,62 @@ public class KyfzMatchController extends BaseController {
             Long projectId[] = extractIds(projectIds);
             for (int i = 0; i < projectId.length; i++) {
                 String projectName = kyfzMatchService.selectProjectName(projectId[i]);
-                projectNames += projectName + ",";
+                if (i == projectId.length - 1) {
+                    projectNames += projectName;
+                } else {
+                    projectNames += projectName + ",";
+                }
             }
             match1.setProjectNames(projectNames);
         }
+
+        if (thesiseIds != "0") {
+            // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
+            String thesisNames = "";
+            Long thesisId[] = extractIds(thesiseIds);
+            for (int i = 0; i < thesisId.length; i++) {
+                String thesisName = kyfzMatchService.selectThesisName(thesisId[i]);
+                if (i == thesisId.length - 1) {
+                    thesisNames += thesisName;
+                } else {
+                    thesisNames += thesisName + ",";
+                }
+            }
+            match1.setThesisNames(thesisNames);
+        }
+
+        if (workIds != "0") {
+            // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
+            String workNames = "";
+            Long workId[] = extractIds(workIds);
+            for (int i = 0; i < workId.length; i++) {
+                String workName = kyfzMatchService.selectWorkName(workId[i]);
+                if (i == workId.length - 1) {
+                    workNames += workName;
+                } else {
+                    workNames += workName + ",";
+                }
+            }
+            match1.setWorkNames(workNames);
+        }
+
+        if (certificateIds != "0") {
+            // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
+            String certificateNames = "";
+            Long certificateId[] = extractIds(certificateIds);
+            for (int i = 0; i < certificateId.length; i++) {
+                String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);
+                if (i == certificateId.length - 1) {
+                    certificateNames += certificateName;
+                } else {
+                    certificateNames += certificateName + ",";
+                }
+
+            }
+            match1.setCertificateNames(certificateNames);
+        }
         // 把projectNames变量传进工具类match1中
+
         return success(match1);
     }
 
@@ -163,11 +219,29 @@ public class KyfzMatchController extends BaseController {
             pushRecord.setMatchId(matchId);
             pushRecord.setPushTime(pushTimeDate);
             pushRecords.add(pushRecord); // 添加到列表中
-            System.out.println(34567);
         }
         // 批量插入推送记录
         // kyfzMatchService.batchInsert(pushRecords);
         return toAjax(kyfzMatchService.batchInsert(pushRecords));
+    }
+
+    /**
+     * 修改匹配列表
+     */
+
+    /*
+     * @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
+     * 
+     * @PutMapping("/3{matchId}")
+     * public AjaxResult updatePushRecord(@PathVariable Long matchId) {
+     * return toAjax(kyfzMatchService.updatePushRecord2(matchId));
+     * }
+     */
+
+    @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
+    @PutMapping("/3/")
+    public AjaxResult updateScore(@RequestBody KyfzMatch kyfzMatch) {
+        return toAjax(kyfzMatchService.updatePushRecord(kyfzMatch));
     }
 
     /************ 工具方法获取String projectId中的所有方法然后用Long 数组存起来 */

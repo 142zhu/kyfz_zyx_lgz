@@ -109,6 +109,36 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
     }
 
     /***************************************************
+     * 查询论文名称
+     * 
+     * @param thesisId 论文表主键
+     * @return 论文名称
+     */
+    public String selectThesisName(Long thesisId) {
+        return kyfzMatchMapper.selectThesisName(thesisId);
+    }
+
+    /***************************************************
+     * 查询著作名称
+     * 
+     * @param Id 著作表主键
+     * @return 著作名称
+     */
+    public String selectWorkName(Long workId) {
+        return kyfzMatchMapper.selectWorkName(workId);
+    }
+
+    /***************************************************
+     * 查询证书名称
+     * 
+     * @param Id 证书表主键
+     * @return 证书名称
+     */
+    public String selectCertificateName(Long certificateId) {
+        return kyfzMatchMapper.selectCertificateName(certificateId);
+    }
+
+    /***************************************************
      * 添加推送记录
      * 
      * @param pushRecords 推送记录list（多条或1条）
@@ -118,4 +148,23 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
         return kyfzMatchMapper.batchInsert(pushRecords);
     }
 
+    /**
+     * 修改推送记录（评分）
+     * 
+     * @param kyfzMatch 推送记录列表
+     * @return 结果
+     */
+    public int updatePushRecord2(Long matchId) {
+        return kyfzMatchMapper.updatePushRecord2(matchId);
+    }
+
+    /**
+     * 修改推送记录（评分）
+     * 
+     * @param kyfzMatch 推送记录列表
+     * @return 结果
+     */
+    public int updatePushRecord(KyfzMatch kyfzMatch) {
+        return kyfzMatchMapper.updatePushRecord(kyfzMatch);
+    }
 }
