@@ -8,7 +8,15 @@
       v-show="showSearch"
       label-width="68px"
     >
-      <el-form-item label="职称" prop="expertPosition">
+      <el-form-item label="姓名" prop="expertName" label-width="120px">
+        <el-input
+          v-model="queryParams.expertName"
+          placeholder="请输入专家姓名"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="职称" prop="expertPosition" label-width="120px">
         <el-input
           v-model="queryParams.expertPosition"
           placeholder="请输入专家职称"
@@ -16,7 +24,15 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="学院" prop="expertAffiliation">
+      <el-form-item label="研究方向" prop="researchDirection" label-width="120px">
+        <el-input
+          v-model="queryParams.researchDirection"
+          placeholder="请输入研究方向"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="所属单位" prop="expertAffiliation" label-width="120px">
         <el-input
           v-model="queryParams.expertAffiliation"
           placeholder="请输入专家所属单位"

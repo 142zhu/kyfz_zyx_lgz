@@ -9,10 +9,10 @@ import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.service.IKyfzEnterpriseService;
 
 /**
- * 推送记录Service业务层处理
+ * 企业管理Service业务层处理
  * 
  * @author ruoyi
- * @date 2023-06-06
+ * @date 2023-06-09
  */
 @Service
 public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService 
@@ -21,10 +21,10 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     private KyfzEnterpriseMapper kyfzEnterpriseMapper;
 
     /**
-     * 查询推送记录
+     * 查询企业管理
      * 
-     * @param enterpriseId 推送记录主键
-     * @return 推送记录
+     * @param enterpriseId 企业管理主键
+     * @return 企业管理
      */
     @Override
     public KyfzEnterprise selectKyfzEnterpriseByEnterpriseId(Long enterpriseId)
@@ -33,10 +33,10 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     }
 
     /**
-     * 查询推送记录列表
+     * 查询企业管理列表
      * 
-     * @param kyfzEnterprise 推送记录
-     * @return 推送记录
+     * @param kyfzEnterprise 企业管理
+     * @return 企业管理
      */
     @Override
     public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise)
@@ -45,9 +45,9 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     }
 
     /**
-     * 新增推送记录
+     * 新增企业管理
      * 
-     * @param kyfzEnterprise 推送记录
+     * @param kyfzEnterprise 企业管理
      * @return 结果
      */
     @Override
@@ -58,9 +58,9 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     }
 
     /**
-     * 修改推送记录
+     * 修改企业管理
      * 
-     * @param kyfzEnterprise 推送记录
+     * @param kyfzEnterprise 企业管理
      * @return 结果
      */
     @Override
@@ -71,9 +71,9 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     }
 
     /**
-     * 批量删除推送记录
+     * 批量删除企业管理
      * 
-     * @param enterpriseIds 需要删除的推送记录主键
+     * @param enterpriseIds 需要删除的企业管理主键
      * @return 结果
      */
     @Override
@@ -83,9 +83,9 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
     }
 
     /**
-     * 删除推送记录信息
+     * 删除企业管理信息
      * 
-     * @param enterpriseId 推送记录主键
+     * @param enterpriseId 企业管理主键
      * @return 结果
      */
     @Override

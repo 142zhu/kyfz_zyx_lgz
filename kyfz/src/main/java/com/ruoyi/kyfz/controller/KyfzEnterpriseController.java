@@ -22,22 +22,22 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 推送记录Controller
+ * 企业管理Controller
  * 
  * @author ruoyi
- * @date 2023-06-06
+ * @date 2023-06-09
  */
 @RestController
-@RequestMapping("/kyfz/push_record")
+@RequestMapping("/kyfz/enterprise")
 public class KyfzEnterpriseController extends BaseController
 {
     @Autowired
     private IKyfzEnterpriseService kyfzEnterpriseService;
 
     /**
-     * 查询推送记录列表
+     * 查询企业管理列表
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:list')")
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:list')")
     @GetMapping("/list")
     public TableDataInfo list(KyfzEnterprise kyfzEnterprise)
     {
@@ -47,22 +47,22 @@ public class KyfzEnterpriseController extends BaseController
     }
 
     /**
-     * 导出推送记录列表
+     * 导出企业管理列表
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:export')")
-    @Log(title = "推送记录", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:export')")
+    @Log(title = "企业管理", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, KyfzEnterprise kyfzEnterprise)
     {
         List<KyfzEnterprise> list = kyfzEnterpriseService.selectKyfzEnterpriseList(kyfzEnterprise);
         ExcelUtil<KyfzEnterprise> util = new ExcelUtil<KyfzEnterprise>(KyfzEnterprise.class);
-        util.exportExcel(response, list, "推送记录数据");
+        util.exportExcel(response, list, "企业管理数据");
     }
 
     /**
-     * 获取推送记录详细信息
+     * 获取企业管理详细信息
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:query')")
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:query')")
     @GetMapping(value = "/{enterpriseId}")
     public AjaxResult getInfo(@PathVariable("enterpriseId") Long enterpriseId)
     {
@@ -70,10 +70,10 @@ public class KyfzEnterpriseController extends BaseController
     }
 
     /**
-     * 新增推送记录
+     * 新增企业管理
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:add')")
-    @Log(title = "推送记录", businessType = BusinessType.INSERT)
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:add')")
+    @Log(title = "企业管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody KyfzEnterprise kyfzEnterprise)
     {
@@ -81,10 +81,10 @@ public class KyfzEnterpriseController extends BaseController
     }
 
     /**
-     * 修改推送记录
+     * 修改企业管理
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:edit')")
-    @Log(title = "推送记录", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:edit')")
+    @Log(title = "企业管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody KyfzEnterprise kyfzEnterprise)
     {
@@ -92,10 +92,10 @@ public class KyfzEnterpriseController extends BaseController
     }
 
     /**
-     * 删除推送记录
+     * 删除企业管理
      */
-    @PreAuthorize("@ss.hasPermi('kyfz:push_record:remove')")
-    @Log(title = "推送记录", businessType = BusinessType.DELETE)
+    @PreAuthorize("@ss.hasPermi('kyfz:enterprise:remove')")
+    @Log(title = "企业管理", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{enterpriseIds}")
     public AjaxResult remove(@PathVariable Long[] enterpriseIds)
     {

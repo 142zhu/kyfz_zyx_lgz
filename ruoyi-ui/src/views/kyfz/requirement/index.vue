@@ -8,10 +8,34 @@
       v-show="showSearch"
       label-width="68px"
     >
+      <el-form-item label="需求名称" prop="projectName">
+        <el-input
+          v-model="queryParams.projectName"
+          placeholder="请输入需求名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="项目类别" prop="projectCategory">
+        <el-input
+          v-model="queryParams.projectCategory"
+          placeholder="请输入项目类别"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="项目类型" prop="projectType">
         <el-input
           v-model="queryParams.projectType"
           placeholder="请输入项目类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="公司名称" prop="enterpriseName">
+        <el-input
+          v-model="queryParams.enterpriseName"
+          placeholder="请输入公司名称"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -23,6 +47,17 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
+      </el-form-item>
+      <el-form-item label="发布时间" prop="requirementReleaseTime">
+        <el-date-picker
+          clearable
+          v-model="queryParams.requirementReleaseTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请输入发布时间"
+          @keyup.enter.native="handleQuery"
+        >
+        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
@@ -40,7 +75,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['kyfz:requirement:add']"
-          >上传</el-button
+          >新增</el-button
         >
       </el-col>
       <el-col :span="1.5">
@@ -69,7 +104,7 @@
       <el-table-column label="项目类别" align="center" prop="projectCategory" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="需求状态" align="center" prop="requirementStatus" />
-      <el-table-column label="企业编号" align="center" prop="enterpriseNumber" />
+      <el-table-column label="公司名称" align="center" prop="enterpriseName" />
       <el-table-column
         label="发布时间"
         align="center"
@@ -86,7 +121,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-document"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['kyfz:requirement:edit']"
             >详情</el-button
@@ -213,6 +248,15 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
+          <el-input
+            v-model="form.enterpriseKeywords"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
+        </el-form-item>
         <el-form-item label="公司简介" prop="enterpriseDescribe" class="inputDeep">
           <el-input
             v-model="form.enterpriseDescribe"
@@ -232,9 +276,6 @@
             ref="idInput"
             style="width: 600px"
           />
-        </el-form-item>
-        <el-form-item label="公司编号" prop="enterpriseNumber" hidden>
-          <el-input v-model="form.enterpriseNumber" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -309,6 +350,15 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
+          <el-input
+            v-model="form.enterpriseKeywords"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
+        </el-form-item>
         <el-form-item label="公司简介" prop="enterpriseDescribe">
           <el-input
             v-model="form.enterpriseDescribe"
@@ -320,7 +370,7 @@
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </el-form-item>
-        <el-form-item label="注册资本" prop="registeredCapital">
+        <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
           <el-input
             v-model="form.registeredCapital"
             placeholder=""
@@ -405,6 +455,7 @@ export default {
         requirementKeywords: null,
         requirementDescription: null,
         requirementReleaseTime: null,
+        enterpriseNumber: null,
       },
       // 表单参数
       form: {},
@@ -529,7 +580,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open1 = true;
-      this.title = "上传需求管理";
+      this.title = "新增需求管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

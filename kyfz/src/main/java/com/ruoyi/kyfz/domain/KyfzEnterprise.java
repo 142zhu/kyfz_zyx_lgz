@@ -6,10 +6,10 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 推送记录对象 kyfz_enterprise
+ * 企业管理对象 kyfz_enterprise
  * 
  * @author ruoyi
- * @date 2023-06-06
+ * @date 2023-06-09
  */
 public class KyfzEnterprise extends BaseEntity
 {
@@ -33,6 +33,10 @@ public class KyfzEnterprise extends BaseEntity
     /** 企业注册资本 */
     @Excel(name = "企业注册资本")
     private String registeredCapital;
+
+    /** 企业关键词 */
+    @Excel(name = "企业关键词")
+    private String enterpriseKeywords;
 
     public void setEnterpriseId(Long enterpriseId) 
     {
@@ -79,6 +83,15 @@ public class KyfzEnterprise extends BaseEntity
     {
         return registeredCapital;
     }
+    public void setEnterpriseKeywords(String enterpriseKeywords) 
+    {
+        this.enterpriseKeywords = enterpriseKeywords;
+    }
+
+    public String getEnterpriseKeywords() 
+    {
+        return enterpriseKeywords;
+    }
 
     @Override
     public String toString() {
@@ -92,6 +105,7 @@ public class KyfzEnterprise extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("enterpriseKeywords", getEnterpriseKeywords())
             .toString();
     }
 }
