@@ -68,62 +68,75 @@
 
     <!-- 详细信息弹窗 -->
     <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
-      <el-table :data="[matchDetails]" style="margin-top:-20px;">
-        <el-table-column label="匹配编号" align="center" prop="matchId" />
-        <!-- 通过需求id获取需求表中的projectName -->
-        <el-table-column label="需求" align="center" prop="projectName" />
-        <!-- 通过需求id获取需求表中的委托单位 -->
-        <el-table-column label="企业" align="center" prop="client" />
-        <el-table-column label="推荐专家" align="center" prop="expertName" />
-        <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
-        <el-table-column label="匹配分值" align="center" prop="matchScore" />
-        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-          <template slot-scope="scope">
-            <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
-              v-hasPermi="['kyfz:match:push']">推送</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div style="border-top: 1px solid black;border-bottom: 1px solid black;margin-top:10px;">
-        <h4>需求关键词</h4>
-        <div class="string-info">
-          <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
-        </div>
-      </div>
-      <div style="border-bottom: 1px solid black;">
-        <h3>专家研究成果</h3>
-        <div class="string-info">
-          <div>
-            <h5>相关项目</h5>
-            <span v-for="item in matchDetails.projectNamesArray" :key="item">{{ item }}</span>
-          </div>
-          <div>
-            <h5>相关论文</h5>
-            <span v-for="item in matchDetails.thesisNamesArray" :key="item">{{ item }}</span>
-          </div>
-          <div>
-            <h5>相关著作</h5>
-            <span v-for="item in matchDetails.workNamesArray" :key="item">{{ item }}</span>
-          </div>
-          <div>
-            <h5>相关证书</h5>
-            <span v-for="item in matchDetails.certificateNamesArray" :key="item">{{ item }}</span>
+      <div class="match-detail" style="margin-top:-20px">
+        <div class="match-detail-header">
+          <h3 class="match-detail-title">匹配详情</h3>
+          <div class="match-detail-star">
+            <span>为匹配结果评分</span>
+            <el-rate :model-value="matchDetails.value2" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+              @change="changeStarValue(matchDetails.matchId, value2)">
+            </el-rate>
           </div>
         </div>
-      </div>
-      <div>
-        <h4>专家团队</h4>
-        <div class="string-info">
-
-          <span v-for="item in matchDetails.teamMembersArray" :key="item">{{ item }}</span>
+        <el-table :data="[matchDetails]" class="match-detail-table">
+          <el-table-column label="匹配编号" align="center" prop="matchId" />
+          <el-table-column label="需求" align="center" prop="projectName" />
+          <el-table-column label="企业" align="center" prop="client" />
+          <el-table-column label="推荐专家" align="center" prop="expertName" />
+          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+          <el-table-column label="匹配分值" align="center" prop="matchScore" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
+                v-has-permission="'kyfz:match:push'">推送</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="match-detail-keywords">
+          <h4>需求关键词</h4>
+          <div class="match-detail-keywords-info">
+            <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
+          </div>
         </div>
-      </div>
-      <!-- 评分模块 -->
-      <div class="block" style="display:inline-block;position:absolute;top:30px;right:60px;">
-        <span style="vertical-align: middle;display:inline;margin-right:3px;">为匹配结果评分</span>
-        <el-rate v-model="matchDetails.value2" :colors="colors" style="display:inline;"
-          @change="changeStarValue(matchDetails.matchId, value2)">
-        </el-rate>
+        <div class="match-detail-result">
+          <h4>专家研究成果</h4>
+          <div class="match-detail-result-info">
+            <div>
+              <h5>相关项目</h5>
+              <div class="match-detail-decorate">
+                <span class="match-detail-item project" v-for="item in matchDetails.projectNamesArray" :key="item">{{ item
+                }}</span>
+              </div>
+            </div>
+            <div>
+              <h5>相关论文</h5>
+              <div class="match-detail-decorate">
+                <span class="match-detail-item thesis" v-for="item in matchDetails.thesisNamesArray" :key="item">{{ item
+                }}</span>
+              </div>
+            </div>
+            <div>
+              <h5>相关著作</h5>
+              <div class="match-detail-decorate">
+                <span class="match-detail-item work" v-for="item in matchDetails.workNamesArray" :key="item">{{ item
+                }}</span>
+              </div>
+            </div>
+            <div>
+              <h5>相关证书</h5>
+              <div class="match-detail-decorate">
+                <span class="match-detail-item certificate" v-for="item in matchDetails.certificateNamesArray"
+                  :key="item">{{ item }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="match-detail-team">
+          <h4>专家团队</h4>
+          <div class="match-detail-team-info">
+            <span v-for="item in matchDetails.teamMembersArray" :key="item">{{ item }}</span>
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -379,5 +392,184 @@ export default {
   margin: 10px;
   border: 1px solid gray;
   white-space: pre-wrap;
+}
+
+.match-detail {
+  padding: 20px;
+}
+
+.match-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.match-detail-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.match-detail-star {
+  display: flex;
+  align-items: center;
+}
+
+.match-detail-table {
+  margin: 10px 0;
+}
+
+.match-detail-keywords h4,
+.match-detail-result h4,
+.match-detail-team h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.match-detail-keywords-info,
+.match-detail-result-info,
+.match-detail-team-info {
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  background-color: #f5f7fa;
+}
+
+.match-detail-result-info>div {
+  margin-bottom: 10px;
+}
+
+.match-detail-decorate {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-detail-decorate .match-detail-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.match-detail-decorate .match-detail-item:first-child {
+  margin-left: 0;
+}
+
+.match-detail-decorate .match-detail-item::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.match-detail-decorate .match-detail-item.project::before {
+  background-color: #3fb27f;
+}
+
+.match-detail-decorate .match-detail-item.thesis::before {
+  background-color: #ffc107;
+}
+
+.match-detail-decorate .match-detail-item.work::before {
+  background-color: #909399;
+}
+
+.match-detail-decorate .match-detail-item.certificate::before {
+  background-color: #19be6b;
+}
+
+.match-detail-team-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-detail-team-info>span {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f5f7fa;
+}
+
+.match-detail-keywords-info span {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid #dcdfe6;
+  border-radius: 2px;
+  background-color: #f2f6fc;
+  color: #606266;
+  margin: 5px 5px 5px 0;
+}
+
+.match-detail-keywords-info span:hover {
+  background-color: #eef1f6;
+}
+
+.match-detail-team-info span {
+  display: inline-block;
+  background-color: #e4e7ed;
+  margin: 0 10px 10px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.match-detail-team-info span:hover {
+  display: inline-block;
+  background-color: #d8dbe2;
+}
+
+/* 调整对话框标题和内容之间的距离 */
+.el-dialog__header {
+  margin-bottom: 0px !important;
+}
+
+/* 在弹窗内容过大时添加垂直滚动条 */
+.el-dialog__body .match-detail-team-info,
+.el-dialog__body .match-detail-keywords-info {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* 匹配详情示例页面中需要增加的样式 */
+.match-detail-keywords-info span {
+  padding: 2px 6px;
+  border: 1px solid #dcdfe6;
+  border-radius: 2px;
+  background-color: #f2f6fc;
+  color: #606266;
+  margin: 5px 5px 5px 0;
+}
+
+.match-detail-keywords-info span:hover {
+  background-color: #eef1f6;
+}
+
+.match-detail-team-info span {
+  display: inline-block;
+  background-color: #e4e7ed;
+  margin: 0 10px 10px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.match-detail-team-info span:hover {
+  background-color: #d8dbe2;
 }
 </style>
