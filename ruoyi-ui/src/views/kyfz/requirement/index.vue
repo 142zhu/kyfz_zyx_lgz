@@ -307,7 +307,7 @@
             placeholder="请输入需求描述"
             style="width: 600px"
             type="textarea"
-            :autosize="{ minRows: 2, maxRows: 4 }"
+            :autosize="{ minRows: 4, maxRows: 6 }"
           />
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
@@ -367,7 +367,7 @@
             :readonly="true"
             ref="idInput"
             style="width: 600px"
-            :autosize="{ minRows: 2, maxRows: 4 }"
+            :autosize="{ minRows: 4, maxRows: 6 }"
           />
         </el-form-item>
         <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
@@ -579,12 +579,14 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.getenterpriseList();
       this.open1 = true;
       this.title = "新增需求管理";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
+      this.getenterpriseList();
       const requirementId = row.requirementId || this.ids;
       getRequirement(requirementId).then((response) => {
         this.form = response.data;

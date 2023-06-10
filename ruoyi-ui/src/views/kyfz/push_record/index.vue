@@ -1,45 +1,98 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
       <el-form-item label="匹配编号" prop="matchId">
-        <el-input v-model="queryParams.matchId" placeholder="请输入匹配编号" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入匹配编号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="需求" prop="projectName">
-        <el-input v-model="queryParams.matchId" placeholder="请输入需求" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入需求"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="专家" prop="expertName">
-        <el-input v-model="queryParams.matchId" placeholder="请输入专家名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.matchId"
+          placeholder="请输入专家名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="反馈状态" prop="feebback">
-        <el-input v-model="queryParams.feebback" placeholder="请输入反馈状态" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.feebback"
+          placeholder="请输入反馈状态"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="推送时间" prop="pushTime">
-        <el-date-picker clearable v-model="queryParams.pushTime" type="date" value-format="yyyy-MM-dd"
-          placeholder="请选择推送时间">
+        <el-date-picker
+          clearable
+          v-model="queryParams.pushTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择推送时间"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
+          >搜索</el-button
+        >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:record:remove']">删除</el-button>
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['kyfz:record:remove']"
+          >删除</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:record:export']">导出</el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['kyfz:record:export']"
+          >导出</el-button
+        >
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="recordList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="匹配编号" align="center" prop="matchId" />
       <!-- 按照需求连接的两行 -->
@@ -54,19 +107,30 @@
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)"
-            v-hasPermi="['kyfz:record:edit']">详细</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleDetail(scope.row)"
+            v-hasPermi="['kyfz:record:edit']"
+            >详细</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 推送详情对话框 -->
     <!-- 详细信息弹窗 -->
     <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
-      <el-table :data="[matchDetails]" style="margin-top:-20px;">
+      <el-table :data="[matchDetails]" style="margin-top: -20px">
         <el-table-column label="匹配编号" align="center" prop="matchId" />
         <!-- 通过需求id获取需求表中的projectName -->
         <el-table-column label="需求" align="center" prop="projectName" />
@@ -81,45 +145,69 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="border-top: 1px solid black;border-bottom: 1px solid black;margin-top:10px;">
+      <div
+        style="
+          border-top: 1px solid black;
+          border-bottom: 1px solid black;
+          margin-top: 10px;
+        "
+      >
         <h4>需求关键词</h4>
         <div class="string-info">
-          <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
+          <span v-for="item in matchDetails.requirementKeywordsArray" :key="item"
+            >{{ item }}<br
+          /></span>
         </div>
       </div>
-      <div style="border-bottom: 1px solid black;">
+      <div style="border-bottom: 1px solid black">
         <h4>专家研究成果</h4>
         <div class="string-info">
-          <span v-for="item in matchDetails.projectNamesArray" :key="item">{{ item }}</span>
+          <span v-for="item in matchDetails.projectNamesArray" :key="item">{{
+            item
+          }}</span>
         </div>
       </div>
       <div>
         <h4>专家团队</h4>
         <div class="string-info">
-          <span v-for="item in matchDetails.teamMembersArray" :key="item">{{ item }}</span>
+          <span v-for="item in matchDetails.teamMembersArray" :key="item">{{
+            item
+          }}</span>
         </div>
       </div>
       <!-- 评分模块 -->
-      <div class="block" style="display:inline-block;position:absolute;top:30px;right:60px;">
+      <div
+        class="block"
+        style="display: inline-block; position: absolute; top: 30px; right: 60px"
+      >
         <span
-          style="vertical-align: middle;display:inline;margin-right:3px;line-height:10px;font-size:10px;">反馈状态:&nbsp;</span>
-        <span style="display:inline;line-height:10px;font-size:10px;">{{ matchDetails.feebback }}</span>
+          style="
+            vertical-align: middle;
+            display: inline;
+            margin-right: 3px;
+            line-height: 10px;
+            font-size: 10px;
+          "
+          >反馈状态:&nbsp;</span
+        >
+        <span style="display: inline; line-height: 10px; font-size: 10px">{{
+          matchDetails.feebback
+        }}</span>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
 <script>
 import {
-  listRecord,
-  getRecord,
-  delRecord,
   addRecord,
+  delRecord,
+  getRecord,
+  listRecord,
   updateRecord,
 } from "@/api/kyfz/push_record";
 
-import { getMatchDetails } from "@/api/kyfz/match"
+import { getMatchDetails } from "@/api/kyfz/match";
 export default {
   name: "Record",
   data() {
@@ -159,7 +247,6 @@ export default {
       // 表单校验
       rules: {},
       matchDetails: [],
-
     };
   },
   created() {
@@ -258,7 +345,7 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -278,7 +365,7 @@ export default {
       const matchId = row.matchId || this.ids;
       const feebback1 = row.feebback;
       const pushTime = row.pushTime;
-      getMatchDetails(matchId).then(response => {
+      getMatchDetails(matchId).then((response) => {
         this.matchDetails = response.data;
         if (feebback1 == 1) {
           this.matchDetails.feebback = "已点击（有意向）";
@@ -289,9 +376,15 @@ export default {
         }
 
         this.matchDetails.pushTime = pushTime;
-        this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords.trim().split(/[,，、]/);
-        this.matchDetails.projectNamesArray = response.data.projectNames.trim().split(/[,，、]/);
-        this.matchDetails.teamMembersArray = response.data.teamMembers.trim().split(/[,，、]/);
+        this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords
+          .trim()
+          .split(/[,，、]/);
+        this.matchDetails.projectNamesArray = response.data.projectNames
+          .trim()
+          .split(/[,，、]/);
+        this.matchDetails.teamMembersArray = response.data.teamMembers
+          .trim()
+          .split(/[,，、]/);
         this.openDetail = true;
         this.title = "详细信息";
       });

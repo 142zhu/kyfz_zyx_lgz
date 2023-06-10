@@ -171,6 +171,7 @@
             type="textarea"
             placeholder="请输入内容"
             style="width: 600px"
+            :autosize="{ minRows: 4, maxRows: 8 }"
           />
         </el-form-item>
         <el-form-item label="企业注册资本" prop="registeredCapital" label-width="250px">
