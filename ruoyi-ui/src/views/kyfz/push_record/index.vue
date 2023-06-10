@@ -110,10 +110,10 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
+            icon="el-icon-document"
             @click="handleDetail(scope.row)"
             v-hasPermi="['kyfz:record:edit']"
-            >详细</el-button
+            >详情</el-button
           >
         </template>
       </el-table-column>
@@ -162,9 +162,30 @@
       <div style="border-bottom: 1px solid black">
         <h4>专家研究成果</h4>
         <div class="string-info">
-          <span v-for="item in matchDetails.projectNamesArray" :key="item">{{
-            item
-          }}</span>
+          <div>
+            <h5>相关项目</h5>
+            <span v-for="item in matchDetails.projectNamesArray" :key="item">{{
+              item
+            }}</span>
+          </div>
+          <div>
+            <h5>相关论文</h5>
+            <span v-for="item in matchDetails.thesisNamesArray" :key="item">{{
+              item
+            }}</span>
+          </div>
+          <div>
+            <h5>相关著作</h5>
+            <span v-for="item in matchDetails.workNamesArray" :key="item">{{
+              item
+            }}</span>
+          </div>
+          <div>
+            <h5>相关证书</h5>
+            <span v-for="item in matchDetails.certificateNamesArray" :key="item">{{
+              item
+            }}</span>
+          </div>
         </div>
       </div>
       <div>
@@ -369,7 +390,7 @@ export default {
         this.matchDetails = response.data;
         if (feebback1 == 1) {
           this.matchDetails.feebback = "已点击（有意向）";
-        } else if (feebback1 == 0) {
+        } else if (feebback1 == 1 || feebback1 == null) {
           this.matchDetails.feebback = "未点击";
         } else if (feebback1 == 2) {
           this.matchDetails.feebback = "已点击（无意向）";
@@ -383,6 +404,15 @@ export default {
           .trim()
           .split(/[,，、]/);
         this.matchDetails.teamMembersArray = response.data.teamMembers
+          .trim()
+          .split(/[,，、]/);
+        this.matchDetails.thesisNamesArray = response.data.thesisNames
+          .trim()
+          .split(/[,，、]/);
+        this.matchDetails.workNamesArray = response.data.workNames
+          .trim()
+          .split(/[,，、]/);
+        this.matchDetails.certificateNamesArray = response.data.certificateNames
           .trim()
           .split(/[,，、]/);
         this.openDetail = true;
@@ -400,10 +430,9 @@ export default {
 }
 
 .string-info span {
-  padding: 10px;
+  display: inline-block;
   margin: 10px;
-
   border: 1px solid gray;
-  padding: 5px;
+  white-space: pre-wrap;
 }
 </style>

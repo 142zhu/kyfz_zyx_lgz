@@ -48,7 +48,15 @@ public class KyfzMatch extends BaseEntity {
     /** 相关项目（多个项目名） */
     @Excel(name = "相关项目的名称", readConverterExp = "多个项目名称合并在一起")
     private String projectNames;
-
+    /** 相关论文（多个论文） */
+    @Excel(name = "相关论文的名称", readConverterExp = "多个论文名称合并在一起")
+    private String thesisNames;
+    /** 相关著作（多个著作） */
+    @Excel(name = "相关著作的名称", readConverterExp = "多个著作名称合并在一起")
+    private String workNames;
+    /** 相关证书（多个项目名） */
+    @Excel(name = "相关证书的名称", readConverterExp = "多个证书名称合并在一起")
+    private String certificateNames;
     /*********************************************************** */
     /** 根据需求添加的字段 */
     /** 专家姓名 */
@@ -70,6 +78,42 @@ public class KyfzMatch extends BaseEntity {
     /** 专家所属团队的成员 */
     @Excel(name = "专家所属团队的成员")
     private String teamMembers;
+
+    /** 专家所属团队的成员 */
+    @Excel(name = "系统评分")
+    private String score;
+
+    public String getThesisNames() {
+        return thesisNames;
+    }
+
+    public void setThesisNames(String thesisNames) {
+        this.thesisNames = thesisNames;
+    }
+
+    public String getWorkNames() {
+        return workNames;
+    }
+
+    public void setWorkNames(String workNames) {
+        this.workNames = workNames;
+    }
+
+    public String getCertificateNames() {
+        return certificateNames;
+    }
+
+    public void setCertificateNames(String certificateNames) {
+        this.certificateNames = certificateNames;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public void setScore(String score) {
+        this.score = score;
+    }
 
     /********************** 按照需求添加的get和set方法 */
 
@@ -217,6 +261,10 @@ public class KyfzMatch extends BaseEntity {
                 .append("projectName", getProjectName())
                 .append("client", getClient())
                 .append("requirementKeywords", getRequirementKeywords())
+                .append("certificateNames", getCertificateNames())
+                .append("workNames", getWorkNames())
+                .append("thesisNames", getThesisNames())
+                .append("score", getScore())
                 .toString();
     }
 }

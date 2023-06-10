@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="client"    column="client"    />
         <result property="requirementKeywords"    column="requirement_keywords"    />
         <result property="teamMembers"    column="team_members"    />
+        <result property="score"    column="score"    />
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
@@ -33,8 +34,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
-        select m.match_id, m.expert_account, m.requirement_id, m.match_score,
-        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords
+        select m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.work_id ,m.match_score,
+        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords,m.score
         from kyfz_match m
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
         left join kyfz_expert e on m.expert_account=e.expert_account
@@ -42,16 +43,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
-        <include refid="selectKyfzMatchVo2"/>
-        <where> 
-            <if test="matchId != null  and matchId != ''"> and match_id = #{matchId}</if>
-            <if test="projectName != null  and projectName != ''"> and r.project_name = #{projectName}</if>
-            <if test="client != null  and client != ''"> and r.client = #{client}</if>
-            <if test="expertName != null  and expertName != ''"> and e.expert_name = #{expertName}</if>
-            <if test="researchDirection != null  and researchDirection != ''"> and e.research_direction = #{researchDirection}</if>
-            <if test="matchScore != null  and matchScore != ''"> and match_score = #{matchScore}</if>
-        </where>
-    </select>
+    <include refid="selectKyfzMatchVo2"/>
+    <where>
+
+        <if test="projectName != null and projectName != ''">
+            AND r.project_name LIKE CONCAT('%', #{projectName}, '%')
+        </if>
+        <if test="client != null and client != ''">
+            AND r.client LIKE CONCAT('%', #{client}, '%')
+        </if>
+        <if test="expertName != null and expertName != ''">
+            AND e.expert_name LIKE CONCAT('%', #{expertName}, '%')
+        </if>
+        <if test="researchDirection != null and researchDirection != ''">
+            AND e.research_direction LIKE CONCAT('%', #{researchDirection}, '%')
+        </if>
+        <if test="matchScore != null and matchScore != ''">
+            AND match_score LIKE CONCAT('%', #{matchScore}, '%') 
+        </if>
+    </where>
+</select>
     
     <select id="selectKyfzMatchByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
         <include refid="selectKyfzMatchVo"/>
@@ -129,6 +140,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where project_id = #{projectId}
     </select>
 
+
+    <!-- 通过论文id搜索论文表中的项目名称 -->
+    <select id="selectThesisName" parameterType="Long" resultType="String">
+    select thesis_name from kyfz_thesis
+        where thesis_id = #{thesisId}
+    </select>
+
+    <!-- 通过著作id搜索著作表中的项目名称 -->
+    <select id="selectWorkName" parameterType="Long" resultType="String">
+    select work_name from kyfz_work
+        where work_id = #{workId}
+    </select>
+
+    <!-- 通过著作id搜索著作表中的项目名称 -->
+    <select id="selectCertificateName" parameterType="Long" resultType="String">
+    select certificate_name from kyfz_certificate
+        where certificate_id = #{certificateId}
+    </select>
+
+
     <!-- 批量推送 -->
     <insert id="batchInsert" parameterType="java.util.List">
         INSERT INTO kyfz_push_record (match_id, push_time)
@@ -137,4 +168,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (#{item.matchId}, #{item.pushTime})
         </foreach>
     </insert>
+
+
+
+    <update id="updatePushRecord" parameterType="KyfzMatch">
+        update kyfz_match
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="score != null">score = #{score}</if>
+        </trim>
+        where match_id = #{matchId}
+    </update>
 </mapper>

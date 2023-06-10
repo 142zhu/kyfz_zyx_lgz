@@ -63,3 +63,13 @@ export function pushMatch(matchId) {
     method: 'put',
   })
 }
+
+
+// 修改匹配列表
+export function updatePushRecord(data1) {
+  return request({
+    url: '/kyfz/match/3/',
+    method: 'put',
+    data: data1
+  })
+}
