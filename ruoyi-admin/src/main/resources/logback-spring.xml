@@ -7,6 +7,9 @@
     <springProfile name="show">
         <property name="log.path" value="/mnt/kyfz/logs" />
     </springProfile>
+    <springProfile name="prod">
+        <property name="log.path" value="/home/kyfz/deploy/logs" />
+    </springProfile>
 
     <!-- 日志输出格式 -->
     <property name="log.pattern"
