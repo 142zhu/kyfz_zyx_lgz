@@ -148,7 +148,6 @@ public class KyfzMatchController extends BaseController {
             Long projectId[] = extractIds(projectIds);
             for (int i = 0; i < projectId.length; i++) {
                 String projectName = kyfzMatchService.selectProjectName(projectId[i]);
-                System.out.println(projectName);
                 strArray.add(projectName);
                 // if (i == projectId.length - 1) {
                 // projectNames += projectName;
@@ -174,7 +173,6 @@ public class KyfzMatchController extends BaseController {
                 // thesisNames += thesisName + ",";
                 // }
             }
-            System.out.println(strArray1);
             match1.setStrArray1(strArray1);
         }
 

@@ -453,7 +453,6 @@ export default {
         }
         if (response.data.strArray != null) {
           this.matchDetails.strArray = response.data.strArray;
-          alert(this.matchDetails.strArray[1]);
         } else {
           this.matchDetails.strArray = "无";
         }
