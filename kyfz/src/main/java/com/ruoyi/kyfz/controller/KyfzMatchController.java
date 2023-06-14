@@ -70,7 +70,7 @@ public class KyfzMatchController extends BaseController {
      * 获取匹配列表详细信息
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:query')")
-    @GetMapping(value = "/{matchId}")
+    @GetMapping(value = "/2/{matchId}")
     public AjaxResult getInfo(@PathVariable("matchId") Long matchId) {
         return success(kyfzMatchService.selectKyfzMatchByMatchId(matchId));
     }
@@ -121,78 +121,101 @@ public class KyfzMatchController extends BaseController {
      * 获取匹配列表详细信息
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:detail')")
-    @GetMapping(value = "/2{matchId}")
-    public AjaxResult getDetailInfo(@PathVariable("matchId") Long matchId) {
+    @GetMapping(value = "/{matchIds}")
+    public AjaxResult getDetailInfo(@PathVariable("matchIds") Long matchIds) {
+        // System.out.println("\u4F60\u597D\u4F60\u597D\u4F60\u597D\u4F60\u597D\u4F60\u597D");
         // 先索引出所有信息
+        Long matchId = matchIds;
+
         KyfzMatch match1 = kyfzMatchService.selectKyfzMatchDetailByMatchId(matchId);
         // 从索引出的匹配表中获取匹配出来的项目id（多个id用逗号分隔开了）
         String projectIds = match1.getProjectId();
+
         // 从索引出的匹配表中获取匹配出来的论文id（多个id用逗号分隔开了）
         String thesiseIds = match1.getThesisId();
+
         // 从索引出的匹配表中获取匹配出来的著作id（多个id用逗号分隔开了）
         String workIds = match1.getWorkId();
+
         // 从索引出的匹配表中获取匹配出来的证书id（多个id用逗号分隔开了）
         String certificateIds = match1.getCertificateId();
+
         // 把索引到的所有id用分隔函数分开，存在数组中
-        if (projectIds != "0") {
+        if (projectIds != null && !projectIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
-            String projectNames = "";
+            // String projectNames = "";
+            ArrayList strArray = new ArrayList();
             Long projectId[] = extractIds(projectIds);
             for (int i = 0; i < projectId.length; i++) {
                 String projectName = kyfzMatchService.selectProjectName(projectId[i]);
-                if (i == projectId.length - 1) {
-                    projectNames += projectName;
-                } else {
-                    projectNames += projectName + ",";
-                }
+                System.out.println(projectName);
+                strArray.add(projectName);
+                // if (i == projectId.length - 1) {
+                // projectNames += projectName;
+                // } else {
+                // projectNames += projectName + ",";
+                // }
             }
-            match1.setProjectNames(projectNames);
+            match1.setStrArray(strArray);
         }
 
-        if (thesiseIds != "0") {
+        if (thesiseIds != null && !thesiseIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
             String thesisNames = "";
+            ArrayList strArray1 = new ArrayList();
+
             Long thesisId[] = extractIds(thesiseIds);
             for (int i = 0; i < thesisId.length; i++) {
                 String thesisName = kyfzMatchService.selectThesisName(thesisId[i]);
-                if (i == thesisId.length - 1) {
-                    thesisNames += thesisName;
-                } else {
-                    thesisNames += thesisName + ",";
-                }
+                strArray1.add(thesisName);
+                // if (i == thesisId.length - 1) {
+                // thesisNames += thesisName;
+                // } else {
+                // thesisNames += thesisName + ",";
+                // }
             }
-            match1.setThesisNames(thesisNames);
+            System.out.println(strArray1);
+            match1.setStrArray1(strArray1);
         }
 
-        if (workIds != "0") {
+        if (workIds != null && !workIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
             String workNames = "";
+            ArrayList strArray2 = new ArrayList();
+
             Long workId[] = extractIds(workIds);
             for (int i = 0; i < workId.length; i++) {
                 String workName = kyfzMatchService.selectWorkName(workId[i]);
-                if (i == workId.length - 1) {
-                    workNames += workName;
-                } else {
-                    workNames += workName + ",";
-                }
+                strArray2.add(workName);
+
+                // if (i == workId.length - 1) {
+                // workNames += workName;
+                // } else {
+                // workNames += workName + ",";
+                // }
+
             }
-            match1.setWorkNames(workNames);
+            match1.setStrArray2(strArray2);
         }
 
-        if (certificateIds != "0") {
+        if (certificateIds != null && !certificateIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
             String certificateNames = "";
+            ArrayList strArray3 = new ArrayList();
+
             Long certificateId[] = extractIds(certificateIds);
             for (int i = 0; i < certificateId.length; i++) {
                 String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);
-                if (i == certificateId.length - 1) {
-                    certificateNames += certificateName;
-                } else {
-                    certificateNames += certificateName + ",";
-                }
+                // if (i == certificateId.length - 1) {
+                // certificateNames += certificateName;
+                // } else {
+                // certificateNames += certificateName + ",";
+                // }
+
+                strArray3.add(certificateName);
 
             }
-            match1.setCertificateNames(certificateNames);
+            match1.setStrArray3(strArray3);
         }
         // 把projectNames变量传进工具类match1中
 

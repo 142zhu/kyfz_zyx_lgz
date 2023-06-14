@@ -1,5 +1,7 @@
 package com.ruoyi.kyfz.domain;
 
+import java.util.ArrayList;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -78,6 +80,54 @@ public class KyfzMatch extends BaseEntity {
     /** 专家所属团队的成员 */
     @Excel(name = "专家所属团队的成员")
     private String teamMembers;
+
+    /** 专家所属团队的成员 */
+    @Excel(name = "多个项目名")
+    private ArrayList strArray;
+
+    /** 专家所属团队的成员 */
+    @Excel(name = "多个专利名")
+    private ArrayList strArray1;
+
+    /** 专家所属团队的成员 */
+    @Excel(name = "多个著作名")
+    private ArrayList strArray2;
+
+    /** 专家所属团队的成员 */
+    @Excel(name = "多个证书名")
+    private ArrayList strArray3;
+
+    public ArrayList getStrArray1() {
+        return strArray1;
+    }
+
+    public void setStrArray1(ArrayList strArray1) {
+        this.strArray1 = strArray1;
+    }
+
+    public ArrayList getStrArray2() {
+        return strArray2;
+    }
+
+    public void setStrArray2(ArrayList strArray2) {
+        this.strArray2 = strArray2;
+    }
+
+    public ArrayList getStrArray3() {
+        return strArray3;
+    }
+
+    public void setStrArray3(ArrayList strArray3) {
+        this.strArray3 = strArray3;
+    }
+
+    public ArrayList getStrArray() {
+        return strArray;
+    }
+
+    public void setStrArray(ArrayList strArray) {
+        this.strArray = strArray;
+    }
 
     /** 专家所属团队的成员 */
     @Excel(name = "系统评分")

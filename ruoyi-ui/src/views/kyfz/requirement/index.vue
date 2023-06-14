@@ -151,8 +151,7 @@
         <el-form-item label="需求状态" prop="requirementStatus">
           <el-select v-model="form.requirementStatus" filterable placeholder="请选择需求状态" style="width: 600px">
             <el-option v-for="item in dict.type.requirement_status" :key="item.value" :label="item.label"
-              :value="item.value">
-            </el-option>
+              :value="item.value" :selected="index === 1"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
@@ -257,7 +256,9 @@ export default {
         enterpriseNumber: null,
       },
       // 表单参数
-      form: {},
+      form: {
+        requirementStatus: ""
+      },
       //企业列表
       enterpriseList: [],
       // 表单校验
@@ -369,6 +370,7 @@ export default {
     handleAdd() {
       this.reset();
       this.getenterpriseList();
+      this.form.requirementStatus = this.dict.type.requirement_status[0].value;
       this.open1 = true;
       this.title = "新增需求管理";
     },
