@@ -344,12 +344,12 @@
 
 <script>
 import {
-  addExpert,
-  delExpert,
-  getExpert,
-  getExpertDetail,
-  listExpert,
-  updateExpert,
+addExpert,
+delExpert,
+getExpert,
+getExpertDetail,
+listExpert,
+updateExpert,
 } from "@/api/kyfz/expert";
 
 export default {
@@ -627,9 +627,11 @@ export default {
 
       getExpertDetail(expertId).then((response) => {
         this.expertDetail = response.data;
+        this.expertDetail.teamMembersArray = response.data.teamMembers
+          .trim()
+          .split(/[,，、]/);
         this.openDetail = true;
       });
-    },
     handleECharts() {
       this.chartTitle = "团队成员关系图";
       this.openECharts = true;
