@@ -1,5 +1,7 @@
 package com.ruoyi.kyfz.domain;
 
+import java.util.ArrayList;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -11,8 +13,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2023-06-06
  */
-public class KyfzExpert extends BaseEntity
-{
+public class KyfzExpert extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 专家id */
@@ -74,160 +75,188 @@ public class KyfzExpert extends BaseEntity
     @Excel(name = "所属团队id", readConverterExp = "多=个")
     private String expertTeams;
 
-    public void setExpertId(Long expertId) 
-    {
+    @Excel(name = "多个项目名")
+    private ArrayList projectArray;
+
+    @Excel(name = "多个项目名")
+    private ArrayList workArray;
+
+    @Excel(name = "多个项目名")
+    private ArrayList certificateArray;
+
+    @Excel(name = "多个项目名")
+    private ArrayList thesisArray;
+
+    public ArrayList getProjectArray() {
+        return projectArray;
+    }
+
+    public void setProjectArray(ArrayList projectArray) {
+        this.projectArray = projectArray;
+    }
+
+    public ArrayList getWorkArray() {
+        return workArray;
+    }
+
+    public void setWorkArray(ArrayList workArray) {
+        this.workArray = workArray;
+    }
+
+    public ArrayList getCertificateArray() {
+        return certificateArray;
+    }
+
+    public void setCertificateArray(ArrayList certificateArray) {
+        this.certificateArray = certificateArray;
+    }
+
+    public ArrayList getThesisArray() {
+        return thesisArray;
+    }
+
+    public void setThesisArray(ArrayList thesisArray) {
+        this.thesisArray = thesisArray;
+    }
+
+    public void setExpertId(Long expertId) {
         this.expertId = expertId;
     }
 
-    public Long getExpertId() 
-    {
+    public Long getExpertId() {
         return expertId;
     }
-    public void setExpertAccount(String expertAccount) 
-    {
+
+    public void setExpertAccount(String expertAccount) {
         this.expertAccount = expertAccount;
     }
 
-    public String getExpertAccount() 
-    {
+    public String getExpertAccount() {
         return expertAccount;
     }
-    public void setExpertName(String expertName) 
-    {
+
+    public void setExpertName(String expertName) {
         this.expertName = expertName;
     }
 
-    public String getExpertName() 
-    {
+    public String getExpertName() {
         return expertName;
     }
-    public void setExpertPosition(String expertPosition) 
-    {
+
+    public void setExpertPosition(String expertPosition) {
         this.expertPosition = expertPosition;
     }
 
-    public String getExpertPosition() 
-    {
+    public String getExpertPosition() {
         return expertPosition;
     }
-    public void setExpertAffiliation(String expertAffiliation) 
-    {
+
+    public void setExpertAffiliation(String expertAffiliation) {
         this.expertAffiliation = expertAffiliation;
     }
 
-    public String getExpertAffiliation() 
-    {
+    public String getExpertAffiliation() {
         return expertAffiliation;
     }
-    public void setPrimaryDiscipline(String primaryDiscipline) 
-    {
+
+    public void setPrimaryDiscipline(String primaryDiscipline) {
         this.primaryDiscipline = primaryDiscipline;
     }
 
-    public String getPrimaryDiscipline() 
-    {
+    public String getPrimaryDiscipline() {
         return primaryDiscipline;
     }
-    public void setSecondaryDiscipline(String secondaryDiscipline) 
-    {
+
+    public void setSecondaryDiscipline(String secondaryDiscipline) {
         this.secondaryDiscipline = secondaryDiscipline;
     }
 
-    public String getSecondaryDiscipline() 
-    {
+    public String getSecondaryDiscipline() {
         return secondaryDiscipline;
     }
-    public void setTertiaryDiscipline(String tertiaryDiscipline) 
-    {
+
+    public void setTertiaryDiscipline(String tertiaryDiscipline) {
         this.tertiaryDiscipline = tertiaryDiscipline;
     }
 
-    public String getTertiaryDiscipline() 
-    {
+    public String getTertiaryDiscipline() {
         return tertiaryDiscipline;
     }
-    public void setResearchDirection(String researchDirection) 
-    {
+
+    public void setResearchDirection(String researchDirection) {
         this.researchDirection = researchDirection;
     }
 
-    public String getResearchDirection() 
-    {
+    public String getResearchDirection() {
         return researchDirection;
     }
-    public void setThesisId(String thesisId) 
-    {
+
+    public void setThesisId(String thesisId) {
         this.thesisId = thesisId;
     }
 
-    public String getThesisId() 
-    {
+    public String getThesisId() {
         return thesisId;
     }
-    public void setProjectId(String projectId) 
-    {
+
+    public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
 
-    public String getProjectId() 
-    {
+    public String getProjectId() {
         return projectId;
     }
-    public void setCertificateId(String certificateId) 
-    {
+
+    public void setCertificateId(String certificateId) {
         this.certificateId = certificateId;
     }
 
-    public String getCertificateId() 
-    {
+    public String getCertificateId() {
         return certificateId;
     }
-    public void setWorkId(String workId) 
-    {
+
+    public void setWorkId(String workId) {
         this.workId = workId;
     }
 
-    public String getWorkId() 
-    {
+    public String getWorkId() {
         return workId;
     }
-    public void setRequirementId(String requirementId) 
-    {
+
+    public void setRequirementId(String requirementId) {
         this.requirementId = requirementId;
     }
 
-    public String getRequirementId() 
-    {
+    public String getRequirementId() {
         return requirementId;
     }
-    public void setExpertTeams(String expertTeams) 
-    {
+
+    public void setExpertTeams(String expertTeams) {
         this.expertTeams = expertTeams;
     }
 
-    public String getExpertTeams() 
-    {
+    public String getExpertTeams() {
         return expertTeams;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("expertId", getExpertId())
-            .append("expertAccount", getExpertAccount())
-            .append("expertName", getExpertName())
-            .append("expertPosition", getExpertPosition())
-            .append("expertAffiliation", getExpertAffiliation())
-            .append("primaryDiscipline", getPrimaryDiscipline())
-            .append("secondaryDiscipline", getSecondaryDiscipline())
-            .append("tertiaryDiscipline", getTertiaryDiscipline())
-            .append("researchDirection", getResearchDirection())
-            .append("thesisId", getThesisId())
-            .append("projectId", getProjectId())
-            .append("certificateId", getCertificateId())
-            .append("workId", getWorkId())
-            .append("requirementId", getRequirementId())
-            .append("expertTeams", getExpertTeams())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("expertId", getExpertId())
+                .append("expertAccount", getExpertAccount())
+                .append("expertName", getExpertName())
+                .append("expertPosition", getExpertPosition())
+                .append("expertAffiliation", getExpertAffiliation())
+                .append("primaryDiscipline", getPrimaryDiscipline())
+                .append("secondaryDiscipline", getSecondaryDiscipline())
+                .append("tertiaryDiscipline", getTertiaryDiscipline())
+                .append("researchDirection", getResearchDirection())
+                .append("thesisId", getThesisId())
+                .append("projectId", getProjectId())
+                .append("certificateId", getCertificateId())
+                .append("workId", getWorkId())
+                .append("requirementId", getRequirementId())
+                .append("expertTeams", getExpertTeams())
+                .toString();
     }
 }

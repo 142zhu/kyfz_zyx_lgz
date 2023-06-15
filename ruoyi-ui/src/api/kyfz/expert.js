@@ -42,3 +42,12 @@ export function delExpert(expertId) {
     method: 'delete'
   })
 }
+
+
+// 查询专家管理详细
+export function getExpertDetail(expertId) {
+  return request({
+    url: '/kyfz/expert/detail/' + expertId,
+    method: 'get'
+  })
+}
