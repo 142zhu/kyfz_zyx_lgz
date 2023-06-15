@@ -392,7 +392,9 @@ export default {
 
       getExpertDetail(expertId).then((response) => {
         this.expertDetail = response.data;
-
+        this.expertDetail.teamMembersArray = response.data.teamMembers
+          .trim()
+          .split(/[,，、]/);
         this.openDetail = true;
       });
     }

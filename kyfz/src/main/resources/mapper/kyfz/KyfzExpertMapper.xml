@@ -20,10 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workId" column="work_id" />
         <result property="requirementId" column="requirement_id" />
         <result property="expertTeams" column="expert_teams" />
+        <result property="teamMember" column="team_member" />
+        
     </resultMap>
 
     <sql id="selectKyfzExpertVo">
-        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams from kyfz_expert
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams ,team_member
+        from kyfz_expert e
+        left join kyfz_team t on t.team_id=e.expert_teams
     </sql>
 
     <select id="selectKyfzExpertList" parameterType="KyfzExpert" resultMap="KyfzExpertResult">

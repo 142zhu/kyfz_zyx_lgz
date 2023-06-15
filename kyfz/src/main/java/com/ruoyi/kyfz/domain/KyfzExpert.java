@@ -87,6 +87,17 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "多个项目名")
     private ArrayList thesisArray;
 
+    @Excel(name = "成员名")
+    private String teamMembers;
+
+    public String getTeamMembers() {
+        return teamMembers;
+    }
+
+    public void setTeamMembers(String teamMembers) {
+        this.teamMembers = teamMembers;
+    }
+
     public ArrayList getProjectArray() {
         return projectArray;
     }
