@@ -333,7 +333,6 @@
         </div>
       </div>
     </el-dialog>
-
     <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
       <div id="graph-chart" style="width: 500px; height: 500px">
         <div :id="echartsId" style="width: 500px; height: 500px"></div>
@@ -344,12 +343,12 @@
 
 <script>
 import {
-addExpert,
-delExpert,
-getExpert,
-getExpertDetail,
-listExpert,
-updateExpert,
+  addExpert,
+  delExpert,
+  getExpert,
+  getExpertDetail,
+  listExpert,
+  updateExpert,
 } from "@/api/kyfz/expert";
 
 export default {
@@ -404,7 +403,6 @@ export default {
       form: {},
       // 表单校验
       rules: {},
-
       echartsId: null,
       chartTitle: null,
     };
@@ -627,11 +625,14 @@ export default {
 
       getExpertDetail(expertId).then((response) => {
         this.expertDetail = response.data;
-        this.expertDetail.teamMembersArray = response.data.teamMembers
-          .trim()
-          .split(/[,，、]/);
+        if (response.data.teamMembers != null) {
+          this.expertDetail.teamMembersArray = response.data.teamMembers
+            .trim()
+            .split(/[,，、]/);
+        }
         this.openDetail = true;
       });
+    },
     handleECharts() {
       this.chartTitle = "团队成员关系图";
       this.openECharts = true;
@@ -701,7 +702,7 @@ export default {
 .match-detail-result-info,
 .match-detail-team-info {
   margin-top: 10px;
-  padding: 10px;
+  padding: 20px;
   border: 1px solid #ebeef5;
   border-radius: 4px;
   background-color: #f5f7fa;
