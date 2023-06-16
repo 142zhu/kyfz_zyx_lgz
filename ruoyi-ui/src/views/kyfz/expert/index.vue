@@ -115,7 +115,6 @@
             type="text"
             icon="el-icon-edit"
             @click="handleDetail(scope.row)"
-            v-hasPermi="['kyfz:expert:detail']"
             >详情</el-button
           >
           <el-button
