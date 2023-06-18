@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -89,6 +90,9 @@ public class KyfzExpert extends BaseEntity {
 
     @Excel(name = "成员名")
     private String teamMembers;
+
+    // 专家有效位
+    private String expertSignificance;
 
     public String getTeamMembers() {
         return teamMembers;
@@ -250,6 +254,10 @@ public class KyfzExpert extends BaseEntity {
         return expertTeams;
     }
 
+    public String getExpertSignificance() {
+        return expertSignificance;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -269,5 +277,9 @@ public class KyfzExpert extends BaseEntity {
                 .append("requirementId", getRequirementId())
                 .append("expertTeams", getExpertTeams())
                 .toString();
+    }
+
+    public void setExpertSignificance(String expertSignificance) {
+        this.expertSignificance = expertSignificance;
     }
 }

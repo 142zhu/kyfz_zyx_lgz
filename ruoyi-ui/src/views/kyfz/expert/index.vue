@@ -148,12 +148,22 @@
     <!-- 添加或修改专家管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
-        <el-form-item label="专家编号" prop="expertId" class="inputDeep">
+        <el-form-item label="专家信息状态" prop="expertSignificance" required>
+          <el-switch
+            v-model="form.expertSignificance"
+            active-text="有效"
+            inactive-text="无效"
+            inactive-color="#FF0000"
+            :active-value="'有效'"
+            :inactive-value="'无效'"
+            style="width: 600px"
+          ></el-switch>
+        </el-form-item>
+        <el-form-item label="专家账号" prop="expertAccount">
           <el-input
-            v-model="form.expertId"
-            placeholder="无需填写（自动生成）"
-            :readonly="true"
-            ref="idInput"
+            v-model="form.expertAccount"
+            placeholder="请输入专家账号"
+            style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="专家姓名" prop="expertName">
@@ -205,48 +215,6 @@
             style="width: 600px"
           />
         </el-form-item>
-        <!-- <el-form-item label="论文id(多个)" prop="thesisId">
-          <el-input
-            v-model="form.thesisId"
-            placeholder="请输入论文id(多个)"
-            style="width: 600px"
-          />
-        </el-form-item>
-        <el-form-item label="项目id(多个)" prop="projectId">
-          <el-input
-            v-model="form.projectId"
-            placeholder="请输入项目id(多个)"
-            style="width: 600px"
-          />
-        </el-form-item>
-        <el-form-item label="证书id(多个)" prop="certificateId">
-          <el-input
-            v-model="form.certificateId"
-            placeholder="请输入证书id(多个)"
-            style="width: 600px"
-          />
-        </el-form-item>
-        <el-form-item label="著作id(多个)" prop="workId">
-          <el-input
-            v-model="form.workId"
-            placeholder="请输入著作id(多个)"
-            style="width: 600px"
-          />
-        </el-form-item> -->
-        <el-form-item label="已对接需求" prop="requirementId">
-          <el-input
-            v-model="form.requirementId"
-            placeholder="请输入已对接需求"
-            style="width: 600px"
-          />
-        </el-form-item>
-        <!-- <el-form-item label="所属团队id" prop="expertTeams">
-          <el-input
-            v-model="form.expertTeams"
-            placeholder="请输入所属团队id"
-            style="width: 600px"
-          />
-        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -352,6 +320,7 @@ import {
 
 export default {
   name: "Expert",
+  inheritAttrs: false,
   data() {
     return {
       // 遮罩层
@@ -397,6 +366,7 @@ export default {
         workId: null,
         requirementId: null,
         expertTeams: null,
+        expertSignificance: null,
       },
       // 表单参数
       form: {},
@@ -532,6 +502,7 @@ export default {
         workId: null,
         requirementId: null,
         expertTeams: null,
+        expertSignificance: null,
       };
       this.resetForm("form");
     },
@@ -554,6 +525,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.form.expertSignificance = "有效";
       this.open = true;
       this.title = "添加专家管理";
     },
