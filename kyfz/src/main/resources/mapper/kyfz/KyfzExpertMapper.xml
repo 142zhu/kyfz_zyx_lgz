@@ -20,8 +20,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workId" column="work_id" />
         <result property="requirementId" column="requirement_id" />
         <result property="expertTeams" column="expert_teams" />
-        <result property="teamMember" column="team_member" />
-
+        <result property="teamMember" column="team_members" />
+        <result property="markProject" column="mark_project" />
+        <result property="markThesis" column="mark_thesis" />
+        <result property="markWork" column="mark_work" />
+        <result property="markCertificate" column="mark_certificate" />
     </resultMap>
 
     <sql id="selectKyfzExpertVo">
@@ -99,6 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertName != null">expert_name = #{expertName},</if>
             <if test="expertPosition != null">expert_position = #{expertPosition},</if>
             <if test="expertAffiliation != null">expert_affiliation = #{expertAffiliation},</if>
+            
             <if test="primaryDiscipline != null">primary_discipline = #{primaryDiscipline},</if>
             <if test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
             <if test="tertiaryDiscipline != null">tertiary_discipline = #{tertiaryDiscipline},</if>
@@ -123,4 +127,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{expertId}
         </foreach>
     </delete>
+
+    <!-- 通过专家账号搜索 -->
+    <select id="selectKyfzExpertByExpertAccount" parameterType="String" resultMap="KyfzExpertResult">
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, 
+        primary_discipline, secondary_discipline, tertiary_discipline, research_direction, 
+        thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams ,
+        mark_project,mark_certificate,mark_thesis,mark_work
+        from kyfz_expert
+        where expert_account = #{expertAccount}
+    </select>
+
+    
+    <update id="updateMarkProject" parameterType="KyfzExpert">
+        UPDATE kyfz_expert
+        SET mark_project = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_project), ''), #{markProject})
+        WHERE expert_account = #{expertAccount}
+    </update>
+
+  
+    <update id="updateMarkWork" parameterType="KyfzExpert">
+        UPDATE kyfz_expert
+        SET mark_work = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_work), ''), #{markWork})
+        WHERE expert_account = #{expertAccount}
+    </update>
+
+    <update id="updateMarkThesis" parameterType="KyfzExpert">
+        UPDATE kyfz_expert
+        SET mark_thesis = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_thesis), ''), #{markThesis})
+        WHERE expert_account = #{expertAccount}
+    </update>
+
+    <update id="updateMarkCertificate" parameterType="KyfzExpert">
+        UPDATE kyfz_expert
+        SET mark_certificate = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_certificate), ''), #{markCertificate}) 
+        WHERE expert_account = #{expertAccount}
+    </update>
 </mapper>

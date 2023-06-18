@@ -186,12 +186,6 @@ public class KyfzMatchController extends BaseController {
                 String workName = kyfzMatchService.selectWorkName(workId[i]);
                 strArray2.add(workName);
 
-                // if (i == workId.length - 1) {
-                // workNames += workName;
-                // } else {
-                // workNames += workName + ",";
-                // }
-
             }
             match1.setStrArray2(strArray2);
         }

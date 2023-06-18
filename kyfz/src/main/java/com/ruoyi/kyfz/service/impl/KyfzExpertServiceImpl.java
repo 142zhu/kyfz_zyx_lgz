@@ -14,8 +14,7 @@ import com.ruoyi.kyfz.service.IKyfzExpertService;
  * @date 2023-06-06
  */
 @Service
-public class KyfzExpertServiceImpl implements IKyfzExpertService 
-{
+public class KyfzExpertServiceImpl implements IKyfzExpertService {
     @Autowired
     private KyfzExpertMapper kyfzExpertMapper;
 
@@ -26,8 +25,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 专家管理
      */
     @Override
-    public KyfzExpert selectKyfzExpertByExpertId(Long expertId)
-    {
+    public KyfzExpert selectKyfzExpertByExpertId(Long expertId) {
         return kyfzExpertMapper.selectKyfzExpertByExpertId(expertId);
     }
 
@@ -38,8 +36,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 专家管理
      */
     @Override
-    public List<KyfzExpert> selectKyfzExpertList(KyfzExpert kyfzExpert)
-    {
+    public List<KyfzExpert> selectKyfzExpertList(KyfzExpert kyfzExpert) {
         return kyfzExpertMapper.selectKyfzExpertList(kyfzExpert);
     }
 
@@ -50,8 +47,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 结果
      */
     @Override
-    public int insertKyfzExpert(KyfzExpert kyfzExpert)
-    {
+    public int insertKyfzExpert(KyfzExpert kyfzExpert) {
         return kyfzExpertMapper.insertKyfzExpert(kyfzExpert);
     }
 
@@ -62,8 +58,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 结果
      */
     @Override
-    public int updateKyfzExpert(KyfzExpert kyfzExpert)
-    {
+    public int updateKyfzExpert(KyfzExpert kyfzExpert) {
         return kyfzExpertMapper.updateKyfzExpert(kyfzExpert);
     }
 
@@ -74,8 +69,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 结果
      */
     @Override
-    public int deleteKyfzExpertByExpertIds(Long[] expertIds)
-    {
+    public int deleteKyfzExpertByExpertIds(Long[] expertIds) {
         return kyfzExpertMapper.deleteKyfzExpertByExpertIds(expertIds);
     }
 
@@ -86,8 +80,58 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService
      * @return 结果
      */
     @Override
-    public int deleteKyfzExpertByExpertId(Long expertId)
-    {
+    public int deleteKyfzExpertByExpertId(Long expertId) {
         return kyfzExpertMapper.deleteKyfzExpertByExpertId(expertId);
+    }
+
+    /**
+     * 查询专家管理
+     * 
+     * @param expertId 专家管理主键
+     * @return 专家管理
+     */
+    public KyfzExpert selectKyfzExpertByExpertAccount(String expertAccount) {
+        return kyfzExpertMapper.selectKyfzExpertByExpertAccount(expertAccount);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkProject(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.updateMarkProject(kyfzExpert);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkWork(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.updateMarkWork(kyfzExpert);
+    }
+
+    /**
+     * updateMarkWork updateMarkThesis updateMarkCertificate
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkThesis(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.updateMarkThesis(kyfzExpert);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkCertificate(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.updateMarkCertificate(kyfzExpert);
     }
 }
