@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
         left join kyfz_expert e on m.expert_account=e.expert_account
         left join kyfz_team t on t.team_id=e.expert_teams
+        order by m.match_id desc
     </sql>
 
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
@@ -62,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             AND match_score LIKE CONCAT('%', #{matchScore}, '%') 
         </if>
     </where>
+
 </select>
     
     <select id="selectKyfzMatchByMatchId" parameterType="Long" resultMap="KyfzMatchResult">

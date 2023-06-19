@@ -43,6 +43,7 @@
     <el-table v-loading="loading" :data="matchList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="匹配编号" align="center" prop="matchId" />
+      <el-table-column label="需求编号" align="center" prop="requirementId" />
       <!-- 通过需求id获取需求表中的projectName -->
       <el-table-column label="需求" align="center" prop="projectName" />
       <!-- 通过需求id获取需求表中的委托单位 -->
@@ -79,6 +80,7 @@
         </div>
         <el-table :data="[matchDetails]" class="match-detail-table">
           <el-table-column label="匹配编号" align="center" prop="matchId" />
+          <el-table-column label="需求编号" align="center" prop="requirementId" />
           <el-table-column label="需求" align="center" prop="projectName" />
           <el-table-column label="企业" align="center" prop="client" />
           <el-table-column label="推荐专家" align="center" prop="expertName" />
