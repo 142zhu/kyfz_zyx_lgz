@@ -51,7 +51,9 @@
       <el-table-column label="公司名称" align="center" prop="enterpriseName" />
       <el-table-column label="发布时间" align="center" prop="requirementReleaseTime" width="100">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.requirementReleaseTime, "{y}-{m}-{d}") }}</span>
+          <span>{{
+            parseTime(scope.row.requirementReleaseTime, "{y}-{m}-{d}")
+          }}</span>
         </template>
       </el-table-column>
 
@@ -191,7 +193,7 @@ import {
   listRequirement,
   listenterprise,
   updateRequirement,
-  pushRequirementId,
+  handleMatch,
 } from "@/api/kyfz/requirement";
 import DictData from "@/components/DictData";
 DictData.install();
@@ -437,19 +439,34 @@ export default {
       });
     },
     //调用需求请求接口
-    handleMatch(row) {
-      this.$axios({
-        method: "post",
-        url: "http://172.18.166.90:6666/infer",
-        data: {
-          requirement_id: row.requirementId,
-        },
-      })
-        .then((response) => {
-          alert("请求成功，需求ID为" + response); //请求成功返回的数据
+    // handleMatch(row) {
+    //   this.$axios({
+    //     method: "post",
+    //     url: "http://172.18.166.90:6666/infer",
+    //     data: {
+    //       requirement_id: row.requirementId,
+    //     },
+    //   })
+    //     .then((response) => {
+    //       alert("请求成功，需求ID为" + response); //请求成功返回的数据
+    //     })
+    //     .catch((error) => {
+    //       alert("请求失败，失败信息为：" + error); //请求失败返回的数据
+    //     });
+    // },
+
+    async handleMatch(row) {
+      debugger;
+      handleMatch({ requirementId: row.requirementId })
+        .then((res) => {
+          if (200 === res.code) {
+            this.$modal.msgSuccess("算法调用成功");
+          } else {
+            this.$modal.msgError("算法调用失败");
+          }
         })
-        .catch((error) => {
-          alert("请求失败，失败信息为：" + error); //请求失败返回的数据
+        .catch((e) => {
+          this.$modal.msgError("算法调用失败");
         });
     },
   },
