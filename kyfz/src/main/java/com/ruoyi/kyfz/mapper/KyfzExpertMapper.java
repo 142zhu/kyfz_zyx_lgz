@@ -97,4 +97,45 @@ public interface KyfzExpertMapper {
      * @return 结果
      */
     public int updateMarkCertificate(KyfzExpert kyfzExpert);
+
+    /************** */
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkProject(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkWork(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkThesis(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkCertificate(KyfzExpert kyfzExpert);
+
+    /**
+     * 查询匹配
+     * 
+     * @param expertId 匹配管理主键
+     * @return 匹配管理
+     */
+    public KyfzExpert selectKyfzMatchMark(Long matchId);
 }

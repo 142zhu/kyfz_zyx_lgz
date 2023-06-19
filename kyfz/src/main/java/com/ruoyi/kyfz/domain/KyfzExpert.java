@@ -25,6 +25,8 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "专家账号")
     private String expertAccount;
 
+    private Long matchId;
+
     /** 专家姓名 */
     @Excel(name = "专家姓名")
     private String expertName;
@@ -68,6 +70,24 @@ public class KyfzExpert extends BaseEntity {
     /** 著作id(多个) */
     @Excel(name = "著作id(多个)")
     private String workId;
+
+    private boolean deleteBool;
+
+    public Long getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(Long matchId) {
+        this.matchId = matchId;
+    }
+
+    public boolean isDeleteBool() {
+        return deleteBool;
+    }
+
+    public void setDeleteBool(boolean deleteBool) {
+        this.deleteBool = deleteBool;
+    }
 
     /** 已对接需求（多个需求id） */
     @Excel(name = "已对接需求", readConverterExp = "多=个需求id")

@@ -129,7 +129,7 @@
               </div>
             </div>
             <div style="padding-bottom:20px;padding-right:0px!important;">
-              <el-button type="primary" @click="handleAllAchievement(matchDetails.expertAccount)"
+              <el-button type="primary" @click="handleAllAchievement(matchDetails.expertAccount, matchDetails.matchId)"
                 style="float: right;margin-right:0px;">所有研究成果</el-button>
             </div>
           </div>
@@ -625,10 +625,10 @@ export default {
       this.myChart.resize(); //自适应大小
     },
 
-    handleAllAchievement(expertAccount) {
+    handleAllAchievement(expertAccount, matchId) {
       //新的弹窗，放专家的信息和所有信息
       this.openExpert = true;
-      getExpertDetailByAccount(expertAccount).then((response) => {
+      getExpertDetailByAccount(expertAccount, matchId).then((response) => {
         //所有的专家信息都存在这里
         //alert(response.data.markProject)
         this.projectIds = [];
@@ -652,45 +652,57 @@ export default {
           this.certificateIds = response.data.markCertificateId;
         }
 
-
       });
 
     },
     sendProjectId(projectId) {
       const data2 = {};
-      if (this.projectIds.includes(projectId)) {
-        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
-        return;
-      }
-      data2.expertAccount = this.expertDetail.expertAccount;
+      data2.deleteBool = false;
+      data2.matchId = this.matchDetails.matchId;
       data2.projectId = projectId;
-      try {
-        this.projectIds.push(projectId);
-      }
-      catch (e) {
-        alert(e)
-      }
+      //删除标记
+      if (this.projectIds.includes(projectId)) {
+        try {
+          data2.deleteBool = true;
+          const index = this.projectIds.indexOf(projectId);
+          if (index !== -1) {
+            this.projectIds.splice(index, 1);
+          }
+          updateMarkProject(data2).then((response) => {
+            this.$modal.msgSuccess("去除标记成功");
+          });
+          return;
+        }
+        catch (e) {
+          alert(e)
+        }
 
+
+      }
+      //添加标记
+      this.projectIds.push(projectId);
       updateMarkProject(data2).then((response) => {
         this.$modal.msgSuccess("标记成功");
-        //在markProject中添加新标记的id
-
       });
     },
     sendThesisId(thesisId) {
       const data2 = {};
+      data2.deleteBool = false;
+      data2.matchId = this.matchDetails.matchId;
+      data2.thesisId = thesisId;
       if (this.thesisIds.includes(thesisId)) {
-        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        data2.deleteBool = true;
+        const index = this.thesisIds.indexOf(thesisId);
+        if (index !== -1) {
+          this.thesisIds.splice(index, 1);
+        }
+        updateMarkThesis(data2).then((response) => {
+          this.$modal.msgSuccess("去除标记成功");
+        });
         return;
       }
-      data2.expertAccount = this.expertDetail.expertAccount;
-      data2.thesisId = thesisId;
-      try {
-        this.thesisIds.push(thesisId);
-      }
-      catch (e) {
-        alert(e)
-      }
+
+      this.thesisIds.push(thesisId);
       updateMarkThesis(data2).then((response) => {
         this.$modal.msgSuccess("标记成功");
       });
@@ -698,18 +710,22 @@ export default {
 
     sendWorkId(workId) {
       const data2 = {};
+      data2.deleteBool = false;
+      data2.matchId = this.matchDetails.matchId;
+      data2.workId = workId;
       if (this.workIds.includes(workId)) {
-        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        data2.deleteBool = true;
+        const index = this.workIds.indexOf(workId);
+        if (index !== -1) {
+          this.workIds.splice(index, 1);
+        }
+        updateMarkWork(data2).then((response) => {
+          this.$modal.msgSuccess("去除标记成功");
+        });
         return;
       }
-      data2.expertAccount = this.expertDetail.expertAccount;
-      data2.workId = workId;
-      try {
-        this.workIds.push(workId);
-      }
-      catch (e) {
-        alert(e)
-      }
+
+      this.workIds.push(workId);
       updateMarkWork(data2).then((response) => {
         this.$modal.msgSuccess("标记成功");
       });
@@ -717,18 +733,21 @@ export default {
 
     sendCertificateId(certificateId) {
       const data2 = {};
+      data2.deleteBool = false;
+      data2.matchId = this.expertDetail.matchId;
+      data2.certificateId = certificateId;
       if (this.thesisIds.includes(certificateId)) {
-        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        data2.deleteBool = true;
+        const index = this.thesisIds.indexOf(certificateId);
+        if (index !== -1) {
+          this.thesisIds.splice(index, 1);
+        }
+        updateMarkCertificate(data2).then((response) => {
+          this.$modal.msgSuccess("去除标记成功");
+        });
         return;
       }
-      data2.expertAccount = this.expertDetail.expertAccount;
-      data2.certificateId = certificateId;
-      try {
-        this.certificateIds.push(certificateId);
-      }
-      catch (e) {
-        alert(e)
-      }
+      this.certificateIds.push(certificateId);
       updateMarkCertificate(data2).then((response) => {
         this.$modal.msgSuccess("标记成功");
       });

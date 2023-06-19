@@ -27,6 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="markCertificate" column="mark_certificate" />
         <result property="teamMember" column="team_member" />
         <result property="expertSignificance" column="expert_significance" />
+        <result property="matchId" column="match_id" />
+
     </resultMap>
 
     <sql id="selectKyfzExpertVo">
@@ -137,35 +139,72 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectKyfzExpertByExpertAccount" parameterType="String" resultMap="KyfzExpertResult">
         select expert_id, expert_account, expert_name, expert_position, expert_affiliation, 
         primary_discipline, secondary_discipline, tertiary_discipline, research_direction, 
-        thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams ,
-        mark_project,mark_certificate,mark_thesis,mark_work
+        thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams 
         from kyfz_expert
         where expert_account = #{expertAccount}
     </select>
 
     
     <update id="updateMarkProject" parameterType="KyfzExpert">
-        UPDATE kyfz_expert
+        UPDATE kyfz_match
         SET mark_project = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_project), ''), #{markProject})
-        WHERE expert_account = #{expertAccount}
+        WHERE match_id=#{matchId}
     </update>
 
   
     <update id="updateMarkWork" parameterType="KyfzExpert">
-        UPDATE kyfz_expert
+        UPDATE kyfz_match
         SET mark_work = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_work), ''), #{markWork})
-        WHERE expert_account = #{expertAccount}
+        WHERE match_id=#{matchId}
     </update>
 
     <update id="updateMarkThesis" parameterType="KyfzExpert">
-        UPDATE kyfz_expert
+        UPDATE kyfz_match
         SET mark_thesis = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_thesis), ''), #{markThesis})
-        WHERE expert_account = #{expertAccount}
+        WHERE match_id=#{matchId}
     </update>
 
     <update id="updateMarkCertificate" parameterType="KyfzExpert">
-        UPDATE kyfz_expert
-        SET mark_certificate = CONCAT_WS('、', IFNULL(TRIM(BOTH ' ' FROM mark_certificate), ''), #{markCertificate}) 
-        WHERE expert_account = #{expertAccount}
+    UPDATE kyfz_match
+    SET mark_certificate = CONCAT_WS('、', 
+        CASE 
+            WHEN mark_certificate IS NULL OR TRIM(mark_certificate) = '' THEN NULL 
+            ELSE TRIM(BOTH ' ' FROM mark_certificate) 
+        END, 
+        #{markCertificate}
+    ) 
+    WHERE match_id = #{matchId}
+</update>
+
+
+    <update id="deleteMarkProject" parameterType="KyfzExpert">
+        UPDATE kyfz_match
+        SET mark_project = REPLACE(mark_project, CONCAT('%、', #{markProject}, '%、'), '、')
+        WHERE match_id=#{matchId}
     </update>
+
+  
+    <update id="deleteMarkWork" parameterType="KyfzExpert">
+        UPDATE kyfz_match
+        SET mark_work = REPLACE(mark_work, CONCAT('%、', #{markWork}, '%、'), '、')
+        WHERE match_id=#{matchId}
+    </update>
+
+    <update id="deleteMarkThesis" parameterType="KyfzExpert">
+        UPDATE kyfz_match
+        SET mark_thesis = REPLACE(mark_thesis, CONCAT('%、', #{markThesis}, '%、'), '、')
+        WHERE match_id=#{matchId}
+    </update>
+
+    <update id="deleteMarkCertificate" parameterType="KyfzExpert">
+        UPDATE kyfz_match
+        SET mark_certificate = REPLACE(mark_certificate, CONCAT('%、', #{markCertificate}, '%、'), '、')
+        WHERE match_id=#{matchId}
+    </update>
+
+    <select id="selectKyfzMatchMark" parameterType="Long" resultMap="KyfzExpertResult">
+        select match_id,mark_project,mark_certificate,mark_thesis,mark_work 
+        from kyfz_match
+        where match_id=#{matchId}
+    </select>
 </mapper>

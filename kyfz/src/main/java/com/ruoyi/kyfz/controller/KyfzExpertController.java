@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.yaml.snakeyaml.error.Mark;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -27,16 +28,6 @@ import com.ruoyi.kyfz.domain.KyfzThesis;
 import com.ruoyi.kyfz.domain.KyfzWork;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
-
-import javafx.scene.control.Alert;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 专家管理Controller
@@ -174,15 +165,41 @@ public class KyfzExpertController extends BaseController {
     /**
      * 获取专家详细信息
      */
-    @GetMapping(value = "/detailByAccount/{expertAccount}")
-    public AjaxResult getDetailByAccountInfo(@PathVariable("expertAccount") String expertAccount) {
+    @GetMapping(value = "/detailByAccount/{expertAccount}/{matchId}")
+    public AjaxResult getDetailByAccountInfo(@PathVariable("expertAccount") String expertAccount,
+            @PathVariable("matchId") Long matchId) {
+        // 1.索引专家的所有信息
+        // 2.索引匹配表的人工标准信息
         KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(expertAccount);
-        System.out.println(expert.getMarkProject());
+
+        KyfzExpert expert2 = kyfzExpertService.selectKyfzMatchMark(matchId);
+
+        expert.setMarkThesis(expert2.getMarkThesis());
+        expert.setMarkCertificate(expert2.getMarkCertificate());
+        expert.setMarkProject(expert2.getMarkProject());
+        expert.setMarkThesis(expert2.getMarkThesis());
+        /*
+         * if (expert2.getMarkCertificate() != null &&
+         * expert2.getMarkCertificate().isEmpty()) {
+         * expert.setMarkCertificate(expert2.getMarkCertificate());
+         * }
+         * if (expert2.getMarkProject() != null && expert2.getMarkProject().isEmpty()) {
+         * expert.setMarkProject(expert2.getMarkProject());
+         * System.out.println("2222222222222222nihao" + expert2.getMarkProject());
+         * }
+         * if (expert2.getMarkWork() != null && expert2.getMarkWork().isEmpty()) {
+         * expert.setMarkWork(expert2.getMarkWork());
+         * }
+         * if (expert2.getMarkThesis() != null && expert2.getMarkThesis().isEmpty()) {
+         * expert.setMarkThesis(expert2.getMarkThesis());
+         * }
+         */
         String thesisIds = expert.getThesisId();
         String projectIds = expert.getProjectId();
         String workIds = expert.getWorkId();
         String certificateIds = expert.getCertificateId();
         String markProject = expert.getMarkProject();
+
         String markThesis = expert.getMarkThesis();
         String markWork = expert.getMarkWork();
         String markCertificate = expert.getMarkCertificate();
@@ -271,7 +288,12 @@ public class KyfzExpertController extends BaseController {
     @PutMapping("/updateMarkProject")
     public AjaxResult updateMarkProject(@RequestBody KyfzExpert kyfzExpert) {
         kyfzExpert.setMarkProject(kyfzExpert.getProjectId());
-        return toAjax(kyfzExpertService.updateMarkProject(kyfzExpert));
+        if (kyfzExpert.isDeleteBool()) {
+            return toAjax(kyfzExpertService.deleteMarkProject(kyfzExpert));
+        } else {
+            return toAjax(kyfzExpertService.updateMarkProject(kyfzExpert));
+        }
+
     }
 
     /**
@@ -281,8 +303,11 @@ public class KyfzExpertController extends BaseController {
     @PutMapping("/updateMarkThesis")
     public AjaxResult updateMarkThesis(@RequestBody KyfzExpert kyfzExpert) {
         kyfzExpert.setMarkThesis(kyfzExpert.getThesisId());
-        System.out.println(11111111);
-        return toAjax(kyfzExpertService.updateMarkThesis(kyfzExpert));
+        if (kyfzExpert.isDeleteBool()) {
+            return toAjax(kyfzExpertService.deleteMarkThesis(kyfzExpert));
+        } else {
+            return toAjax(kyfzExpertService.updateMarkThesis(kyfzExpert));
+        }
     }
 
     /**
@@ -292,7 +317,11 @@ public class KyfzExpertController extends BaseController {
     @PutMapping("/updateMarkWork")
     public AjaxResult updateMarkWork(@RequestBody KyfzExpert kyfzExpert) {
         kyfzExpert.setMarkWork(kyfzExpert.getWorkId());
-        return toAjax(kyfzExpertService.updateMarkWork(kyfzExpert));
+        if (kyfzExpert.isDeleteBool()) {
+            return toAjax(kyfzExpertService.deleteMarkWork(kyfzExpert));
+        } else {
+            return toAjax(kyfzExpertService.updateMarkWork(kyfzExpert));
+        }
     }
 
     /**
@@ -302,7 +331,11 @@ public class KyfzExpertController extends BaseController {
     @PutMapping("/updateMarkCertificate")
     public AjaxResult updateMarkCertificate(@RequestBody KyfzExpert kyfzExpert) {
         kyfzExpert.setMarkCertificate(kyfzExpert.getCertificateId());
-        return toAjax(kyfzExpertService.updateMarkCertificate(kyfzExpert));
+        if (kyfzExpert.isDeleteBool()) {
+            return toAjax(kyfzExpertService.deleteMarkCertificate(kyfzExpert));
+        } else {
+            return toAjax(kyfzExpertService.updateMarkCertificate(kyfzExpert));
+        }
     }
 
     /************ 工具方法获取String projectId中的所有方法然后用Long 数组存起来 */

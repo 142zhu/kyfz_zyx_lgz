@@ -134,4 +134,55 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
     public int updateMarkCertificate(KyfzExpert kyfzExpert) {
         return kyfzExpertMapper.updateMarkCertificate(kyfzExpert);
     }
+
+    /************** */
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkProject(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.deleteMarkProject(kyfzExpert);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkWork(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.deleteMarkWork(kyfzExpert);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkThesis(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.deleteMarkThesis(kyfzExpert);
+    }
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int deleteMarkCertificate(KyfzExpert kyfzExpert) {
+        return kyfzExpertMapper.deleteMarkCertificate(kyfzExpert);
+    }
+
+    /**
+     * 查询匹配
+     * 
+     * @param expertId 匹配管理主键
+     * @return 匹配管理
+     */
+    public KyfzExpert selectKyfzMatchMark(Long matchId) {
+        return kyfzExpertMapper.selectKyfzMatchMark(matchId);
+    }
 }

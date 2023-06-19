@@ -54,9 +54,9 @@ export function getExpertDetail(expertId) {
 
 
 // 查询专家管理详细
-export function getExpertDetailByAccount(expertAccount) {
+export function getExpertDetailByAccount(expertAccount, matchId) {
   return request({
-    url: '/kyfz/expert/detailByAccount/' + expertAccount,
+    url: '/kyfz/expert/detailByAccount/' + expertAccount + '/' + matchId,
     method: 'get'
   })
 }
