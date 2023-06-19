@@ -51,3 +51,54 @@ export function getExpertDetail(expertId) {
     method: 'get'
   })
 }
+
+
+// 查询专家管理详细
+export function getExpertDetailByAccount(expertAccount) {
+  return request({
+    url: '/kyfz/expert/detailByAccount/' + expertAccount,
+    method: 'get'
+  })
+}
+
+
+
+// 修改专家管理
+export function updateMarkProject(data) {
+  return request({
+    url: '/kyfz/expert/updateMarkProject',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 修改专家管理
+export function updateMarkThesis(data) {
+  return request({
+    url: '/kyfz/expert/updateMarkThesis ',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 修改专家管理
+export function updateMarkWork(data) {
+  return request({
+    url: '/kyfz/expert/updateMarkWork',
+    method: 'put',
+    data: data
+  })
+}
+
+
+// 修改专家管理
+export function updateMarkCertificate(data) {
+  return request({
+    url: '/kyfz/expert/updateMarkCertificate',
+    method: 'put',
+    data: data
+  })
+}
+

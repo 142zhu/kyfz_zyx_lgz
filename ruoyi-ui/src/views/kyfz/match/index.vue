@@ -128,7 +128,12 @@
                 }}</span>
               </div>
             </div>
+            <div style="padding-bottom:20px;padding-right:0px!important;">
+              <el-button type="primary" @click="handleAllAchievement(matchDetails.expertAccount)"
+                style="float: right;margin-right:0px;">所有研究成果</el-button>
+            </div>
           </div>
+
         </div>
         <div class="match-detail-team">
           <h4>专家团队</h4>
@@ -136,7 +141,7 @@
             <span v-for="item in matchDetails.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" @click="handleECharts()" style="float: right">
+            <el-button type="primary" @click="handleECharts()" style="float: right;margin-right:0px;">
               团队关系图
             </el-button>
           </div>
@@ -149,6 +154,77 @@
         <div :id="echartsId" style="width: 500px; height: 500px"></div>
       </div>
     </el-dialog>
+    <!-- 展示专家所有成果 -->
+    <el-dialog :title="ExpertInfo" :visible.sync="openExpert" append-to-body>
+      <div class="match-detail" style="margin-top: -20px">
+        <div class="match-detail-header">
+          <h3 class="match-detail-title">专家详细信息</h3>
+        </div>
+        <el-table :data="[expertDetail]" class="match-detail-table">
+          <el-table-column label="专家账号" align="center" prop="expertAccount" />
+          <el-table-column label="专家姓名" align="center" prop="expertName" />
+          <el-table-column label="专家职称" align="center" prop="expertPosition" />
+          <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+          <el-table-column label="一级学科" align="center" prop="primaryDiscipline" />
+          <el-table-column label="二级学科" align="center" prop="secondaryDiscipline" />
+          <el-table-column label="三级学科" align="center" prop="tertiaryDiscipline" />
+        </el-table>
+        <div class="match-detail-result">
+          <h4>专家研究成果</h4>
+          <div class="match-detail-result-info">
+            <div>
+              <h5>相关项目</h5>
+              <div class="match-detail-decorate">
+                <ul>
+                  <li style="" v-for="item in expertDetail.projectList" :key="item.projectId"
+                    @click="sendProjectId(item.projectId)">
+                    <span v-bind:class="{ 'highlight': isHighlighted(item.projectId) }">
+                      {{ item.projectName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <h5>相关论文</h5>
+              <div class="match-detail-decorate">
+                <ul>
+                  <li style="" v-for="item in expertDetail.thesisList" :key="item.thesisId"
+                    @click="sendThesisId(item.thesisId)">
+                    <span v-bind:class="{ 'highlight': isHighlighted1(item.thesisId) }">
+                      {{ item.thesisName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <h5>相关著作</h5>
+              <div class="match-detail-decorate">
+                <ul>
+                  <li style="" v-for="item in expertDetail.workList" :key="item.workId" @click="sendWorkId(item.workId)">
+                    <span v-bind:class="{ 'highlight': isHighlighted2(item.workId) }">
+                      {{ item.workName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <h5>相关证书</h5>
+              <div class="match-detail-decorate">
+                <ul>
+                  <li style="" v-for="item in expertDetail.certificateList" :key="item.certificateId"
+                    @click="sendCertificateId(item.certificateId)">
+                    <span v-bind:class="{ 'highlight': isHighlighted3(item.certificateId) }">
+                      {{ item.certificateName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -164,6 +240,7 @@ import {
   updatePushRecord,
 } from "@/api/kyfz/match";
 
+import { getExpertDetailByAccount, updateMarkProject, updateMarkThesis, updateMarkWork, updateMarkCertificate } from "@/api/kyfz/expert"
 import * as echarts from "echarts";
 
 const getEchartsId = () => {
@@ -193,12 +270,24 @@ export default {
       strArray1: [],
       strArray2: [],
       strArray3: [],
+      projectArrary: [],
+      projectList: [],
+      thesisList: [],
+      workList: [],
+      certificateList: [],
+      expertDetail: [],
+      projectIds: [],
+      workIds: [],
+      certificateIds: [],
+      thesisIds: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       openDetail: false,
       openECharts: false,
+      openExpert: false,
+      selectedProjectId: null,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -216,6 +305,17 @@ export default {
         researchDirection: null, //存专家研究方向
         requirementKeywords: "", //需求关键词
         projectNames: "", //专家研究成果：项目（目前就做这个），论文，著作
+        expertName: null,
+        expertPosition: null,
+        expertAffiliation: null,
+        primaryDisclipline: null,
+        secondaryDiscipline: null,
+        tertiaryDiscipline: null,
+
+        thesisName: null,
+        workName: null,
+        certificateName: null,
+
       },
       // 表单参数
       form: {},
@@ -226,6 +326,7 @@ export default {
       colors: ["#99A9BF", "#F7BA2A", "#FF9900"],
       echartsId: null,
       chartTitle: null,
+      selectedId: null,
     };
   },
   created() {
@@ -233,6 +334,7 @@ export default {
     this.echartsId = getEchartsId();
   },
   methods: {
+
     // echarts
     initChart: function () {
       const myChart = echarts.init(document.getElementById(this.echartsId));
@@ -352,6 +454,7 @@ export default {
         createTime: null,
         updateBy: null,
         updateTime: null,
+        markProject: null,
       };
       this.resetForm("form");
     },
@@ -441,6 +544,8 @@ export default {
       //获取到当前行匹配信息的id
       //const matchId = (number)((String)(row.matchId).trim());
       const matchId = row.matchId;
+      this.matchDetails.expertAccount = row.expertAccount;
+      // alert(this.matchDetails.expertAccount);
       this.matchDetails.expertName = row.expertName;
       getMatchDetails(matchId).then((response) => {
         this.matchDetails = response.data;
@@ -519,11 +624,140 @@ export default {
       });
       this.myChart.resize(); //自适应大小
     },
+
+    handleAllAchievement(expertAccount) {
+      //新的弹窗，放专家的信息和所有信息
+      this.openExpert = true;
+      getExpertDetailByAccount(expertAccount).then((response) => {
+        //所有的专家信息都存在这里
+        //alert(response.data.markProject)
+        this.projectIds = [];
+        this.thesisIds = [];
+        this.workIds = [];
+        this.certificateIds = [];
+        this.expertDetail = response.data;
+        if (response.data.markProject != null) {
+          this.projectIds = response.data.markProjectId;
+        }
+
+        if (response.data.markThesis != null) {
+          this.thesisIds = response.data.markThesisId;
+        }
+
+        if (response.data.markWork != null) {
+          this.workIds = response.data.markWorkId;
+        }
+
+        if (response.data.markCertificate != null) {
+          this.certificateIds = response.data.markCertificateId;
+        }
+
+
+      });
+
+    },
+    sendProjectId(projectId) {
+      const data2 = {};
+      if (this.projectIds.includes(projectId)) {
+        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        return;
+      }
+      data2.expertAccount = this.expertDetail.expertAccount;
+      data2.projectId = projectId;
+      try {
+        this.projectIds.push(projectId);
+      }
+      catch (e) {
+        alert(e)
+      }
+
+      updateMarkProject(data2).then((response) => {
+        this.$modal.msgSuccess("标记成功");
+        //在markProject中添加新标记的id
+
+      });
+    },
+    sendThesisId(thesisId) {
+      const data2 = {};
+      if (this.thesisIds.includes(thesisId)) {
+        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        return;
+      }
+      data2.expertAccount = this.expertDetail.expertAccount;
+      data2.thesisId = thesisId;
+      try {
+        this.thesisIds.push(thesisId);
+      }
+      catch (e) {
+        alert(e)
+      }
+      updateMarkThesis(data2).then((response) => {
+        this.$modal.msgSuccess("标记成功");
+      });
+    },
+
+    sendWorkId(workId) {
+      const data2 = {};
+      if (this.workIds.includes(workId)) {
+        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        return;
+      }
+      data2.expertAccount = this.expertDetail.expertAccount;
+      data2.workId = workId;
+      try {
+        this.workIds.push(workId);
+      }
+      catch (e) {
+        alert(e)
+      }
+      updateMarkWork(data2).then((response) => {
+        this.$modal.msgSuccess("标记成功");
+      });
+    },
+
+    sendCertificateId(certificateId) {
+      const data2 = {};
+      if (this.thesisIds.includes(certificateId)) {
+        this.$modal.msgSuccess("该项目已经被标记过，请不要重复点击");
+        return;
+      }
+      data2.expertAccount = this.expertDetail.expertAccount;
+      data2.certificateId = certificateId;
+      try {
+        this.certificateIds.push(certificateId);
+      }
+      catch (e) {
+        alert(e)
+      }
+      updateMarkCertificate(data2).then((response) => {
+        this.$modal.msgSuccess("标记成功");
+      });
+    },
+    isHighlighted(projectId) {
+      // 返回项目 ID 是否存在于 projectIds 数组中
+      return this.projectIds.includes(projectId);
+    },
+    isHighlighted2(workId) {
+      // 返回项目 ID 是否存在于 projectIds 数组中
+      return this.workIds.includes(workId);
+    },
+    isHighlighted1(thesisId) {
+      // 返回项目 ID 是否存在于 projectIds 数组中
+      return this.thesisIds.includes(thesisId);
+    },
+    isHighlighted3(certificateId) {
+      // 返回项目 ID 是否存在于 projectIds 数组中
+      return this.certificateIds.includes(certificateId);
+    },
   },
 };
 </script>
 
 <style scoped>
+.highlight {
+  background-color: yellow;
+}
+
 .string-info {
   display: flex;
   flex-wrap: wrap;
@@ -581,6 +815,11 @@ export default {
 
 .match-detail-result-info>div {
   margin-bottom: 10px;
+}
+
+.match-detail-team-info>div>el-button {
+  margin-bottom: 10px;
+  margin-right: 10px;
 }
 
 .match-detail-decorate {

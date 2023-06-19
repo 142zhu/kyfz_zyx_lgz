@@ -9,8 +9,7 @@ import com.ruoyi.kyfz.domain.KyfzExpert;
  * @author ruoyi
  * @date 2023-06-06
  */
-public interface KyfzExpertMapper 
-{
+public interface KyfzExpertMapper {
     /**
      * 查询专家管理
      * 
@@ -58,4 +57,44 @@ public interface KyfzExpertMapper
      * @return 结果
      */
     public int deleteKyfzExpertByExpertIds(Long[] expertIds);
+
+    /**
+     * 查询专家管理
+     * 
+     * @param expertId 专家管理主键
+     * @return 专家管理
+     */
+    public KyfzExpert selectKyfzExpertByExpertAccount(String expertAccount);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkProject(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkWork(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkThesis(KyfzExpert kyfzExpert);
+
+    /**
+     * 修改专家管理
+     * 
+     * @param kyfzExpert 专家管理(人工标记)
+     * @return 结果
+     */
+    public int updateMarkCertificate(KyfzExpert kyfzExpert);
 }

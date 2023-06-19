@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.domain;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -76,6 +77,18 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "所属团队id", readConverterExp = "多=个")
     private String expertTeams;
 
+    @Excel(name = "项目列表")
+    List<KyfzProject> projectList;
+
+    @Excel(name = "著作列表")
+    List<KyfzWork> workList;
+
+    @Excel(name = "证书列表")
+    List<KyfzCertificate> certificateList;
+
+    @Excel(name = "论文列表")
+    List<KyfzThesis> thesisList;
+
     @Excel(name = "多个项目名")
     private ArrayList projectArray;
 
@@ -90,6 +103,126 @@ public class KyfzExpert extends BaseEntity {
 
     @Excel(name = "成员名")
     private String teamMembers;
+
+    @Excel(name = "人工标注的项目id")
+    private String markProject;
+
+    @Excel(name = "人工标注的项目id")
+    private Long[] markProjectId;
+
+    @Excel(name = "人工标注的论文id")
+    private String markThesis;
+
+    @Excel(name = "人工标注的著作id")
+    private String markWork;
+
+    @Excel(name = "人工标注的证书id")
+    private String markCertificate;
+
+    @Excel(name = "人工标注的著作id")
+    private Long[] markWorkId;
+
+    @Excel(name = "人工标注的论文id")
+    private Long[] markThesisId;
+
+    @Excel(name = "人工标注的证书id")
+    private Long[] markCertificateId;
+
+    public Long[] getMarkWorkId() {
+        return markWorkId;
+    }
+
+    public void setMarkWorkId(Long[] markWorkId) {
+        this.markWorkId = markWorkId;
+    }
+
+    public Long[] getMarkThesisId() {
+        return markThesisId;
+    }
+
+    public void setMarkThesisId(Long[] markThesisId) {
+        this.markThesisId = markThesisId;
+    }
+
+    public Long[] getMarkCertificateId() {
+        return markCertificateId;
+    }
+
+    public void setMarkCertificateId(Long[] markCertificateId) {
+        this.markCertificateId = markCertificateId;
+    }
+
+    public Long[] getMarkProjectId() {
+        return markProjectId;
+    }
+
+    public void setMarkProjectId(Long[] markProjectId) {
+        this.markProjectId = markProjectId;
+    }
+
+    public List<KyfzProject> getProjectList() {
+        return projectList;
+    }
+
+    public void setProjectList(List<KyfzProject> projectList) {
+        this.projectList = projectList;
+    }
+
+    public List<KyfzWork> getWorkList() {
+        return workList;
+    }
+
+    public void setWorkList(List<KyfzWork> workList) {
+        this.workList = workList;
+    }
+
+    public List<KyfzCertificate> getCertificateList() {
+        return certificateList;
+    }
+
+    public void setCertificateList(List<KyfzCertificate> certificateList) {
+        this.certificateList = certificateList;
+    }
+
+    public List<KyfzThesis> getThesisList() {
+        return thesisList;
+    }
+
+    public void setThesisList(List<KyfzThesis> thesisList) {
+        this.thesisList = thesisList;
+    }
+
+    public String getMarkProject() {
+        return markProject;
+    }
+
+    public void setMarkProject(String markProject) {
+        this.markProject = markProject;
+    }
+
+    public String getMarkThesis() {
+        return markThesis;
+    }
+
+    public void setMarkThesis(String markThesis) {
+        this.markThesis = markThesis;
+    }
+
+    public String getMarkWork() {
+        return markWork;
+    }
+
+    public void setMarkWork(String markWork) {
+        this.markWork = markWork;
+    }
+
+    public String getMarkCertificate() {
+        return markCertificate;
+    }
+
+    public void setMarkCertificate(String markCertificate) {
+        this.markCertificate = markCertificate;
+    }
 
     // 专家有效位
     private String expertSignificance;
