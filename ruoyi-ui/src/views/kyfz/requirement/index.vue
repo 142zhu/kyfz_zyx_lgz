@@ -640,6 +640,23 @@ export default {
         `requirement_${new Date().getTime()}.xlsx`
       );
     },
+
+    //调用需求请求接口
+    handleMatch(row) {
+      this.$axios({
+        method: "post",
+        url: "http://172.18.166.90:6666/infer",
+        data: {
+          requirement_id: row.requirementId,
+        },
+      })
+        .then((response) => {
+          alert("请求成功，需求ID为" + row.requirementId); //请求成功返回的数据
+        })
+        .catch((error) => {
+          alert("请求失败，失败信息为：" + error); //请求失败返回的数据
+        });
+    },
   },
   mounted() {
     // 初始时设置readonly属性
@@ -647,29 +664,6 @@ export default {
       const input = this.$refs.idInput.$el.querySelector("input");
       input.setAttribute("readonly", this.editable);
     });
-  },
-  //调用需求请求接口
-  handleMatch(row) {
-    var axios = require("axios").default;
-
-    var options = {
-      method: "POST",
-      url: "http://172.18.166.90:6666/infer",
-      headers: { "content-type": "application/json" },
-      data: { requirement_id: row.requirementId },
-    };
-
-    axios
-      .request(options)
-      .then(function (response) {
-        this.$message({
-          message: "匹配成功，需求ID:" + row.requirementId,
-          type: "success",
-        });
-      })
-      .catch(function (error) {
-        this.$message.error("匹配失败，接口超时");
-      });
   },
 };
 </script>

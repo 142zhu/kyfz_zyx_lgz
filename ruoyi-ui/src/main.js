@@ -46,7 +46,9 @@ import VueMeta from "vue-meta";
 import DictData from "@/components/DictData";
 
 //echarts
+import axios from "axios";
 import echarts from "echarts";
+Vue.prototype.$axios = axios;
 Vue.prototype.$echarts = echarts;
 
 // 全局方法挂载
