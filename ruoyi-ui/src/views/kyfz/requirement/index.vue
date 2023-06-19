@@ -1,130 +1,327 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
       <el-form-item label="需求名称" prop="projectName">
-        <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.projectName"
+          placeholder="请输入需求名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="项目类别" prop="projectCategory">
-        <el-input v-model="queryParams.projectCategory" placeholder="请输入项目类别" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.projectCategory"
+          placeholder="请输入项目类别"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="项目类型" prop="projectType">
-        <el-input v-model="queryParams.projectType" placeholder="请输入项目类型" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.projectType"
+          placeholder="请输入项目类型"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="公司名称" prop="enterpriseName">
-        <el-input v-model="queryParams.enterpriseName" placeholder="请输入公司名称" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.enterpriseName"
+          placeholder="请输入公司名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="需求状态" prop="requirementStatus">
-        <el-input v-model="queryParams.requirementStatus" placeholder="请输入需求状态" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.requirementStatus"
+          placeholder="请输入需求状态"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="发布时间" prop="requirementReleaseTime">
-        <el-date-picker clearable v-model="queryParams.requirementReleaseTime" type="date" value-format="yyyy-MM-dd"
-          placeholder="请输入发布时间" @keyup.enter.native="handleQuery">
+        <el-date-picker
+          clearable
+          v-model="queryParams.requirementReleaseTime"
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请输入发布时间"
+          @keyup.enter.native="handleQuery"
+        >
         </el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+          >搜索</el-button
+        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['kyfz:requirement:add']">新增</el-button>
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+          v-hasPermi="['kyfz:requirement:add']"
+          >新增</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:requirement:remove']">删除</el-button>
+        <el-button
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+          v-hasPermi="['kyfz:requirement:remove']"
+          >删除</el-button
+        >
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar
+        :showSearch.sync="showSearch"
+        @queryTable="getList"
+      ></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="requirementList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="requirementList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="需求名称" align="center" prop="projectName" />
       <el-table-column label="合同号" align="center" prop="contractNumber" />
       <el-table-column label="项目类别" align="center" prop="projectCategory" />
       <el-table-column label="项目类型" align="center" prop="projectType" />
-      <el-table-column label="需求状态" align="center" prop="requirementStatus" />
+      <el-table-column
+        label="需求状态"
+        align="center"
+        prop="requirementStatus"
+      />
       <el-table-column label="公司名称" align="center" prop="enterpriseName" />
-      <el-table-column label="发布时间" align="center" prop="requirementReleaseTime" width="100">
+      <el-table-column
+        label="发布时间"
+        align="center"
+        prop="requirementReleaseTime"
+        width="100"
+      >
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.requirementReleaseTime, "{y}-{m}-{d}") }}</span>
+          <span>{{
+            parseTime(scope.row.requirementReleaseTime, "{y}-{m}-{d}")
+          }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-search" @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:requirement:edit']">详情</el-button>
-          <el-button size="mini" type="text" icon="el-icon-document" @click="handleMatch(scope.row)">匹配</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:requirement:remove']">删除</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-search"
+            @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:requirement:edit']"
+            >详情</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleMatch(scope.row)"
+            >匹配</el-button
+          >
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            v-hasPermi="['kyfz:requirement:remove']"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 修改需求管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
-      <div class="toggle-edit-button" style="position: absolute; top: 25px; right: 80px">
+    <el-dialog
+      :title="title"
+      :visible.sync="open"
+      width="1000px"
+      append-to-body
+    >
+      <div
+        class="toggle-edit-button"
+        style="position: absolute; top: 25px; right: 80px"
+      >
         <el-button type="primary" @click="toggleEdit">{{
           editable ? "编辑" : "暂存"
         }}</el-button>
       </div>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="需求编号" prop="requirementId" class="inputDeep">
-          <el-input v-model="form.requirementId" placeholder="无需填写（自动生成）" :readonly="true" ref="idInput" />
+          <el-input
+            v-model="form.requirementId"
+            placeholder="无需填写（自动生成）"
+            :readonly="true"
+            ref="idInput"
+          />
         </el-form-item>
         <el-form-item label="需求名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="" :readonly="editable" ref="idInput" style="width: 600px" />
+          <el-input
+            v-model="form.projectName"
+            placeholder=""
+            :readonly="editable"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求关键词" prop="requirementKeywords">
-          <el-input v-model="form.requirementKeywords" placeholder="" :readonly="editable" ref="idInput"
-            style="width: 600px" />
+          <el-input
+            v-model="form.requirementKeywords"
+            placeholder=""
+            :readonly="editable"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求描述" prop="requirementDescription">
-          <el-input v-model="form.requirementDescription" placeholder="" :readonly="editable" ref="idInput"
-            style="width: 600px" type="textarea" :autosize="{ minRows: 2, maxRows: 4 }" />
+          <el-input
+            v-model="form.requirementDescription"
+            placeholder=""
+            :readonly="editable"
+            ref="idInput"
+            style="width: 600px"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+          />
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
-          <el-input v-model="form.projectCategory" placeholder="" :readonly="editable" ref="idInput"
-            style="width: 600px" />
+          <el-input
+            v-model="form.projectCategory"
+            placeholder=""
+            :readonly="editable"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求发布时间" prop="requirementReleaseTime">
-          <el-date-picker clearable v-model="form.requirementReleaseTime" type="date" value-format="yyyy-MM-dd"
-            placeholder="" :readonly="true" ref="idInput" style="width: 600px">
+          <el-date-picker
+            clearable
+            v-model="form.requirementReleaseTime"
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          >
           </el-date-picker>
         </el-form-item>
         <el-form-item label="需求状态" prop="requirementStatus">
-          <el-select v-model="form.requirementStatus" filterable placeholder="" :disabled="editable" style="width: 600px">
-            <el-option v-for="item in dict.type.requirement_status" :key="item.value" :label="item.label"
-              :value="item.value">
+          <el-select
+            v-model="form.requirementStatus"
+            filterable
+            placeholder=""
+            :disabled="editable"
+            style="width: 600px"
+          >
+            <el-option
+              v-for="item in dict.type.requirement_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
-          <el-select v-model="form.enterpriseName" filterable placeholder="" :disabled="editable" style="width: 600px"
-            @change="handleChange">
-            <el-option v-for="item in enterpriseList" :key="item.enterpriseName" :label="item.enterpriseName"
-              :value="item.enterpriseName">
+          <el-select
+            v-model="form.enterpriseName"
+            filterable
+            placeholder=""
+            :disabled="editable"
+            style="width: 600px"
+            @change="handleChange"
+          >
+            <el-option
+              v-for="item in enterpriseList"
+              :key="item.enterpriseName"
+              :label="item.enterpriseName"
+              :value="item.enterpriseName"
+            >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
-          <el-input v-model="form.enterpriseKeywords" placeholder="" :readonly="true" ref="idInput"
-            style="width: 600px" />
+        <el-form-item
+          label="公司关键词"
+          prop="enterpriseKeywords"
+          class="inputDeep"
+        >
+          <el-input
+            v-model="form.enterpriseKeywords"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
-        <el-form-item label="公司简介" prop="enterpriseDescribe" class="inputDeep">
-          <el-input v-model="form.enterpriseDescribe" type="textarea" placeholder="" :readonly="true" ref="idInput"
-            style="width: 600px" :autosize="{ minRows: 2, maxRows: 4 }" />
+        <el-form-item
+          label="公司简介"
+          prop="enterpriseDescribe"
+          class="inputDeep"
+        >
+          <el-input
+            v-model="form.enterpriseDescribe"
+            type="textarea"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+          />
         </el-form-item>
-        <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
-          <el-input v-model="form.registeredCapital" placeholder="" :readonly="true" ref="idInput" style="width: 600px" />
+        <el-form-item
+          label="注册资本"
+          prop="registeredCapital"
+          class="inputDeep"
+        >
+          <el-input
+            v-model="form.registeredCapital"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -134,45 +331,112 @@
     </el-dialog>
 
     <!-- 上传需求管理对话框 -->
-    <el-dialog :title="title" :visible.sync="open1" width="1000px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open1"
+      width="1000px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="需求名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入需求名称" style="width: 600px" />
+          <el-input
+            v-model="form.projectName"
+            placeholder="请输入需求名称"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求关键词" prop="requirementKeywords">
-          <el-input v-model="form.requirementKeywords" placeholder="请输入需求关键词" style="width: 600px" />
+          <el-input
+            v-model="form.requirementKeywords"
+            placeholder="请输入需求关键词"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求描述" prop="requirementDescription">
-          <el-input v-model="form.requirementDescription" placeholder="请输入需求描述" style="width: 600px" type="textarea"
-            :autosize="{ minRows: 4, maxRows: 6 }" />
+          <el-input
+            v-model="form.requirementDescription"
+            placeholder="请输入需求描述"
+            style="width: 600px"
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 6 }"
+          />
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
-          <el-input v-model="form.projectCategory" placeholder="请输入需求类型" style="width: 600px" />
+          <el-input
+            v-model="form.projectCategory"
+            placeholder="请输入需求类型"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求状态" prop="requirementStatus">
-          <el-select v-model="form.requirementStatus" filterable placeholder="请选择需求状态" style="width: 600px">
-            <el-option v-for="item in dict.type.requirement_status" :key="item.value" :label="item.label"
-              :value="item.value" :selected="index === 1"></el-option>
+          <el-select
+            v-model="form.requirementStatus"
+            filterable
+            placeholder="请选择需求状态"
+            style="width: 600px"
+          >
+            <el-option
+              v-for="item in dict.type.requirement_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              :selected="index === 1"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
-          <el-select v-model="form.enterpriseName" filterable placeholder="请选择已有公司名称" style="width: 600px"
-            @change="handleChange">
-            <el-option v-for="item in enterpriseList" :key="item.enterpriseName" :label="item.enterpriseName"
-              :value="item.enterpriseName">
+          <el-select
+            v-model="form.enterpriseName"
+            filterable
+            placeholder="请选择已有公司名称"
+            style="width: 600px"
+            @change="handleChange"
+          >
+            <el-option
+              v-for="item in enterpriseList"
+              :key="item.enterpriseName"
+              :label="item.enterpriseName"
+              :value="item.enterpriseName"
+            >
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
-          <el-input v-model="form.enterpriseKeywords" placeholder="" :readonly="true" ref="idInput"
-            style="width: 600px" />
+        <el-form-item
+          label="公司关键词"
+          prop="enterpriseKeywords"
+          class="inputDeep"
+        >
+          <el-input
+            v-model="form.enterpriseKeywords"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="公司简介" prop="enterpriseDescribe">
-          <el-input v-model="form.enterpriseDescribe" type="textarea" placeholder="" :readonly="true" ref="idInput"
-            style="width: 600px" :autosize="{ minRows: 4, maxRows: 6 }" />
+          <el-input
+            v-model="form.enterpriseDescribe"
+            type="textarea"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+            :autosize="{ minRows: 4, maxRows: 6 }"
+          />
         </el-form-item>
-        <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
-          <el-input v-model="form.registeredCapital" placeholder="" :readonly="true" ref="idInput" style="width: 600px" />
+        <el-form-item
+          label="注册资本"
+          prop="registeredCapital"
+          class="inputDeep"
+        >
+          <el-input
+            v-model="form.registeredCapital"
+            placeholder=""
+            :readonly="true"
+            ref="idInput"
+            style="width: 600px"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -191,6 +455,7 @@ import {
   listRequirement,
   listenterprise,
   updateRequirement,
+  handleMatch,
 } from "@/api/kyfz/requirement";
 import DictData from "@/components/DictData";
 DictData.install();
@@ -416,7 +681,7 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -430,19 +695,34 @@ export default {
     },
 
     //调用需求请求接口
-    handleMatch(row) {
-      this.$axios({
-        method: "post",
-        url: "http://172.18.166.90:6666/infer",
-        data: {
-          requirement_id: row.requirementId,
-        },
-      })
-        .then((response) => {
-          alert("请求成功，需求ID为" + response); //请求成功返回的数据
+    // handleMatch(row) {
+    //   this.$axios({
+    //     method: "post",
+    //     url: "http://172.18.166.90:6666/infer",
+    //     data: {
+    //       requirement_id: row.requirementId,
+    //     },
+    //   })
+    //     .then((response) => {
+    //       alert("请求成功，需求ID为" + response); //请求成功返回的数据
+    //     })
+    //     .catch((error) => {
+    //       alert("请求失败，失败信息为：" + error); //请求失败返回的数据
+    //     });
+    // },
+
+    async handleMatch(row) {
+      debugger;
+      handleMatch({ requirementId: row.requirementId })
+        .then((res) => {
+          if (200 === res.code) {
+            this.$modal.msgSuccess("算法调用成功");
+          } else {
+            this.$modal.msgError("算法调用失败");
+          }
         })
-        .catch((error) => {
-          alert("请求失败，失败信息为：" + error); //请求失败返回的数据
+        .catch((e) => {
+          this.$modal.msgError("算法调用失败");
         });
     },
   },
@@ -457,7 +737,7 @@ export default {
 </script>
 
 <style scoped>
-.inputDeep>>>.el-input__inner {
+.inputDeep >>> .el-input__inner {
   border: 0px;
   box-shadow: 0 0 0 0px;
 }

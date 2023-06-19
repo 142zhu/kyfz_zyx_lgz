@@ -50,3 +50,11 @@ export function listenterprise(query) {
     params: query,
   });
 }
+
+export function handleMatch(data) {
+  return request({
+    url: "/kyfz/requirement/handleMatch",
+    method: "post",
+    params: data,
+  });
+}
