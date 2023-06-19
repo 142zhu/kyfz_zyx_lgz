@@ -41,20 +41,21 @@ module.exports = {
           ["^" + process.env.VUE_APP_BASE_API]: "",
         },
       },
+      "/api": {
+        target: "http://172.18.166.90:6666/infer", //设置你调用的接口域名和端口号
+        changeOrigin: true, //跨域这个必须是true因为是跨域
+        pathRewrite: {
+          "^/api": "/", //这里理解成用‘/api’代替target里面的地址，
+          //后面组件中我们调接口时直接用api代替
+          //比如我要调用
+          //'http://xxxx.xxx.xx.xxx:xxxx/xxx/aaa?a=1'，
+          //直接写‘/api/xxx/aaa?a=1’即可
+        },
+      },
     },
     disableHostCheck: true,
   },
-  "/api": {
-    target: "http://172.18.166.90:6666/infer", //设置你调用的接口域名和端口号
-    changeOrigin: true, //跨域这个必须是true因为是跨域
-    pathRewrite: {
-      "^/api": "/", //这里理解成用‘/api’代替target里面的地址，
-      //后面组件中我们调接口时直接用api代替
-      //比如我要调用
-      //'http://xxxx.xxx.xx.xxx:xxxx/xxx/aaa?a=1'，
-      //直接写‘/api/xxx/aaa?a=1’即可
-    },
-  },
+
 
   css: {
     loaderOptions: {
@@ -134,10 +135,10 @@ module.exports = {
         },
       });
       config.optimization.runtimeChunk("single"),
-        {
-          from: path.resolve(__dirname, "./public/robots.txt"), //防爬虫文件
-          to: "./", //到根目录下
-        };
+      {
+        from: path.resolve(__dirname, "./public/robots.txt"), //防爬虫文件
+        to: "./", //到根目录下
+      };
     });
   },
 };
