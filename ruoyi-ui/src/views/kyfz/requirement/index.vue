@@ -191,6 +191,7 @@ import {
   listRequirement,
   listenterprise,
   updateRequirement,
+  pushRequirementId,
 } from "@/api/kyfz/requirement";
 import DictData from "@/components/DictData";
 DictData.install();
@@ -429,6 +430,12 @@ export default {
       );
     },
 
+    handleMatch2(row) {
+      const requirementId = row.requirementId;
+      pushRequirementId(requirementId).then((response) => {
+        this.$modal.msgSuccess("推送匹配成功");
+      });
+    },
     //调用需求请求接口
     handleMatch(row) {
       this.$axios({

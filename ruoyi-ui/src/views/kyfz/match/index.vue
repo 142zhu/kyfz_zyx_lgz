@@ -629,26 +629,28 @@ export default {
       //新的弹窗，放专家的信息和所有信息
       this.openExpert = true;
       getExpertDetailByAccount(expertAccount, matchId).then((response) => {
+
         //所有的专家信息都存在这里
         //alert(response.data.markProject)
         this.projectIds = [];
+
         this.thesisIds = [];
         this.workIds = [];
         this.certificateIds = [];
         this.expertDetail = response.data;
-        if (response.data.markProject != null) {
+        if (response.data.markProjectId != null) {
           this.projectIds = response.data.markProjectId;
         }
 
-        if (response.data.markThesis != null) {
+        if (response.data.markThesisId != null) {
           this.thesisIds = response.data.markThesisId;
         }
 
-        if (response.data.markWork != null) {
+        if (response.data.markWorkId != null) {
           this.workIds = response.data.markWorkId;
         }
 
-        if (response.data.markCertificate != null) {
+        if (response.data.markCertificateId != null) {
           this.certificateIds = response.data.markCertificateId;
         }
 
@@ -734,13 +736,13 @@ export default {
     sendCertificateId(certificateId) {
       const data2 = {};
       data2.deleteBool = false;
-      data2.matchId = this.expertDetail.matchId;
+      data2.matchId = this.matchDetails.matchId;
       data2.certificateId = certificateId;
-      if (this.thesisIds.includes(certificateId)) {
+      if (this.certificateIds.includes(certificateId)) {
         data2.deleteBool = true;
-        const index = this.thesisIds.indexOf(certificateId);
+        const index = this.certificateIds.indexOf(certificateId);
         if (index !== -1) {
-          this.thesisIds.splice(index, 1);
+          this.certificateIds.splice(index, 1);
         }
         updateMarkCertificate(data2).then((response) => {
           this.$modal.msgSuccess("去除标记成功");

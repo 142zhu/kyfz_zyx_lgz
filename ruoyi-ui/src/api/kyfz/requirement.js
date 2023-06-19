@@ -50,3 +50,13 @@ export function listenterprise(query) {
     params: query,
   });
 }
+
+
+// 新增需求管理
+export function pushRequirementId(requirementId) {
+  return request({
+    url: "/kyfz/requirement/pushRequirementId",
+    method: "post",
+    data: requirementId,
+  });
+}

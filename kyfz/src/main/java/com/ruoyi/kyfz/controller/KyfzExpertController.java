@@ -174,10 +174,38 @@ public class KyfzExpertController extends BaseController {
 
         KyfzExpert expert2 = kyfzExpertService.selectKyfzMatchMark(matchId);
 
-        expert.setMarkThesis(expert2.getMarkThesis());
+        expert.setMarkWork(expert2.getMarkWork());
         expert.setMarkCertificate(expert2.getMarkCertificate());
         expert.setMarkProject(expert2.getMarkProject());
         expert.setMarkThesis(expert2.getMarkThesis());
+        // System.out.println("11111111111111111+" + expert2.getMarkThesis() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkCertificate() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkWork() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkProject() +
+        // "+2222222");
+        // if (expert2.getMarkThesis() == "") {
+        // expert.setMarkThesis(null);
+        // }
+        // if (expert2.getMarkCertificate() == "") {
+        // expert.setMarkCertificate(null);
+        // }
+        // if (expert2.getMarkProject() == "") {
+        // expert.setMarkProject(null);
+        // }
+        // if (expert2.getMarkWork() == "") {
+        // expert.setMarkWork(null);
+        // }
+        // System.out.println("11111111111111111+" + expert2.getMarkThesis() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkCertificate() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkWork() +
+        // "+2222222");
+        // System.out.println("11111111111111111+" + expert2.getMarkProject() +
+        // "+2222222");
         /*
          * if (expert2.getMarkCertificate() != null &&
          * expert2.getMarkCertificate().isEmpty()) {
