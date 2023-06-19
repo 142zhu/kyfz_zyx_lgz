@@ -38,7 +38,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="requirementKeywords" column="requirement_keywords" />
         <result property="requirementDescription" column="requirement_description" />
         <result property="requirementReleaseTime" column="requirement_release_time" />
-
         <result property="enterpriseName" column="enterprise_name" />
         <result property="enterpriseDescribe" column="enterprise_describe" />
         <result property="registeredCapital" column="registered_capital" />
