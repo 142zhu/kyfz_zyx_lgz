@@ -97,6 +97,46 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "多个证书名")
     private ArrayList strArray3;
 
+    private String markProject;
+
+    private String markWork;
+
+    private String markThesis;
+
+    private String markCertificate;
+
+    public String getMarkProject() {
+        return markProject;
+    }
+
+    public void setMarkProject(String markProject) {
+        this.markProject = markProject;
+    }
+
+    public String getMarkWork() {
+        return markWork;
+    }
+
+    public void setMarkWork(String markWork) {
+        this.markWork = markWork;
+    }
+
+    public String getMarkThesis() {
+        return markThesis;
+    }
+
+    public void setMarkThesis(String markThesis) {
+        this.markThesis = markThesis;
+    }
+
+    public String getMarkCertificate() {
+        return markCertificate;
+    }
+
+    public void setMarkCertificate(String markCertificate) {
+        this.markCertificate = markCertificate;
+    }
+
     public ArrayList getStrArray1() {
         return strArray1;
     }

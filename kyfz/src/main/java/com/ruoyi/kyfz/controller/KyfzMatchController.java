@@ -76,57 +76,15 @@ public class KyfzMatchController extends BaseController {
     }
 
     /**
-     * 新增匹配列表
-     */
-    /*
-     * @PreAuthorize("@ss.hasPermi('kyfz:match:add')")
-     * 
-     * @Log(title = "匹配列表", businessType = BusinessType.INSERT)
-     * 
-     * @PostMapping
-     * public AjaxResult add(@RequestBody KyfzMatch kyfzMatch) {
-     * return toAjax(kyfzMatchService.insertKyfzMatch(kyfzMatch));
-     * }
-     */
-
-    /**
-     * 修改匹配列表
-     */
-    /*
-     * @PreAuthorize("@ss.hasPermi('kyfz:match:edit')")
-     * 
-     * @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
-     * 
-     * @PutMapping
-     * public AjaxResult edit(@RequestBody KyfzMatch kyfzMatch) {
-     * return toAjax(kyfzMatchService.updateKyfzMatch(kyfzMatch));
-     * }
-     */
-
-    /**
-     * 删除匹配列表
-     */
-    /*
-     * @PreAuthorize("@ss.hasPermi('kyfz:match:remove')")
-     * 
-     * @Log(title = "匹配列表", businessType = BusinessType.DELETE)
-     * 
-     * @DeleteMapping("/{matchIds}")
-     * public AjaxResult remove(@PathVariable Long[] matchIds) {
-     * return toAjax(kyfzMatchService.deleteKyfzMatchByMatchIds(matchIds));
-     * }
-     */
-
-    /**
      * 获取匹配列表详细信息
      */
     @PreAuthorize("@ss.hasPermi('kyfz:match:detail')")
     @GetMapping(value = "/{matchIds}")
     public AjaxResult getDetailInfo(@PathVariable("matchIds") Long matchIds) {
-        // System.out.println("\u4F60\u597D\u4F60\u597D\u4F60\u597D\u4F60\u597D\u4F60\u597D");
         // 先索引出所有信息
         Long matchId = matchIds;
 
+        // KyfzMatch match_0 = kyfzMatchService.selectKyfzMatchByMatchId(matchIds);
         KyfzMatch match1 = kyfzMatchService.selectKyfzMatchDetailByMatchId(matchId);
         // 从索引出的匹配表中获取匹配出来的项目id（多个id用逗号分隔开了）
         String projectIds = match1.getProjectId();
@@ -240,24 +198,20 @@ public class KyfzMatchController extends BaseController {
         return toAjax(kyfzMatchService.batchInsert(pushRecords));
     }
 
-    /**
-     * 修改匹配列表
-     */
-
-    /*
-     * @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
-     * 
-     * @PutMapping("/3{matchId}")
-     * public AjaxResult updatePushRecord(@PathVariable Long matchId) {
-     * return toAjax(kyfzMatchService.updatePushRecord2(matchId));
-     * }
-     */
-
     @Log(title = "匹配列表", businessType = BusinessType.UPDATE)
     @PutMapping("/3/")
     public AjaxResult updateScore(@RequestBody KyfzMatch kyfzMatch) {
         return toAjax(kyfzMatchService.updatePushRecord(kyfzMatch));
     }
+
+    /**
+     * 获取匹配列表详细信息
+     */
+
+    // @GetMapping(value = "/detail/{matchId}")
+    // public AjaxResult getDetailInfo(@PathVariable("matchId") Long matchId) {
+    // return success(kyfzMatchService.selectKyfzMatchByMatchId(matchId));
+    // }
 
     /************ 工具方法获取String projectId中的所有方法然后用Long 数组存起来 */
     public Long[] extractIds(String projectId) {

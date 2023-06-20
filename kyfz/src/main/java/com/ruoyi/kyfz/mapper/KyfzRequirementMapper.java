@@ -67,4 +67,12 @@ public interface KyfzRequirementMapper {
      * @return 企业列表
      */
     public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise);
+
+    /**
+     * 修改需求匹配状态
+     * 
+     * @param Long 需求id
+     * @return 结果
+     */
+    public int updateKyfzRequirementStatusById(Long requirementId);
 }

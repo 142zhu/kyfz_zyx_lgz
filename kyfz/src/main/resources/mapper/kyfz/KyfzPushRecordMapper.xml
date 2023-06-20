@@ -34,10 +34,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectKyfzPushRecordList" parameterType="KyfzPushRecord" resultMap="KyfzPushRecordResult">
         <include refid="selectKyfzPushRecordVo2"/>
-        <where>  
-            <if test="matchId != null "> and match_id = #{matchId}</if>
-            <if test="pushTime != null "> and push_time = #{pushTime}</if>
-            <if test="feebback != null  and feebback != ''"> and feebback = #{feebback}</if>
+        <where>
+            <if test="pushId != null "> and p.push_id LIKE CONCAT('%', #{pushId}, '%') </if>
+            <if test="matchId != null "> and p.match_id LIKE CONCAT('%', #{matchId}, '%') </if>
+            <if test="pushTime != null "> and push_time LIKE CONCAT('%', #{pushTime}, '%')  </if>
+            <if test="expertName != null "> and expert_name LIKE CONCAT('%', #{expertName}, '%')  </if>
+            <if test="feebback != null  and feebback != ''"> and feebback LIKE CONCAT('%', #{feebback}, '%') </if>
         </where>
     </select>
     
@@ -101,4 +103,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             (#{item.matchId}, #{item.pushTime})
         </foreach>
     </insert>
+
+    
 </mapper>

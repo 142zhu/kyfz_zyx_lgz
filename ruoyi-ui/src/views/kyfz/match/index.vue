@@ -1,11 +1,14 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="需求" prop="projectName">
+      <el-form-item label="需求编号" prop="requirementId">
+        <el-input v-model="queryParams.requirementId" placeholder="请输入需求编号" clearable @keyup.enter.native="handleQuery" />
+      </el-form-item>
+      <el-form-item label="需求名称" prop="projectName">
         <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
 
-      <el-form-item label="企业" prop="client">
+      <el-form-item label="企业名称" prop="client">
         <el-input v-model="queryParams.client" placeholder="请输入企业名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
 
@@ -131,7 +134,7 @@
               </div>
             </div>
             <div style="padding-bottom:20px;padding-right:0px!important;">
-              <el-button type="primary" @click="handleAllAchievement(matchDetails.expertAccount, matchDetails.matchId)"
+              <el-button type="primary" @click="handleAllAchievement()"
                 style="float: right;margin-right:0px;">所有研究成果</el-button>
             </div>
           </div>
@@ -150,7 +153,6 @@
         </div>
       </div>
     </el-dialog>
-
     <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
       <div id="graph-chart" style="width: 500px; height: 500px">
         <div :id="echartsId" style="width: 500px; height: 500px"></div>
@@ -457,6 +459,9 @@ export default {
         updateBy: null,
         updateTime: null,
         markProject: null,
+        markWork: null,
+        markThesis: null,
+        markCertificate: null,
       };
       this.resetForm("form");
     },
@@ -547,10 +552,17 @@ export default {
       //const matchId = (number)((String)(row.matchId).trim());
       const matchId = row.matchId;
       this.matchDetails.expertAccount = row.expertAccount;
+      this.expertAccount = row.expertAccount;
+      //alert(row.expertAccount);
       // alert(this.matchDetails.expertAccount);
       this.matchDetails.expertName = row.expertName;
       getMatchDetails(matchId).then((response) => {
         this.matchDetails = response.data;
+        this.markProject = response.data.markProject;
+        this.markWork = response.data.markWork;
+        this.markCertificate = response.data.markCertificate;
+        this.markThesis = response.data.markThesis;
+
         if (response.data.requirementKeywords != null) {
           this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords
             .trim()
@@ -627,19 +639,29 @@ export default {
       this.myChart.resize(); //自适应大小
     },
 
-    handleAllAchievement(expertAccount, matchId) {
+    handleAllAchievement() {
+
       //新的弹窗，放专家的信息和所有信息
       this.openExpert = true;
-      getExpertDetailByAccount(expertAccount, matchId).then((response) => {
-
-        //所有的专家信息都存在这里
-        //alert(response.data.markProject)
+      const markProject = this.markProject
+      const markWork = this.markWork;
+      const markCertificate = this.markCertificate;
+      const markThesis = this.markThesis;
+      const expertAccount = this.expertAccount;
+      const data = {};
+      data.markProject = markProject;
+      data.markWork = markWork;
+      data.markCertificate = markCertificate;
+      data.markThesis = markThesis;
+      data.expertAccount = expertAccount;
+      //alert(data.expertAccount);
+      getExpertDetailByAccount(data).then((response) => {
         this.projectIds = [];
-
         this.thesisIds = [];
         this.workIds = [];
         this.certificateIds = [];
         this.expertDetail = response.data;
+        //人工标注的id（还没处理的）
         if (response.data.markProjectId != null) {
           this.projectIds = response.data.markProjectId;
         }

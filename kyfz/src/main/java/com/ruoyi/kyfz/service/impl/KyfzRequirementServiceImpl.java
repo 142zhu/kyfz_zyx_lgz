@@ -100,4 +100,14 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise) {
         return kyfzRequirementMapper.selectKyfzEnterpriseList(kyfzEnterprise);
     }
+
+    /**
+     * 修改需求匹配状态
+     * 
+     * @param Long 需求id
+     * @return 结果
+     */
+    public int updateKyfzRequirementStatusById(Long requirementId) {
+        return kyfzRequirementMapper.updateKyfzRequirementStatusById(requirementId);
+    }
 }

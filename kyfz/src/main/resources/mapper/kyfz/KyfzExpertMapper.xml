@@ -20,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="workId" column="work_id" />
         <result property="requirementId" column="requirement_id" />
         <result property="expertTeams" column="expert_teams" />
-        <result property="teamMember" column="team_members" />
+        <result property="teamMembers" column="team_members" />
         <result property="markProject" column="mark_project" />
         <result property="markThesis" column="mark_thesis" />
         <result property="markWork" column="mark_work" />
@@ -184,16 +184,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <update id="updateMarkCertificate" parameterType="KyfzExpert">
-    UPDATE kyfz_match
-    SET mark_certificate = CONCAT_WS('、', 
-        CASE 
-            WHEN mark_certificate IS NULL OR TRIM(mark_certificate) = '' THEN NULL 
-            ELSE TRIM(BOTH ' ' FROM mark_certificate) 
-        END, 
-        #{markCertificate}
-    ) 
-    WHERE match_id = #{matchId}
-</update>
+        UPDATE kyfz_match
+        SET mark_certificate = CONCAT_WS('、', 
+            CASE 
+                WHEN mark_certificate IS NULL OR TRIM(mark_certificate) = '' THEN NULL 
+                ELSE TRIM(BOTH ' ' FROM mark_certificate) 
+            END, 
+            #{markCertificate}
+        ) 
+        WHERE match_id = #{matchId}
+    </update>
 
 
     <update id="deleteMarkProject" parameterType="KyfzExpert">
@@ -203,17 +203,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             REPLACE(
                 REPLACE(
                 mark_project,
-                #{markProject},
-                ''
-                ),
                 CONCAT('、', #{markProject}, '、'),
                 '、'
-            ),
-            CONCAT(#{markProject}, '、'),
-            ''
+                ),
+                CONCAT(#{markProject}, '、'),
+                ''
             ),
             CONCAT('、', #{markProject}),
             ''
+            ),
+            CONCAT('、', REPLACE(#{markProject}, '、', '')),
+            REPLACE(#{markProject}, '、', '')
         )
         WHERE match_id=#{matchId}
     </update>
@@ -226,17 +226,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             REPLACE(
                 REPLACE(
                 mark_work,
-                #{markWork},
-                ''
-                ),
                 CONCAT('、', #{markWork}, '、'),
                 '、'
-            ),
-            CONCAT(#{markWork}, '、'),
-            ''
+                ),
+                CONCAT(#{markWork}, '、'),
+                ''
             ),
             CONCAT('、', #{markWork}),
             ''
+            ),
+            CONCAT('、', REPLACE(#{markWork}, '、', '')),
+            REPLACE(#{markWork}, '、', '')
         )
         WHERE match_id=#{matchId}
     </update>
@@ -248,17 +248,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             REPLACE(
                 REPLACE(
                 mark_thesis,
-                #{markThesis},
-                ''
-                ),
                 CONCAT('、', #{markThesis}, '、'),
                 '、'
-            ),
-            CONCAT(#{markThesis}, '、'),
-            ''
+                ),
+                CONCAT(#{markThesis}, '、'),
+                ''
             ),
             CONCAT('、', #{markThesis}),
             ''
+            ),
+            CONCAT('、', REPLACE(#{markThesis}, '、', '')),
+            REPLACE(#{markThesis}, '、', '')
         )
         WHERE match_id=#{matchId}
     </update>
@@ -270,17 +270,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             REPLACE(
                 REPLACE(
                 mark_certificate,
-                #{markCertificate},
-                ''
-                ),
                 CONCAT('、', #{markCertificate}, '、'),
                 '、'
-            ),
-            CONCAT(#{markCertificate}, '、'),
-            ''
+                ),
+                CONCAT(#{markCertificate}, '、'),
+                ''
             ),
             CONCAT('、', #{markCertificate}),
             ''
+            ),
+            CONCAT('、', REPLACE(#{markCertificate}, '、', '')),
+            REPLACE(#{markCertificate}, '、', '')
         )
         WHERE match_id=#{matchId}
     </update>

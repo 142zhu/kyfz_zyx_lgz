@@ -126,7 +126,10 @@ public class KyfzRequirementController extends BaseController {
         }
         String body = responseEntity.getBody();
         // TODO:更新需求匹配状态
+        Long requirementIds = Long.parseLong(requirementId);
+        int s = kyfzRequirementService.updateKyfzRequirementStatusById(requirementIds);
+
         System.out.println("responseBody:" + body);
-        return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success();
+        return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
     }
 }

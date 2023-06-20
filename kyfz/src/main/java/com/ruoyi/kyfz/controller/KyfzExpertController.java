@@ -118,7 +118,6 @@ public class KyfzExpertController extends BaseController {
         String projectIds = expert.getProjectId();
         String workIds = expert.getWorkId();
         String certificateIds = expert.getCertificateId();
-
         if (projectIds != null && !projectIds.isEmpty()) {
             ArrayList projectArray = new ArrayList();
             Long projectId[] = extractIds(projectIds);
@@ -158,79 +157,46 @@ public class KyfzExpertController extends BaseController {
             }
             expert.setWorkArray(certificateArray);
         }
-
         return success(expert);
     }
 
     /**
      * 获取专家详细信息
      */
-    @GetMapping(value = "/detailByAccount/{expertAccount}/{matchId}")
-    public AjaxResult getDetailByAccountInfo(@PathVariable("expertAccount") String expertAccount,
-            @PathVariable("matchId") Long matchId) {
+    @PutMapping("/detailByAccount")
+    public AjaxResult getDetailByAccountInfo(@RequestBody KyfzExpert kyfzExpert) {
         // 1.索引专家的所有信息
         // 2.索引匹配表的人工标准信息
-        KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(expertAccount);
+        String markProject = kyfzExpert.getMarkProject();
+        String markThesis = kyfzExpert.getMarkThesis();
+        String markWork = kyfzExpert.getMarkWork();
+        String markCertificate = kyfzExpert.getMarkCertificate();
+        System.out.println("+++++++++++++++++++++");
+        System.out.println(kyfzExpert.getExpertAccount());
+        System.out.println(markProject);
+        System.out.println(markThesis);
+        System.out.println(markWork);
+        System.out.println("1111111");
+        System.out.println(markCertificate);
+        System.out.println("2222222");
+        KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(kyfzExpert.getExpertAccount());
 
-        KyfzExpert expert2 = kyfzExpertService.selectKyfzMatchMark(matchId);
+        // kyfzExpert前端传过来的对象中已经存了人工标注的四个字段
+        // 这部分代码是完全没必要的，因为前端可以往这边传过来，
+        // KyfzExpert expert2 =
+        // kyfzExpertService.selectKyfzMatchMark(kyfzExpert.getMatchId());
 
-        expert.setMarkWork(expert2.getMarkWork());
-        expert.setMarkCertificate(expert2.getMarkCertificate());
-        expert.setMarkProject(expert2.getMarkProject());
-        expert.setMarkThesis(expert2.getMarkThesis());
-        // System.out.println("11111111111111111+" + expert2.getMarkThesis() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkCertificate() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkWork() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkProject() +
-        // "+2222222");
-        // if (expert2.getMarkThesis() == "") {
-        // expert.setMarkThesis(null);
-        // }
-        // if (expert2.getMarkCertificate() == "") {
-        // expert.setMarkCertificate(null);
-        // }
-        // if (expert2.getMarkProject() == "") {
-        // expert.setMarkProject(null);
-        // }
-        // if (expert2.getMarkWork() == "") {
-        // expert.setMarkWork(null);
-        // }
-        // System.out.println("11111111111111111+" + expert2.getMarkThesis() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkCertificate() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkWork() +
-        // "+2222222");
-        // System.out.println("11111111111111111+" + expert2.getMarkProject() +
-        // "+2222222");
-        /*
-         * if (expert2.getMarkCertificate() != null &&
-         * expert2.getMarkCertificate().isEmpty()) {
-         * expert.setMarkCertificate(expert2.getMarkCertificate());
-         * }
-         * if (expert2.getMarkProject() != null && expert2.getMarkProject().isEmpty()) {
-         * expert.setMarkProject(expert2.getMarkProject());
-         * System.out.println("2222222222222222nihao" + expert2.getMarkProject());
-         * }
-         * if (expert2.getMarkWork() != null && expert2.getMarkWork().isEmpty()) {
-         * expert.setMarkWork(expert2.getMarkWork());
-         * }
-         * if (expert2.getMarkThesis() != null && expert2.getMarkThesis().isEmpty()) {
-         * expert.setMarkThesis(expert2.getMarkThesis());
-         * }
-         */
+        // expert.setMarkWork(expert2.getMarkWork());
+        // expert.setMarkCertificate(expert2.getMarkCertificate());
+        // expert.setMarkProject(expert2.getMarkProject());
+        // expert.setMarkThesis(expert2.getMarkThesis());
+
+        // 专家对应的所有项目、论文、著作、证书id
         String thesisIds = expert.getThesisId();
         String projectIds = expert.getProjectId();
         String workIds = expert.getWorkId();
         String certificateIds = expert.getCertificateId();
-        String markProject = expert.getMarkProject();
-
-        String markThesis = expert.getMarkThesis();
-        String markWork = expert.getMarkWork();
-        String markCertificate = expert.getMarkCertificate();
+        // 人工标注的id
 
         if (projectIds != null && !projectIds.isEmpty()) {
             List<KyfzProject> projectList = new ArrayList<KyfzProject>();

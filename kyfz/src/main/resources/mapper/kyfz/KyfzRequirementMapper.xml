@@ -41,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="enterpriseName" column="enterprise_name" />
         <result property="enterpriseDescribe" column="enterprise_describe" />
         <result property="registeredCapital" column="registered_capital" />
-
+        <result property="requirementStatus" column="requirement_status" />
     </resultMap>
 
     <resultMap type="KyfzEnterprise" id="KyfzEnterpriseResult">
@@ -250,4 +250,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseKeywords != null  and enterpriseKeywords != ''"> and enterprise_keywords = #{enterpriseKeywords}</if>
         </where>
     </select>
+
+    <!-- 更新匹配状态 -->
+    <update id="updateKyfzRequirementStatusById" parameterType="Long">
+        update kyfz_requirement
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="requirementStatus != null">requirement_status = '已匹配',</if>
+        </trim>
+        where requirement_id = #{requirementId}
+    </update>
 </mapper>
