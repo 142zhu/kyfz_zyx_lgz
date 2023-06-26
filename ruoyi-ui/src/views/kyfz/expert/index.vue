@@ -24,11 +24,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item
-        label="研究方向"
-        prop="researchDirection"
-        label-width="120px"
-      >
+      <el-form-item label="研究方向" prop="researchDirection" label-width="120px">
         <el-input
           v-model="queryParams.researchDirection"
           placeholder="请输入研究方向"
@@ -36,11 +32,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item
-        label="所属单位"
-        prop="expertAffiliation"
-        label-width="120px"
-      >
+      <el-form-item label="所属单位" prop="expertAffiliation" label-width="120px">
         <el-input
           v-model="queryParams.expertAffiliation"
           placeholder="请输入专家所属单位"
@@ -49,16 +41,10 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
           >搜索</el-button
         >
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
-          >重置</el-button
-        >
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
@@ -108,10 +94,7 @@
           >导出</el-button
         >
       </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table
@@ -123,21 +106,9 @@
       <el-table-column label="专家账号" align="center" prop="expertAccount" />
       <el-table-column label="专家姓名" align="center" prop="expertName" />
       <el-table-column label="专家职称" align="center" prop="expertPosition" />
-      <el-table-column
-        label="专家所属单位"
-        align="center"
-        prop="expertAffiliation"
-      />
-      <el-table-column
-        label="研究方向"
-        align="center"
-        prop="researchDirection"
-      />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+      <el-table-column label="研究方向" align="center" prop="researchDirection" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -175,12 +146,7 @@
     />
 
     <!-- 添加或修改专家管理对话框 -->
-    <el-dialog
-      :title="title"
-      :visible.sync="open"
-      width="1000px"
-      append-to-body
-    >
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="专家信息状态" prop="expertSignificance" required>
           <el-switch
@@ -257,53 +223,20 @@
     </el-dialog>
 
     <!-- 详细信息弹窗 -->
-    <el-dialog
-      :title="title"
-      :visible.sync="openDetail"
-      width="1000px"
-      append-to-body
-    >
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
       <div class="match-detail" style="margin-top: -20px">
         <div class="match-detail-header">
           <h3 class="match-detail-title">专家详细信息</h3>
         </div>
         <el-table :data="[expertDetail]" class="match-detail-table">
-          <el-table-column
-            label="专家账号"
-            align="center"
-            prop="expertAccount"
-          />
+          <el-table-column label="专家账号" align="center" prop="expertAccount" />
           <el-table-column label="专家姓名" align="center" prop="expertName" />
-          <el-table-column
-            label="专家职称"
-            align="center"
-            prop="expertPosition"
-          />
-          <el-table-column
-            label="专家所属单位"
-            align="center"
-            prop="expertAffiliation"
-          />
-          <el-table-column
-            label="专家研究方向"
-            align="center"
-            prop="researchDirection"
-          />
-          <el-table-column
-            label="一级学科"
-            align="center"
-            prop="primaryDiscipline"
-          />
-          <el-table-column
-            label="二级学科"
-            align="center"
-            prop="secondaryDiscipline"
-          />
-          <el-table-column
-            label="三级学科"
-            align="center"
-            prop="researchDirection"
-          />
+          <el-table-column label="专家职称" align="center" prop="expertPosition" />
+          <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+          <el-table-column label="一级学科" align="center" prop="primaryDiscipline" />
+          <el-table-column label="二级学科" align="center" prop="secondaryDiscipline" />
+          <el-table-column label="三级学科" align="center" prop="researchDirection" />
         </el-table>
         <div class="match-detail-result">
           <h4>专家研究成果</h4>
@@ -360,11 +293,7 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button
-              type="primary"
-              @click="handleECharts()"
-              style="float: right"
-            >
+            <el-button type="primary" @click="handleECharts()" style="float: right">
               团队关系图
             </el-button>
           </div>
@@ -388,6 +317,11 @@ import {
   listExpert,
   updateExpert,
 } from "@/api/kyfz/expert";
+import * as echarts from "echarts";
+
+const getEchartsId = () => {
+  return new Date().getTime();
+};
 
 export default {
   name: "Expert",
@@ -449,6 +383,7 @@ export default {
   },
   created() {
     this.getList();
+    this.echartsId = getEchartsId();
   },
   methods: {
     // echarts
@@ -460,7 +395,7 @@ export default {
 
     // echatrs 数据
     setOption: function () {
-      let experts = this.matchDetails.teamMembersArray;
+      let experts = this.expertDetail.teamMembersArray;
       let nodes = [];
       let links = [];
 
@@ -470,10 +405,7 @@ export default {
           name: experts[i],
           category: i >= 1 ? 1 : 0,
           itemStyle: {
-            color:
-              experts[i] != this.matchDetails.expertName
-                ? "#5470C6"
-                : "#EE6666",
+            color: experts[i] != this.expertDetail.expertName ? "#5470C6" : "#EE6666",
           },
         });
       }
@@ -553,6 +485,7 @@ export default {
         this.loading = false;
       });
     },
+
     // 取消按钮
     cancel() {
       this.open = false;
@@ -674,6 +607,8 @@ export default {
           this.expertDetail.teamMembersArray = response.data.teamMembers
             .trim()
             .split(/[,，、]/);
+        } else {
+          this.expertDetail.teamMembersArray = "无";
         }
         this.openDetail = true;
       });
