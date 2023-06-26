@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
+import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
 import com.ruoyi.kyfz.mapper.KyfzRequirementMapper;
 import com.ruoyi.kyfz.service.IKyfzRequirementService;
 
@@ -21,6 +22,9 @@ import com.ruoyi.kyfz.service.IKyfzRequirementService;
 public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     @Autowired
     private KyfzRequirementMapper kyfzRequirementMapper;
+
+    @Autowired
+    private KyfzMatchMapper kyfzMatchMapper;
 
     /**
      * 查询需求管理
@@ -76,6 +80,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
      */
     @Override
     public int deleteKyfzRequirementByRequirementIds(Long[] requirementIds) {
+        kyfzMatchMapper.deleteKyfzMatchByrequirementIds(requirementIds);
         return kyfzRequirementMapper.deleteKyfzRequirementByRequirementIds(requirementIds);
     }
 
@@ -87,6 +92,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
      */
     @Override
     public int deleteKyfzRequirementByRequirementId(Long requirementId) {
+        kyfzMatchMapper.deleteKyfzMatchByrequirementId(requirementId);
         return kyfzRequirementMapper.deleteKyfzRequirementByRequirementId(requirementId);
     }
 

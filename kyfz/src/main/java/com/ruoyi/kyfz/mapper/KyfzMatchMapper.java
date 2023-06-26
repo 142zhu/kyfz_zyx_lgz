@@ -1,11 +1,9 @@
 package com.ruoyi.kyfz.mapper;
 
-import java.time.LocalDateTime;
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
-
-import io.lettuce.core.dynamic.annotation.Param;
 
 /**
  * 匹配列表Mapper接口
@@ -126,5 +124,19 @@ public interface KyfzMatchMapper {
      */
     public int updatePushRecord(KyfzMatch kyfzMatch);
 
-    // 获取推送表的匹配号，校验是否已经推送过了
+    /**
+     * 根据需求批量删除匹配表里的匹配数据
+     * 
+     * @param requirementIds 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int deleteKyfzMatchByrequirementIds(Long[] requirementIds);
+
+    /**
+     * 根据需求删除匹配表里的匹配数据
+     * 
+     * @param requirementId 匹配列表主键
+     * @return 结果
+     */
+    public int deleteKyfzMatchByrequirementId(Long requirementId);
 }

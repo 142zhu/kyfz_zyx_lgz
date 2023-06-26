@@ -3,40 +3,40 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.kyfz.mapper.KyfzMatchMapper">
-    
+
     <resultMap type="KyfzMatch" id="KyfzMatchResult">
-        <result property="matchId"    column="match_id"    />
-        <result property="expertAccount"    column="expert_account"    />
-        <result property="requirementId"    column="requirement_id"    />
-        <result property="matchScore"    column="match_score"    />
-        <result property="thesisId"    column="thesis_id"    />
-        <result property="workId"    column="work_id"    />
-        <result property="certificateId"    column="certificate_id"    />
-        <result property="projectId"    column="project_id"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        
+        <result property="matchId" column="match_id" />
+        <result property="expertAccount" column="expert_account" />
+        <result property="requirementId" column="requirement_id" />
+        <result property="matchScore" column="match_score" />
+        <result property="thesisId" column="thesis_id" />
+        <result property="workId" column="work_id" />
+        <result property="certificateId" column="certificate_id" />
+        <result property="projectId" column="project_id" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+
         <!-- 按需求添加 -->
-        <result property="expertName"    column="expert_name"    />
-        <result property="researchDirection"    column="research_direction"    />
-        <result property="projectName"    column="project_name"    />
-        <result property="client"    column="client"    />
-        <result property="requirementKeywords"    column="requirement_keywords"    />
-        <result property="teamMembers"    column="team_members"    />
-        <result property="score"    column="score"    />
-        <result property="markProject"    column="mark_project"    />
-        <result property="markThesis"    column="mark_thesis"    />
-        <result property="markWork"    column="mark_work"    />
-        <result property="markCertificate"    column="mark_certificate"    />
+        <result property="expertName" column="expert_name" />
+        <result property="researchDirection" column="research_direction" />
+        <result property="projectName" column="project_name" />
+        <result property="client" column="client" />
+        <result property="requirementKeywords" column="requirement_keywords" />
+        <result property="teamMembers" column="team_members" />
+        <result property="score" column="score" />
+        <result property="markProject" column="mark_project" />
+        <result property="markThesis" column="mark_thesis" />
+        <result property="markWork" column="mark_work" />
+        <result property="markCertificate" column="mark_certificate" />
 
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
         select match_id, expert_account, requirement_id, match_score, thesis_id, work_id, certificate_id, project_id, create_by, create_time, update_by, update_time from kyfz_match
     </sql>
-    
+
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
         select m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.work_id ,m.match_score,
@@ -47,7 +47,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join kyfz_team t on t.team_id=e.expert_teams
         order by m.match_id desc
     </sql>
-    
+
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
         select match_id,m.requirement_id,m.match_score,
         r.project_name, r.client, 		
@@ -77,12 +77,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by m.match_id desc
     </select>
-    
+
     <select id="selectKyfzMatchByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
         <include refid="selectKyfzMatchVo"/>
         where match_id = #{matchId}
     </select>
-        
+
     <insert id="insertKyfzMatch" parameterType="KyfzMatch" useGeneratedKeys="true" keyProperty="matchId">
         insert into kyfz_match
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="expertAccount != null">#{expertAccount},</if>
             <if test="requirementId != null">#{requirementId},</if>
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateKyfzMatch" parameterType="KyfzMatch">
@@ -195,4 +195,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where match_id = #{matchId}
     </update>
+
+    <!-- 根据需求删除匹配表里的数据 -->
+    <delete id="deleteKyfzMatchByrequirementIds" parameterType="String">
+        delete from kyfz_match where requirement_id in 
+        <foreach item="requirementId" collection="array" open="(" separator="," close=")">
+            #{requirementId}
+        </foreach>
+    </delete>
+
+    <!-- 根据需求删除匹配表里的数据 -->
+    <delete id="deleteKyfzMatchByrequirementId" parameterType="Long">
+        delete from kyfz_match where requirement_id = #{requirementId}
+    </delete>
 </mapper>

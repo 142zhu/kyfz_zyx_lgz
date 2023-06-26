@@ -16,22 +16,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="项目类别" prop="projectCategory">
-        <el-input
-          v-model="queryParams.projectCategory"
-          placeholder="请输入项目类别"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="项目类型" prop="projectType">
-        <el-input
-          v-model="queryParams.projectType"
-          placeholder="请输入项目类型"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="公司名称" prop="enterpriseName">
         <el-input
           v-model="queryParams.enterpriseName"
@@ -100,9 +84,6 @@
     >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="需求名称" align="center" prop="projectName" />
-      <el-table-column label="合同号" align="center" prop="contractNumber" />
-      <el-table-column label="项目类别" align="center" prop="projectCategory" />
-      <el-table-column label="项目类型" align="center" prop="projectType" />
       <el-table-column label="需求状态" align="center" prop="requirementStatus" />
       <el-table-column label="公司名称" align="center" prop="enterpriseName" />
       <el-table-column
@@ -241,6 +222,7 @@
           <el-select
             v-model="form.enterpriseName"
             filterable
+            clearable
             placeholder=""
             :disabled="editable"
             style="width: 600px"
@@ -324,7 +306,7 @@
             style="width: 600px"
           />
         </el-form-item>
-        <el-form-item label="需求状态" prop="requirementStatus">
+        <el-form-item label="需求状态" prop="requirementStatus" v-if="false">
           <el-select
             v-model="form.requirementStatus"
             filterable
@@ -344,6 +326,7 @@
           <el-select
             v-model="form.client"
             filterable
+            clearable
             placeholder="请选择已有公司名称"
             style="width: 600px"
             @change="handleChange"
