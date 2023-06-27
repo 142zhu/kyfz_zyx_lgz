@@ -97,6 +97,12 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "多个证书名")
     private ArrayList strArray3;
 
+    /** 最小匹配分值 */
+    private double minMatchScore;
+
+    /** 最大匹配分值 */
+    private double maxMatchScore;
+
     private String markProject;
 
     private String markWork;
@@ -104,6 +110,22 @@ public class KyfzMatch extends BaseEntity {
     private String markThesis;
 
     private String markCertificate;
+
+    public double getMinMatchScore() {
+        return minMatchScore;
+    }
+
+    public void setMinMatchScore(double minMatchScore) {
+        this.minMatchScore = minMatchScore;
+    }
+
+    public double getMaxMatchScore() {
+        return maxMatchScore;
+    }
+
+    public void setMaxMatchScore(double maxMatchScore) {
+        this.maxMatchScore = maxMatchScore;
+    }
 
     public String getMarkProject() {
         return markProject;

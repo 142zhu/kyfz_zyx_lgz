@@ -65,4 +65,22 @@ public interface KyfzPushRecordMapper {
      * @return 结果
      */
     public int batchInsert(List<KyfzPushRecord> pushRecords);
+
+    public int selectProjectCount();
+
+    public int selectExpertCount();
+
+    public int selectThesisCount();
+
+    public int selectMatchCount();
+
+    public int selectEnterpriseCount();
+
+    public int selectPushCount();
+
+    public int selectRequirementCount();
+
+    public int selectCertificateCount();
+
+    public int selectWorkCount();
 }

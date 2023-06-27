@@ -16,6 +16,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.kyfz.domain.KyfzCount;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
 import com.ruoyi.kyfz.service.IKyfzPushRecordService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -93,5 +94,20 @@ public class KyfzPushRecordController extends BaseController {
     @DeleteMapping("/{pushIds}")
     public AjaxResult remove(@PathVariable Long[] pushIds) {
         return toAjax(kyfzPushRecordService.deleteKyfzPushRecordByPushIds(pushIds));
+    }
+
+    @GetMapping("/getAllCount")
+    public KyfzCount getAllCount() {
+        KyfzCount count = new KyfzCount();
+        count.setProjectCount(kyfzPushRecordService.selectProjectCount());
+        count.setExpertCount(kyfzPushRecordService.selectExpertCount());
+        count.setThesisCount(kyfzPushRecordService.selectThesisCount());
+        count.setThesisCount(kyfzPushRecordService.selectMatchCount());
+        count.setEnterpriseCount(kyfzPushRecordService.selectEnterpriseCount());
+        count.setPushCount(kyfzPushRecordService.selectPushCount());
+        count.setRequirementCount(kyfzPushRecordService.selectRequirementCount());
+        count.setCertificateCount(kyfzPushRecordService.selectCertificateCount());
+        count.setWorkCount(kyfzPushRecordService.selectWorkCount());
+        return count;
     }
 }

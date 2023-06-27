@@ -96,4 +96,40 @@ public class KyfzPushRecordServiceImpl implements IKyfzPushRecordService {
     public int batchInsert(List<KyfzPushRecord> pushRecords) {
         return kyfzPushRecordMapper.batchInsert(pushRecords);
     }
+
+    public int selectProjectCount() {
+        return kyfzPushRecordMapper.selectProjectCount();
+    }
+
+    public int selectExpertCount() {
+        return kyfzPushRecordMapper.selectExpertCount();
+    }
+
+    public int selectThesisCount() {
+        return kyfzPushRecordMapper.selectThesisCount();
+    }
+
+    public int selectMatchCount() {
+        return kyfzPushRecordMapper.selectMatchCount();
+    }
+
+    public int selectEnterpriseCount() {
+        return kyfzPushRecordMapper.selectEnterpriseCount();
+    }
+
+    public int selectPushCount() {
+        return kyfzPushRecordMapper.selectPushCount();
+    }
+
+    public int selectRequirementCount() {
+        return kyfzPushRecordMapper.selectRequirementCount();
+    }
+
+    public int selectCertificateCount() {
+        return kyfzPushRecordMapper.selectCertificateCount();
+    }
+
+    public int selectWorkCount() {
+        return kyfzPushRecordMapper.selectWorkCount();
+    }
 }

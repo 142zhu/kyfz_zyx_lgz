@@ -1,9 +1,9 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="需求编号" prop="requirementId">
+      <!-- <el-form-item label="需求编号" prop="requirementId">
         <el-input v-model="queryParams.requirementId" placeholder="请输入需求编号" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="需求名称" prop="projectName">
         <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
@@ -22,7 +22,13 @@
       </el-form-item>
 
       <el-form-item label="匹配分值" prop="matchScore">
-        <el-input v-model="queryParams.matchScore" placeholder="请输入匹配分值" clearable @keyup.enter.native="handleQuery" />
+        <!-- <el-input v-model="queryParams.matchScore" placeholder="请输入匹配分值" clearable @keyup.enter.native="handleQuery" />
+         -->
+        <el-input v-model="queryParams.minMatchScore" placeholder="最小匹配分值" style="width:140px;" clearable
+          @keyup.enter.native="handleQuery" />
+        <span>~</span>
+        <el-input v-model="queryParams.maxMatchScore" placeholder="最大匹配分值" style="width:140px;" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
 
       <el-form-item>
@@ -45,8 +51,8 @@
 
     <el-table v-loading="loading" :data="matchList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="匹配编号" align="center" prop="matchId" />
-      <el-table-column label="需求编号" align="center" prop="requirementId" />
+      <!-- <el-table-column label="匹配编号" align="center" prop="matchId" />
+      <el-table-column label="需求编号" align="center" prop="requirementId" /> -->
       <!-- 通过需求id获取需求表中的projectName -->
       <el-table-column label="需求" align="center" prop="projectName" />
       <!-- 通过需求id获取需求表中的委托单位 -->
@@ -82,8 +88,8 @@
           </div>
         </div>
         <el-table :data="[matchDetails]" class="match-detail-table">
-          <el-table-column label="匹配编号" align="center" prop="matchId" />
-          <el-table-column label="需求编号" align="center" prop="requirementId" />
+          <!-- <el-table-column label="匹配编号" align="center" prop="matchId" />
+          <el-table-column label="需求编号" align="center" prop="requirementId" /> -->
           <el-table-column label="需求" align="center" prop="projectName" />
           <el-table-column label="企业" align="center" prop="client" />
           <el-table-column label="推荐专家" align="center" prop="expertName" />
@@ -134,7 +140,7 @@
               </div>
             </div>
             <div style="padding-bottom:20px;padding-right:0px!important;">
-              <el-button type="primary" @click="handleAllAchievement()"
+              <el-button :disabled="SearchButton" type="primary" @click="handleAllAchievement()"
                 style="float: right;margin-right:0px;">所有研究成果</el-button>
             </div>
           </div>
@@ -146,13 +152,17 @@
             <span v-for="item in matchDetails.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" @click="handleECharts()" style="float: right;margin-right:0px;">
+            <el-button :disabled="relationshipButton" type="primary" @click="handleECharts()"
+              style="float: right;margin-right:0px;">
               团队关系图
             </el-button>
           </div>
         </div>
       </div>
     </el-dialog>
+
+
+
     <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
       <div id="graph-chart" style="width: 500px; height: 500px">
         <div :id="echartsId" style="width: 500px; height: 500px"></div>
@@ -229,6 +239,7 @@
       </div>
     </el-dialog>
 
+
   </div>
 </template>
 
@@ -284,6 +295,8 @@ export default {
       workIds: [],
       certificateIds: [],
       thesisIds: [],
+      SearchButton: false,
+      relationshipButton: false,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -299,6 +312,8 @@ export default {
         expertAccount: null,
         requirementId: null,
         matchScore: null,
+        minMatchScore: null,
+        maxMatchScore: null,
         thesisId: null,
         workId: null,
         certificateId: null,
@@ -556,6 +571,12 @@ export default {
       //alert(row.expertAccount);
       // alert(this.matchDetails.expertAccount);
       this.matchDetails.expertName = row.expertName;
+
+      if (this.matchDetails.expertName == "" || this.matchDetails.expertName == null || this.matchDetails.expertName == "无") {
+        this.SearchButton = true;
+        this.relationshipButton = true;
+
+      }
       getMatchDetails(matchId).then((response) => {
         this.matchDetails = response.data;
         this.markProject = response.data.markProject;

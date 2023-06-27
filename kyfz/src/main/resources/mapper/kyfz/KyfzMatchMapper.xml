@@ -31,6 +31,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="markWork" column="mark_work" />
         <result property="markCertificate" column="mark_certificate" />
 
+        <result property="minMatchScore" column="match_score" />
+        <result property="maxMatchScore" column="match_score" />
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
@@ -71,8 +73,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null and researchDirection != ''">
                 AND e.research_direction LIKE CONCAT('%', #{researchDirection}, '%')
             </if>
-            <if test="matchScore != null and matchScore != ''">
-                AND match_score LIKE CONCAT('%', #{matchScore}, '%') 
+            <if test="minMatchScore != null and minMatchScore != ''">
+                AND match_score &gt; #{minMatchScore} 
+            </if>
+            <if test="maxMatchScore != null and maxMatchScore != ''">
+                AND match_score &lt; #{maxMatchScore}
             </if>
         </where>
         order by m.match_id desc

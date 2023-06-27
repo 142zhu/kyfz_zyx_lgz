@@ -104,5 +104,41 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
+    <select id="selectProjectCount"  resultType="int">
+        select count(*) from kyfz_project
+    </select>
+
+    <select id="selectExpertCount"  resultType="int">
+        select count(*) from kyfz_expert
+    </select>
+
+    <select id="selectThesisCount"  resultType="int">
+        select count(*) from kyfz_thesis
+    </select>
+
+    <select id="selectMatchCount"  resultType="int">
+        select count(*) from kyfz_match
+    </select>
+
+    <select id="selectEnterpriseCount"  resultType="int">
+        select count(*) from kyfz_enterprise
+    </select>
+
+    <select id="selectPushCount"  resultType="int">
+        select count(*) from kyfz_push_record
+    </select>
+
+    <select id="selectRequirementCount"  resultType="int">
+        select count(*) from kyfz_requirement
+    </select>
+
+    <select id="selectCertificateCount"  resultType="int">
+        select count(*) from kyfz_certificate
+    </select>
+
+    <select id="selectWorkCount"  resultType="int">
+        select count(*) from kyfz_work
+    </select>
+
     
 </mapper>

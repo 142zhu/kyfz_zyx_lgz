@@ -42,3 +42,11 @@ export function delRecord(pushId) {
     method: 'delete'
   })
 }
+
+// 查询推送记录详细
+export function getAllCount() {
+  return request({
+    url: '/kyfz/record/getAllCount',
+    method: 'get'
+  })
+}
