@@ -3,36 +3,37 @@
     <div class="header" style="text-align:center;padding-top:100px">
       <div style="display:inline-block">
         <div style="display:inline-block;margin-right:40px">
-          <h3 style="font-size:30px">已匹配的需求</h3>
-          <!-- <span>{{ finishMatchCount }}</span> -->
-          <span style="font-size:25px">20000</span>
+          <h3 style="font-size:30px">已对接的需求</h3>
+          <span>{{ infoList.hasFinishRequirement }}</span>
+          <!-- <span style="font-size:25px">20000</span> -->
         </div>
         <el-progress type="circle" style="transform: scale(1.5);display:inline-block;"
-          :percentage="matchPercent"></el-progress>
+          :percentage="infoList.requirePercent"></el-progress>
       </div>
 
-      <div style="display:inline-block;margin-left:50px">
+      <div style="display:inline-block;margin-left:150px">
         <div style="display:inline-block;margin-right:40px">
           <h3 style="font-size:30px">已推送匹配</h3>
           <!-- <span>{{ finishMatchCount }}</span> -->
-          <span style="font-size:25px">20000</span>
+          <span>{{ infoList.hasPushMatch }}</span>
         </div>
         <el-progress type="circle" style="transform: scale(1.5);display:inline-block;"
-          :percentage="pushPercent"></el-progress>
+          :percentage="infoList.pushPercent"></el-progress>
       </div>
 
     </div>
     <div>
       <el-icon name="el-icon-search"></el-icon>
     </div>
-    <div class="container" style="padding:20px;">
+    <div class="container">
 
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="project" style="color:black" />
         </i>
         <h3>项目情况</h3>
-        <p>已入库：{{ infoList.projectCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.projectCount }}</span>
       </el-card>
 
       <el-card class="card" v-hover-shadow>
@@ -40,21 +41,24 @@
           <svg-icon icon-class="thesis" />
         </i>
         <h3>论文情况</h3>
-        <p>已入库：{{ infoList.thesisCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.thesisCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="work" />
         </i>
         <h3>著作情况</h3>
-        <p>已入库：{{ infoList.workCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.workCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="certificate" />
         </i>
         <h3>证书情况</h3>
-        <p>已入库：{{ infoList.certificateCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.certificateCount }}</span>
       </el-card>
 
       <el-card class="card" v-hover-shadow>
@@ -62,35 +66,40 @@
           <svg-icon icon-class="expert" />
         </i>
         <h3>专家情况</h3>
-        <p>已入库：{{ infoList.expertCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.expertCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="match" style="color:black" />
         </i>
         <h3>匹配情况</h3>
-        <p>已入库：{{ infoList.matchCount }}</p>
+        <h4>已入库：</h4>
+        <span> {{ infoList.matchCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="requirement" />
         </i>
         <h3>需求情况</h3>
-        <p>已入库：{{ infoList.matchCount }}</p>
+        <h4>已入库：</h4>
+        <span> {{ infoList.requirementCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="push" />
         </i>
         <h3>推送情况</h3>
-        <p>已入库：{{ infoList.pushCount }}</p>
+        <h4>已入库：</h4>
+        <span> {{ infoList.pushCount }}</span>
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
           <svg-icon icon-class="enterprise" style="color:black" />
         </i>
         <h3>企业情况</h3>
-        <p>已入库：{{ infoList.enterpriseCount }}</p>
+        <h4>已入库：</h4>
+        <span>{{ infoList.enterpriseCount }}</span>
       </el-card>
     </div>
   </div>
@@ -111,21 +120,35 @@ export default {
         expertCount: null,//已入库专家数目
         matchCount: null,//已匹配的数目
         pushCount: null,//已经推送的数目
-        enterpriseCount: null,//已入库的企业数目
+        enterpriseCount: 0,//已入库的企业数目
         requirementCount: null,//已入库的需求数目
+        hasFinishRequirement: null,
+        requirePercent: null,
+        hasPushMatch: null,
       },
-      infoList: [],
+      infoList: {}
+      ,
       count: null,
     };
   },
-  created() {
+  mounted() {
     this.getCount();
   },
   methods: {
     getCount() {
+      this.expertCount = 11;
       getAllCount().then((response) => {
-        this.workCount = response.rows.workCount;
-        alert(this.workCount)
+        this.infoList = response.data;
+        const a = response.data.hasFinishRequirement;
+        const b = response.data.requirementCount;
+
+        const c = response.data.hasPushMatch;
+        const d = response.data.matchCount;
+        if (((c / d) * 100) < 1) {
+          this.infoList.pushPercent = 1
+        }
+        // alert((a / b) * 100)
+        this.infoList.requirePercent = (a / b) * 100
       });
     }
   },
@@ -136,8 +159,18 @@ export default {
 <style scoped lang="scss">
 .header {
   height: 300px;
+  font-weight: 700;
   border-bottom: 1px solid black;
   margin-bottom: 40px;
+}
+
+.header h3 {
+  font-weight: 700;
+}
+
+.header span {
+  font-size: 50px;
+  color: #74c65d;
 }
 
 .header .el-progress__circle {
@@ -230,9 +263,10 @@ export default {
 
 .card {
   position: relative;
-  width: 20%;
+  width: 271px;
   display: inline-block;
   overflow: visible;
+  // width: 1200px;
   /* 默认情况下无阴影 */
   box-shadow: none;
   border-radius: 10px;
@@ -245,9 +279,29 @@ export default {
   box-shadow: 0px 0px 10px #888888;
 }
 
+.card h3 {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.card h4 {
+  display: inline-block;
+  font-size: 14px;
+  color: #676a6c;
+  font-weight: 600;
+  margin-right: 50px;
+}
+
+.card span {
+  font-size: 30px;
+  font-weight: 700;
+  color: #74c65d;
+
+}
+
 .card i {
   position: absolute;
-  top: -30%;
+  top: -20%;
   left: 5%;
 
   padding: 10px;

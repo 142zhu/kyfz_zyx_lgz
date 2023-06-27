@@ -11,6 +11,18 @@ public class KyfzCount {
     private int certificateCount;
     private int workCount;
 
+    private int hasFinishRequirement;// 已对接的需求
+
+    private int hasPushMatch;
+
+    public int getHasPushMatch() {
+        return hasPushMatch;
+    }
+
+    public void setHasPushMatch(int hasPushMatch) {
+        this.hasPushMatch = hasPushMatch;
+    }
+
     public int getExpertCount() {
         return expertCount;
     }
@@ -81,6 +93,14 @@ public class KyfzCount {
 
     public void setWorkCount(int workCount) {
         this.workCount = workCount;
+    }
+
+    public int getHasFinishRequirement() {
+        return hasFinishRequirement;
+    }
+
+    public void setHasFinishRequirement(int hasFinishRequirement) {
+        this.hasFinishRequirement = hasFinishRequirement;
     }
 
 }

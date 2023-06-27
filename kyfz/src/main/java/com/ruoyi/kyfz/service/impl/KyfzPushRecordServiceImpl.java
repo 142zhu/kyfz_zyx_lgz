@@ -132,4 +132,12 @@ public class KyfzPushRecordServiceImpl implements IKyfzPushRecordService {
     public int selectWorkCount() {
         return kyfzPushRecordMapper.selectWorkCount();
     }
+
+    public int selectHasFinishRequirement() {
+        return kyfzPushRecordMapper.selectHasFinishRequirement();
+    }
+
+    public int selectHasPushMatch() {
+        return kyfzPushRecordMapper.selectHasPushMatch();
+    }
 }

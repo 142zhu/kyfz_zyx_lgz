@@ -141,4 +141,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     
+    <select id="selectHasFinishRequirement"  resultType="int">
+        select count(*) from kyfz_requirement where requirement_status='已对接'
+    </select>
+    
+    <select id="selectHasPushMatch"  resultType="int">
+        SELECT COUNT(DISTINCT match_id) FROM kyfz_push_record
+    </select>
 </mapper>

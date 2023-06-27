@@ -83,4 +83,8 @@ public interface KyfzPushRecordMapper {
     public int selectCertificateCount();
 
     public int selectWorkCount();
+
+    public int selectHasFinishRequirement();
+
+    public int selectHasPushMatch();
 }

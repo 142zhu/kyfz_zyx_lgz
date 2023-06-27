@@ -97,17 +97,19 @@ public class KyfzPushRecordController extends BaseController {
     }
 
     @GetMapping("/getAllCount")
-    public KyfzCount getAllCount() {
+    public AjaxResult getAllCount() {
         KyfzCount count = new KyfzCount();
         count.setProjectCount(kyfzPushRecordService.selectProjectCount());
         count.setExpertCount(kyfzPushRecordService.selectExpertCount());
         count.setThesisCount(kyfzPushRecordService.selectThesisCount());
-        count.setThesisCount(kyfzPushRecordService.selectMatchCount());
+        count.setMatchCount(kyfzPushRecordService.selectMatchCount());
         count.setEnterpriseCount(kyfzPushRecordService.selectEnterpriseCount());
         count.setPushCount(kyfzPushRecordService.selectPushCount());
         count.setRequirementCount(kyfzPushRecordService.selectRequirementCount());
         count.setCertificateCount(kyfzPushRecordService.selectCertificateCount());
         count.setWorkCount(kyfzPushRecordService.selectWorkCount());
-        return count;
+        count.setHasFinishRequirement(kyfzPushRecordService.selectHasFinishRequirement());
+        count.setHasPushMatch(kyfzPushRecordService.selectHasPushMatch());
+        return success(count);
     }
 }
