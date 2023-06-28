@@ -17,20 +17,37 @@
         />
       </el-form-item>
       <el-form-item label="公司名称" prop="enterpriseName">
-        <el-input
+        <el-select
           v-model="queryParams.enterpriseName"
-          placeholder="请输入公司名称"
+          filterable
           clearable
-          @keyup.enter.native="handleQuery"
-        />
+          placeholder="请选择公司名称"
+          popper-class="custom-select"
+          @change="handleChange_1"
+        >
+          <el-option
+            v-for="item in enterpriseList"
+            :key="item.enterpriseName"
+            :label="item.enterpriseName"
+            :value="item.enterpriseName"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="需求状态" prop="requirementStatus">
-        <el-input
+        <el-select
           v-model="queryParams.requirementStatus"
-          placeholder="请输入需求状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+          filterable
+          placeholder="请选择需求状态"
+        >
+          <el-option
+            v-for="item in dict.type.requirement_status"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="发布时间" prop="requirementReleaseTime">
         <el-date-picker
@@ -46,6 +63,13 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
           >搜索</el-button
+        >
+        <el-button
+          type="primary"
+          icon="el-icon-document"
+          size="mini"
+          @click="handleMatch_2"
+          >匹配</el-button
         >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -226,6 +250,7 @@
             placeholder=""
             :disabled="editable"
             style="width: 600px"
+            popper-class="custom-select"
             @change="handleChange"
           >
             <el-option
@@ -329,6 +354,7 @@
             clearable
             placeholder="请选择已有公司名称"
             style="width: 600px"
+            popper-class="custom-select"
             @change="handleChange"
           >
             <el-option
@@ -449,7 +475,8 @@ export default {
         requirementKeywords: null,
         requirementDescription: null,
         requirementReleaseTime: null,
-        enterpriseNumber: null,
+        enterpriseName: null,
+        requirementId: null,
       },
       // 表单参数
       form: {
@@ -492,11 +519,22 @@ export default {
       this.form.registeredCapital = selectedEnterprise.registeredCapital;
       this.form.enterpriseNumber = selectedEnterprise.enterpriseId;
     },
+
+    handleChange_1(value) {
+      const selectedEnterprise1 = this.enterpriseList.find(
+        (item) => item.enterpriseName === value
+      );
+      this.queryParams.enterpriseName = selectedEnterprise1.enterpriseName;
+      this.queryParams.enterpriseDescribe = selectedEnterprise1.enterpriseDescribe;
+      this.queryParams.registeredCapital = selectedEnterprise1.registeredCapital;
+      this.queryParams.enterpriseNumber = selectedEnterprise1.enterpriseId;
+    },
     /** 查询需求管理列表 */
     getList() {
       this.loading = true;
       listRequirement(this.queryParams).then((response) => {
         this.requirementList = response.rows;
+        this.queryParams.requirementId = response.rows[0].requirementId;
         this.total = response.total;
         this.loading = false;
       });
@@ -549,6 +587,16 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
+    },
+
+    // 搜索框配匹配按钮，新建项目并匹配
+    handleMatch_2() {
+      addRequirement(this.queryParams).then((response) => {
+        this.$modal.msgSuccess("新增成功,正在匹配中");
+        this.open1 = false;
+        this.getList();
+        this.handleMatch(this.queryParams);
+      });
     },
     /** 重置按钮操作 */
     resetQuery() {
@@ -661,5 +709,11 @@ export default {
 .inputDeep >>> .el-input__inner {
   border: 0px;
   box-shadow: 0 0 0 0px;
+}
+</style>
+
+<style>
+.custom-select {
+  width: 450px; /* 自定义搜索框宽度 */
 }
 </style>
