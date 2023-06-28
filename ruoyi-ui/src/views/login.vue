@@ -1,7 +1,7 @@
 <template>
   <div class="login">
-    <div class="header"></div>
-    <div class="container">
+    <div class="login-header"></div>
+    <div class="login-container">
       <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form">
         <h3 class="title">中山大学有组织科研辅助系统</h3>
         <el-form-item prop="username">
@@ -233,15 +233,15 @@ export default {
   height: 38px;
 }
 
-.header,
-.container,
+.login-header,
+.login-container,
 .footer {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.header {
+.login-header {
   top: 0;
   width: 100%;
   height: 110px;
@@ -249,7 +249,7 @@ export default {
   background-size: cover;
 }
 
-.container {
+.login-container {
   top: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
