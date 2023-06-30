@@ -141,7 +141,7 @@
             </div>
             <div style="padding-bottom:20px;padding-right:0px!important;">
               <el-button :disabled="SearchButton" type="primary" @click="handleAllAchievement()"
-                style="float: right;margin-right:0px;">所有研究成果</el-button>
+                style="float: right;margin-right:0px;" :title="buttonTitle">所有研究成果</el-button>
             </div>
           </div>
 
@@ -153,7 +153,7 @@
               item
             }}</span>
             <el-button :disabled="relationshipButton" type="primary" @click="handleECharts()"
-              style="float: right;margin-right:0px;">
+              style="float: right;margin-right:0px;" :title="buttonTitle">
               团队关系图
             </el-button>
           </div>
@@ -305,6 +305,7 @@ export default {
       openECharts: false,
       openExpert: false,
       selectedProjectId: null,
+      buttonTitle: null,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -575,7 +576,12 @@ export default {
       if (this.matchDetails.expertName == "" || this.matchDetails.expertName == null || this.matchDetails.expertName == "无") {
         this.SearchButton = true;
         this.relationshipButton = true;
-
+        this.buttonTitle = '未匹配专家';
+      }
+      else {
+        this.SearchButton = false;
+        this.relationshipButton = false;
+        this.buttonTitle = null;
       }
       getMatchDetails(matchId).then((response) => {
         this.matchDetails = response.data;
@@ -592,7 +598,8 @@ export default {
           this.matchDetails.requirementKeywordsArray = "无";
         }
         if (response.data.strArray != null) {
-          this.matchDetails.strArray = response.data.strArray;
+          const list = response.data.strArray;
+          this.matchDetails.strArray = list.filter(item => item != "" && item !== null);
         } else {
           this.matchDetails.strArray = "无";
         }
@@ -604,17 +611,20 @@ export default {
           this.matchDetails.teamMembersArray = "无";
         }
         if (response.data.strArray1 != null) {
-          this.matchDetails.strArray1 = response.data.strArray1
+          const list = response.data.strArray1;
+          this.matchDetails.strArray1 = list.filter(item => item != "" && item !== null);
         } else {
           this.matchDetails.strArray1 = "无";
         }
         if (response.data.strArray2 != null) {
-          this.matchDetails.strArray2 = response.data.strArray2;
+          const list = response.data.strArray2;
+          this.matchDetails.strArray2 = list.filter(item => item != "" && item !== null);
         } else {
           this.matchDetails.strArray2 = "无";
         }
         if (response.data.strArray3 != null) {
-          this.matchDetails.strArray3 = response.data.strArray3
+          const list = response.data.strArray3;
+          this.matchDetails.strArray3 = list.filter(item => item !== "" && item !== null);
         } else {
           this.matchDetails.strArray3 = "无";
         }
@@ -661,7 +671,6 @@ export default {
     },
 
     handleAllAchievement() {
-
       //新的弹窗，放专家的信息和所有信息
       this.openExpert = true;
       const markProject = this.markProject
