@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.service;
 
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
 
@@ -122,5 +123,13 @@ public interface IKyfzMatchService {
      * @return 结果
      */
     public int updatePushRecord(KyfzMatch kyfzMatch);
+
+    /**
+     * 批量更新匹配列表的推送状态
+     * 
+     * @param matchIds 匹配列表主键集合
+     * @return 结果
+     */
+    public int updateKyfzMatchByMatchIds_pushState(Long[] matchIds);
 
 }

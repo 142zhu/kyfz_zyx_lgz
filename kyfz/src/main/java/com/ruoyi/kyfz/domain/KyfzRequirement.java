@@ -152,12 +152,23 @@ public class KyfzRequirement extends BaseEntity {
     @Excel(name = "企业注册资本")
     private String registeredCapital;
 
+    /** 用户ID */
+    private Long userId;
+
     public void setRequirementId(Long requirementId) {
         this.requirementId = requirementId;
     }
 
     public Long getRequirementId() {
         return requirementId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     public void setProjectName(String projectName) {

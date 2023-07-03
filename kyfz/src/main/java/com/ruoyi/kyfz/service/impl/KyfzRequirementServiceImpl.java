@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
 import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
@@ -44,6 +46,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
      * @return 需求管理
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<KyfzRequirement> selectKyfzRequirementList(KyfzRequirement kyfzRequirement) {
         return kyfzRequirementMapper.selectKyfzRequirementList(kyfzRequirement);
     }
@@ -57,6 +60,8 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     @Override
     public int insertKyfzRequirement(KyfzRequirement kyfzRequirement) {
         kyfzRequirement.setCreateTime(DateUtils.getNowDate());
+        kyfzRequirement.setCreatBy(SecurityUtils.getUsername());
+        kyfzRequirement.setUserId(SecurityUtils.getUserId());
         return kyfzRequirementMapper.insertKyfzRequirement(kyfzRequirement);
     }
 

@@ -1,55 +1,115 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <!-- <el-form-item label="需求编号" prop="requirementId">
-        <el-input v-model="queryParams.requirementId" placeholder="请输入需求编号" clearable @keyup.enter.native="handleQuery" />
-      </el-form-item> -->
+    <el-form
+      :model="queryParams"
+      ref="queryForm"
+      size="small"
+      :inline="true"
+      v-show="showSearch"
+      label-width="68px"
+    >
       <el-form-item label="需求名称" prop="projectName">
-        <el-input v-model="queryParams.projectName" placeholder="请输入需求名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.projectName"
+          placeholder="请输入需求名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="企业名称" prop="client">
-        <el-input v-model="queryParams.client" placeholder="请输入企业名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.client"
+          placeholder="请输入企业名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="推荐专家" prop="expertName">
-        <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.expertName"
+          placeholder="请输入专家姓名"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="研究方向" prop="researchDirection">
-        <el-input v-model="queryParams.researchDirection" placeholder="请输入专家研究方向" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.researchDirection"
+          placeholder="请输入专家研究方向"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="推送状态" prop="pushstatus">
+        <el-input
+          v-model="queryParams.pushstatus"
+          placeholder="请输入推送状态"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item label="匹配分值" prop="matchScore">
-        <!-- <el-input v-model="queryParams.matchScore" placeholder="请输入匹配分值" clearable @keyup.enter.native="handleQuery" />
-         -->
-        <el-input v-model="queryParams.minMatchScore" placeholder="最小匹配分值" style="width:140px;" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.minMatchScore"
+          placeholder="最小匹配分值"
+          style="width: 140px"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
         <span>~</span>
-        <el-input v-model="queryParams.maxMatchScore" placeholder="最大匹配分值" style="width:140px;" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.maxMatchScore"
+          placeholder="最大匹配分值"
+          style="width: 140px"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
+          >搜索</el-button
+        >
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-s-promotion" size="mini" :disabled="multiple" @click="handlePush"
-          v-hasPermi="['kyfz:match:push']">批量推送</el-button>
+        <el-button
+          type="primary"
+          plain
+          icon="el-icon-s-promotion"
+          size="mini"
+          :disabled="multiple"
+          @click="handlePush"
+          v-hasPermi="['kyfz:match:push']"
+          >批量推送</el-button
+        >
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:match:export']">导出</el-button>
+        <el-button
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['kyfz:match:export']"
+          >导出</el-button
+        >
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="matchList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="matchList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="匹配编号" align="center" prop="matchId" />
       <el-table-column label="需求编号" align="center" prop="requirementId" /> -->
@@ -61,19 +121,37 @@
       <el-table-column label="推荐专家" align="center" prop="expertName" />
       <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
       <el-table-column label="匹配分值" align="center" prop="matchScore" />
+      <el-table-column label="推送状态" align="center" prop="pushstatus" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-document" @click="handleDetail(scope.row)"
-            v-hasPermi="['kyfz:match:detail']">详细</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleDetail(scope.row)"
+            v-hasPermi="['kyfz:match:detail']"
+            >详细</el-button
+          >
 
-          <el-button size="mini" type="text" icon="el-icon-s-promotion" @click="handlePush(scope.row)"
-            v-hasPermi="['kyfz:match:push']">推送</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-s-promotion"
+            @click="handlePush(scope.row)"
+            v-hasPermi="['kyfz:match:push']"
+            >推送</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 详细信息弹窗 -->
     <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
@@ -82,8 +160,11 @@
           <h3 class="match-detail-title">匹配详情</h3>
           <div class="match-detail-star">
             <span>为匹配结果评分</span>
-            <el-rate v-model="matchDetails.value2" :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-              @change="changeStarValue(matchDetails.matchId, matchDetails.value2)">
+            <el-rate
+              v-model="matchDetails.value2"
+              :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+              @change="changeStarValue(matchDetails.matchId, matchDetails.value2)"
+            >
             </el-rate>
           </div>
         </div>
@@ -95,17 +176,29 @@
           <el-table-column label="推荐专家" align="center" prop="expertName" />
           <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
           <el-table-column label="匹配分值" align="center" prop="matchScore" />
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column
+            label="操作"
+            align="center"
+            class-name="small-padding fixed-width"
+          >
             <template slot-scope="scope">
-              <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
-                v-has-permission="'kyfz:match:push'">推送</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handlePush(scope.row)"
+                v-has-permission="'kyfz:match:push'"
+                >推送</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
         <div class="match-detail-keywords">
           <h4>需求关键词</h4>
           <div class="match-detail-keywords-info">
-            <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br /></span>
+            <span v-for="item in matchDetails.requirementKeywordsArray" :key="item"
+              >{{ item }}<br
+            /></span>
           </div>
         </div>
         <div class="match-detail-result">
@@ -114,37 +207,58 @@
             <div>
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item project" v-for="item in matchDetails.strArray" :key="item">{{ item
-                }}</span>
+                <span
+                  class="match-detail-item project"
+                  v-for="item in matchDetails.strArray"
+                  :key="item"
+                  >{{ item }}</span
+                >
               </div>
             </div>
             <div>
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item thesis" v-for="item in matchDetails.strArray1" :key="item">{{ item
-                }}</span>
+                <span
+                  class="match-detail-item thesis"
+                  v-for="item in matchDetails.strArray1"
+                  :key="item"
+                  >{{ item }}</span
+                >
               </div>
             </div>
             <div>
               <h5>相关著作</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item work" v-for="item in matchDetails.strArray2" :key="item">{{ item
-                }}</span>
+                <span
+                  class="match-detail-item work"
+                  v-for="item in matchDetails.strArray2"
+                  :key="item"
+                  >{{ item }}</span
+                >
               </div>
             </div>
             <div>
               <h5>相关证书</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item certificate" v-for="item in matchDetails.strArray3" :key="item">{{ item
-                }}</span>
+                <span
+                  class="match-detail-item certificate"
+                  v-for="item in matchDetails.strArray3"
+                  :key="item"
+                  >{{ item }}</span
+                >
               </div>
             </div>
-            <div style="padding-bottom:20px;padding-right:0px!important;">
-              <el-button :disabled="SearchButton" type="primary" @click="handleAllAchievement()"
-                style="float: right;margin-right:0px;" :title="buttonTitle">所有研究成果</el-button>
+            <div style="padding-bottom: 20px; padding-right: 0px !important">
+              <el-button
+                :disabled="SearchButton"
+                type="primary"
+                @click="handleAllAchievement()"
+                style="float: right; margin-right: 0px"
+                :title="buttonTitle"
+                >所有研究成果</el-button
+              >
             </div>
           </div>
-
         </div>
         <div class="match-detail-team">
           <h4>专家团队</h4>
@@ -152,16 +266,19 @@
             <span v-for="item in matchDetails.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button :disabled="relationshipButton" type="primary" @click="handleECharts()"
-              style="float: right;margin-right:0px;" :title="buttonTitle">
+            <el-button
+              :disabled="relationshipButton"
+              type="primary"
+              @click="handleECharts()"
+              style="float: right; margin-right: 0px"
+              :title="buttonTitle"
+            >
               团队关系图
             </el-button>
           </div>
         </div>
       </div>
     </el-dialog>
-
-
 
     <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
       <div id="graph-chart" style="width: 500px; height: 500px">
@@ -191,10 +308,15 @@
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
                 <ul>
-                  <li style="" v-for="item in expertDetail.projectList" :key="item.projectId"
-                    @click="sendProjectId(item.projectId)">
-                    <span v-bind:class="{ 'highlight': isHighlighted(item.projectId) }">
-                      {{ item.projectName }}</span>
+                  <li
+                    style=""
+                    v-for="item in expertDetail.projectList"
+                    :key="item.projectId"
+                    @click="sendProjectId(item.projectId)"
+                  >
+                    <span v-bind:class="{ highlight: isHighlighted(item.projectId) }">
+                      {{ item.projectName }}</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -203,10 +325,15 @@
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
                 <ul>
-                  <li style="" v-for="item in expertDetail.thesisList" :key="item.thesisId"
-                    @click="sendThesisId(item.thesisId)">
-                    <span v-bind:class="{ 'highlight': isHighlighted1(item.thesisId) }">
-                      {{ item.thesisName }}</span>
+                  <li
+                    style=""
+                    v-for="item in expertDetail.thesisList"
+                    :key="item.thesisId"
+                    @click="sendThesisId(item.thesisId)"
+                  >
+                    <span v-bind:class="{ highlight: isHighlighted1(item.thesisId) }">
+                      {{ item.thesisName }}</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -215,9 +342,15 @@
               <h5>相关著作</h5>
               <div class="match-detail-decorate">
                 <ul>
-                  <li style="" v-for="item in expertDetail.workList" :key="item.workId" @click="sendWorkId(item.workId)">
-                    <span v-bind:class="{ 'highlight': isHighlighted2(item.workId) }">
-                      {{ item.workName }}</span>
+                  <li
+                    style=""
+                    v-for="item in expertDetail.workList"
+                    :key="item.workId"
+                    @click="sendWorkId(item.workId)"
+                  >
+                    <span v-bind:class="{ highlight: isHighlighted2(item.workId) }">
+                      {{ item.workName }}</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -226,10 +359,17 @@
               <h5>相关证书</h5>
               <div class="match-detail-decorate">
                 <ul>
-                  <li style="" v-for="item in expertDetail.certificateList" :key="item.certificateId"
-                    @click="sendCertificateId(item.certificateId)">
-                    <span v-bind:class="{ 'highlight': isHighlighted3(item.certificateId) }">
-                      {{ item.certificateName }}</span>
+                  <li
+                    style=""
+                    v-for="item in expertDetail.certificateList"
+                    :key="item.certificateId"
+                    @click="sendCertificateId(item.certificateId)"
+                  >
+                    <span
+                      v-bind:class="{ highlight: isHighlighted3(item.certificateId) }"
+                    >
+                      {{ item.certificateName }}</span
+                    >
                   </li>
                 </ul>
               </div>
@@ -238,8 +378,6 @@
         </div>
       </div>
     </el-dialog>
-
-
   </div>
 </template>
 
@@ -255,7 +393,13 @@ import {
   updatePushRecord,
 } from "@/api/kyfz/match";
 
-import { getExpertDetailByAccount, updateMarkProject, updateMarkThesis, updateMarkWork, updateMarkCertificate } from "@/api/kyfz/expert"
+import {
+  getExpertDetailByAccount,
+  updateMarkCertificate,
+  updateMarkProject,
+  updateMarkThesis,
+  updateMarkWork,
+} from "@/api/kyfz/expert";
 import * as echarts from "echarts";
 
 const getEchartsId = () => {
@@ -331,11 +475,10 @@ export default {
         primaryDisclipline: null,
         secondaryDiscipline: null,
         tertiaryDiscipline: null,
-
+        pushstatus: null,
         thesisName: null,
         workName: null,
         certificateName: null,
-
       },
       // 表单参数
       form: {},
@@ -354,7 +497,6 @@ export default {
     this.echartsId = getEchartsId();
   },
   methods: {
-
     // echarts
     initChart: function () {
       const myChart = echarts.init(document.getElementById(this.echartsId));
@@ -478,6 +620,7 @@ export default {
         markWork: null,
         markThesis: null,
         markCertificate: null,
+        pushstatus: null,
       };
       this.resetForm("form");
     },
@@ -546,7 +689,7 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -573,12 +716,15 @@ export default {
       // alert(this.matchDetails.expertAccount);
       this.matchDetails.expertName = row.expertName;
 
-      if (this.matchDetails.expertName == "" || this.matchDetails.expertName == null || this.matchDetails.expertName == "无") {
+      if (
+        this.matchDetails.expertName == "" ||
+        this.matchDetails.expertName == null ||
+        this.matchDetails.expertName == "无"
+      ) {
         this.SearchButton = true;
         this.relationshipButton = true;
-        this.buttonTitle = '未匹配专家';
-      }
-      else {
+        this.buttonTitle = "未匹配专家";
+      } else {
         this.SearchButton = false;
         this.relationshipButton = false;
         this.buttonTitle = null;
@@ -599,7 +745,7 @@ export default {
         }
         if (response.data.strArray != null) {
           const list = response.data.strArray;
-          this.matchDetails.strArray = list.filter(item => item != "" && item !== null);
+          this.matchDetails.strArray = list.filter((item) => item != "" && item !== null);
         } else {
           this.matchDetails.strArray = "无";
         }
@@ -612,19 +758,25 @@ export default {
         }
         if (response.data.strArray1 != null) {
           const list = response.data.strArray1;
-          this.matchDetails.strArray1 = list.filter(item => item != "" && item !== null);
+          this.matchDetails.strArray1 = list.filter(
+            (item) => item != "" && item !== null
+          );
         } else {
           this.matchDetails.strArray1 = "无";
         }
         if (response.data.strArray2 != null) {
           const list = response.data.strArray2;
-          this.matchDetails.strArray2 = list.filter(item => item != "" && item !== null);
+          this.matchDetails.strArray2 = list.filter(
+            (item) => item != "" && item !== null
+          );
         } else {
           this.matchDetails.strArray2 = "无";
         }
         if (response.data.strArray3 != null) {
           const list = response.data.strArray3;
-          this.matchDetails.strArray3 = list.filter(item => item !== "" && item !== null);
+          this.matchDetails.strArray3 = list.filter(
+            (item) => item !== "" && item !== null
+          );
         } else {
           this.matchDetails.strArray3 = "无";
         }
@@ -647,8 +799,9 @@ export default {
         })
         .then(() => {
           this.$modal.msgSuccess("推送成功");
+          this.getList();
         })
-        .catch(() => { });
+        .catch(() => {});
     },
     changeStarValue(matchId, value2) {
       const data1 = {};
@@ -657,7 +810,7 @@ export default {
       updatePushRecord(data1).then((response) => {
         this.$modal.msgSuccess("评分成功");
         this.openDetail = false;
-        for (let i = 0; i < 1000; i++) { }
+        for (let i = 0; i < 1000; i++) {}
         this.openDetail = true;
       });
     },
@@ -673,7 +826,7 @@ export default {
     handleAllAchievement() {
       //新的弹窗，放专家的信息和所有信息
       this.openExpert = true;
-      const markProject = this.markProject
+      const markProject = this.markProject;
       const markWork = this.markWork;
       const markCertificate = this.markCertificate;
       const markThesis = this.markThesis;
@@ -707,9 +860,7 @@ export default {
         if (response.data.markCertificateId != null) {
           this.certificateIds = response.data.markCertificateId;
         }
-
       });
-
     },
     sendProjectId(projectId) {
       const data2 = {};
@@ -728,12 +879,9 @@ export default {
             this.$modal.msgSuccess("去除标记成功");
           });
           return;
+        } catch (e) {
+          alert(e);
         }
-        catch (e) {
-          alert(e)
-        }
-
-
       }
       //添加标记
       this.projectIds.push(projectId);
@@ -888,11 +1036,11 @@ export default {
   background-color: #f5f7fa;
 }
 
-.match-detail-result-info>div {
+.match-detail-result-info > div {
   margin-bottom: 10px;
 }
 
-.match-detail-team-info>div>el-button {
+.match-detail-team-info > div > el-button {
   margin-bottom: 10px;
   margin-right: 10px;
 }
@@ -948,7 +1096,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.match-detail-team-info>span {
+.match-detail-team-info > span {
   display: inline-flex;
   align-items: center;
   margin-right: 10px;

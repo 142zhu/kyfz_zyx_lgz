@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzProjectMapper">
+
+    <resultMap type="KyfzProject" id="KyfzProjectResult">
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="dataSource" column="data_source" />
+        <result property="startFunds" column="start_funds" />
+
+    </resultMap>
+
+    <sql id="selectKyfzEnterpriseVo"> select project_id, project_name, data_source, start_funds from
+        kyfz_project </sql>
+
+    <select id="selectKyfzProjectList" parameterType="Long[]" resultMap="KyfzProjectResult"> select
+        project_id, project_name, data_source, start_funds from kyfz_project WHERE project_id IN <foreach
+            item="projectId" collection="array" open="(" separator="," close=")"> #{projectId} </foreach>
+    </select>
+</mapper>

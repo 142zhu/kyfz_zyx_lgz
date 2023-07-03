@@ -29,6 +29,7 @@ import com.ruoyi.kyfz.domain.KyfzThesis;
 import com.ruoyi.kyfz.domain.KyfzWork;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
+import com.ruoyi.kyfz.service.IKyfzProjectService;
 
 /**
  * 专家管理Controller
@@ -44,6 +45,9 @@ public class KyfzExpertController extends BaseController {
 
     @Autowired
     private IKyfzMatchService kyfzMatchService;
+
+    @Autowired
+    private IKyfzProjectService iKyfzProjectService;
 
     /**
      * 查询专家管理列表
@@ -120,12 +124,9 @@ public class KyfzExpertController extends BaseController {
         String workIds = expert.getWorkId();
         String certificateIds = expert.getCertificateId();
         if (projectIds != null && !projectIds.isEmpty()) {
-            ArrayList<String> projectArray = new ArrayList<>();
+            ArrayList<KyfzProject> projectArray = new ArrayList<KyfzProject>();
             Long projectId[] = extractIds(projectIds);
-            for (int i = 0; i < projectId.length; i++) {
-                String projectName = kyfzMatchService.selectProjectName(projectId[i]);
-                projectArray.add(projectName);
-            }
+            projectArray = (ArrayList<KyfzProject>) iKyfzProjectService.selectKyfzProjectList(projectId);
             expert.setProjectArray(projectArray);
         }
 

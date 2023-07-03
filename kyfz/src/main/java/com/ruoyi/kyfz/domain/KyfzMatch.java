@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -46,6 +47,10 @@ public class KyfzMatch extends BaseEntity {
     /** 相关项目（多个项目id） */
     @Excel(name = "相关项目", readConverterExp = "多=个项目id")
     private String projectId;
+
+    /** 推送状态 */
+    @Excel(name = "推送状态")
+    private String pushstatus;
 
     /** 相关项目（多个项目名） */
     @Excel(name = "相关项目的名称", readConverterExp = "多个项目名称合并在一起")
@@ -351,6 +356,14 @@ public class KyfzMatch extends BaseEntity {
 
     public String getProjectId() {
         return projectId;
+    }
+
+    public String getPushstatus() {
+        return pushstatus;
+    }
+
+    public void setPushstatus(String pushstatus) {
+        this.pushstatus = pushstatus;
     }
 
     @Override

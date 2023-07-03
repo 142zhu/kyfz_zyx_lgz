@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time" />
         <result property="updateBy" column="update_by" />
         <result property="updateTime" column="update_time" />
+        <result property="pushstatus" column="push_status" />
 
         <!-- 按需求添加 -->
         <result property="expertName" column="expert_name" />
@@ -36,12 +37,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectKyfzMatchVo">
-        select match_id, expert_account, requirement_id, match_score, thesis_id, work_id, certificate_id, project_id, create_by, create_time, update_by, update_time from kyfz_match
+        select match_id, expert_account, requirement_id, match_score, thesis_id, work_id, certificate_id, project_id, create_by, create_time, update_by, update_time,push_status from kyfz_match
     </sql>
 
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
-        select m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.work_id ,m.match_score,
+        select m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.work_id ,m.match_score,m.push_status,
         m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords,m.score
         from kyfz_match m
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
@@ -51,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
-        select match_id,m.requirement_id,m.match_score,
+        select match_id,m.requirement_id,m.match_score,m.push_status,
         r.project_name, r.client, 		
         e.expert_name, e.research_direction,e.expert_account
         from kyfz_match m
@@ -78,6 +79,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
             <if test="maxMatchScore != null and maxMatchScore != ''">
                 AND match_score &lt; #{maxMatchScore}
+            </if>
+            <if test="pushstatus != null and pushstatus != ''">
+                AND m.push_status LIKE CONCAT('%', #{pushstatus}, '%')
             </if>
         </where>
         order by m.match_id desc
@@ -132,6 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="pushstatus != null">push_status = #{pushstatus},</if>
         </trim>
         where match_id = #{matchId}
     </update>
@@ -213,4 +218,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteKyfzMatchByrequirementId" parameterType="Long">
         delete from kyfz_match where requirement_id = #{requirementId}
     </delete>
+
+    <update id="updateKyfzMatchByMatchIds_pushState" parameterType="String">
+            update kyfz_match
+            set push_status = '已推送'
+            where match_id in
+        <foreach item="matchId" collection="array" open="(" separator="," close=")">
+            #{matchId}
+        </foreach>
+    </update>
+
 </mapper>

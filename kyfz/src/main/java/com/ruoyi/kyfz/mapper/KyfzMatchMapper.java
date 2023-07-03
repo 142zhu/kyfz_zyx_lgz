@@ -139,4 +139,12 @@ public interface KyfzMatchMapper {
      * @return 结果
      */
     public int deleteKyfzMatchByrequirementId(Long requirementId);
+
+    /**
+     * 批量更新匹配列表的推送状态
+     * 
+     * @param matchIds 数据主键集合
+     * @return 结果
+     */
+    public int updateKyfzMatchByMatchIds_pushState(Long[] matchIds);
 }

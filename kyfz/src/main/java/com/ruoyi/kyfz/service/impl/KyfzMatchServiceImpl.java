@@ -1,12 +1,14 @@
 package com.ruoyi.kyfz.service.impl;
 
 import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
+
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
+import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 
 /**
@@ -166,5 +168,10 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      */
     public int updatePushRecord(KyfzMatch kyfzMatch) {
         return kyfzMatchMapper.updatePushRecord(kyfzMatch);
+    }
+
+    @Override
+    public int updateKyfzMatchByMatchIds_pushState(Long[] matchIds) {
+        return kyfzMatchMapper.updateKyfzMatchByMatchIds_pushState(matchIds);
     }
 }
