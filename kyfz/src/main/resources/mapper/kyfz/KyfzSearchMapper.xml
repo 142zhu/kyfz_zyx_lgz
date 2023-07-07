@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzSearchMapper">
+    
+    <resultMap type="KyfzSearch" id="KyfzSearchResult">
+        <result property="searchId"    column="search_id"    />
+    </resultMap>
+
+    <sql id="selectKyfzSearchVo">
+        select search_id from kyfz_search
+    </sql>
+
+    <select id="selectKyfzSearchList" parameterType="KyfzSearch" resultMap="KyfzSearchResult">
+        <include refid="selectKyfzSearchVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectKyfzSearchBySearchId" parameterType="Long" resultMap="KyfzSearchResult">
+        <include refid="selectKyfzSearchVo"/>
+        where search_id = #{searchId}
+    </select>
+        
+    <insert id="insertKyfzSearch" parameterType="KyfzSearch">
+        insert into kyfz_search
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="searchId != null">search_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="searchId != null">#{searchId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzSearch" parameterType="KyfzSearch">
+        update kyfz_search
+        <trim prefix="SET" suffixOverrides=",">
+        </trim>
+        where search_id = #{searchId}
+    </update>
+
+    <delete id="deleteKyfzSearchBySearchId" parameterType="Long">
+        delete from kyfz_search where search_id = #{searchId}
+    </delete>
+
+    <delete id="deleteKyfzSearchBySearchIds" parameterType="String">
+        delete from kyfz_search where search_id in 
+        <foreach item="searchId" collection="array" open="(" separator="," close=")">
+            #{searchId}
+        </foreach>
+    </delete>
+</mapper>

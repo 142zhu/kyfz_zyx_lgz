@@ -1,35 +1,39 @@
 <template>
   <div class="app-container home">
-    <div class="header" style="text-align:center;padding-top:100px">
-      <div style="display:inline-block">
-        <div style="display:inline-block;margin-right:40px">
-          <h3 style="font-size:30px">已对接的需求</h3>
+    <div class="header" style="text-align: center; padding-top: 100px">
+      <div style="display: inline-block">
+        <div style="display: inline-block; margin-right: 40px">
+          <h3 style="font-size: 30px">已对接的需求</h3>
           <span>{{ infoList.hasFinishRequirement }}</span>
           <!-- <span style="font-size:25px">20000</span> -->
         </div>
-        <el-progress type="circle" style="transform: scale(1.5);display:inline-block;"
-          :percentage="infoList.requirePercent"></el-progress>
+        <el-progress
+          type="circle"
+          style="transform: scale(1.5); display: inline-block"
+          :percentage="infoList.requirePercent"
+        ></el-progress>
       </div>
 
-      <div style="display:inline-block;margin-left:150px">
-        <div style="display:inline-block;margin-right:40px">
-          <h3 style="font-size:30px">已推送匹配</h3>
+      <div style="display: inline-block; margin-left: 150px">
+        <div style="display: inline-block; margin-right: 40px">
+          <h3 style="font-size: 30px">已推送匹配</h3>
           <!-- <span>{{ finishMatchCount }}</span> -->
           <span>{{ infoList.hasPushMatch }}</span>
         </div>
-        <el-progress type="circle" style="transform: scale(1.5);display:inline-block;"
-          :percentage="infoList.pushPercent"></el-progress>
+        <el-progress
+          type="circle"
+          style="transform: scale(1.5); display: inline-block"
+          :percentage="infoList.pushPercent"
+        ></el-progress>
       </div>
-
     </div>
     <div>
       <el-icon name="el-icon-search"></el-icon>
     </div>
     <div class="container">
-
       <el-card class="card" v-hover-shadow>
         <i>
-          <svg-icon icon-class="project" style="color:black" />
+          <svg-icon icon-class="project" style="color: black" />
         </i>
         <h3>项目情况</h3>
         <h4>已入库：</h4>
@@ -71,7 +75,7 @@
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
-          <svg-icon icon-class="match" style="color:black" />
+          <svg-icon icon-class="match" style="color: black" />
         </i>
         <h3>匹配情况</h3>
         <h4>已入库：</h4>
@@ -95,39 +99,39 @@
       </el-card>
       <el-card class="card" v-hover-shadow>
         <i>
-          <svg-icon icon-class="enterprise" style="color:black" />
+          <svg-icon icon-class="enterprise" style="color: black" />
         </i>
         <h3>企业情况</h3>
         <h4>已入库：</h4>
         <span>{{ infoList.enterpriseCount }}</span>
       </el-card>
     </div>
+    <!-- echarts -->
+    <div id="container" style="height: 100%"></div>
   </div>
 </template>
 
 <script>
-//import '../assets/icons/svg/bug.svg';
-import { getAllCount } from "@/api/kyfz/push_record"
+import { getAllCount } from "@/api/kyfz/push_record";
 export default {
   name: "Index",
   data() {
     return {
       form: {
-        projectCount: null,//已入库项目数量
-        thesisCount: null,//已入库论文数量
-        workCount: null,//已入库著作数量
-        certificateCount: null,//已入库证书数量
-        expertCount: null,//已入库专家数目
-        matchCount: null,//已匹配的数目
-        pushCount: null,//已经推送的数目
-        enterpriseCount: 0,//已入库的企业数目
-        requirementCount: null,//已入库的需求数目
+        projectCount: null, //已入库项目数量
+        thesisCount: null, //已入库论文数量
+        workCount: null, //已入库著作数量
+        certificateCount: null, //已入库证书数量
+        expertCount: null, //已入库专家数目
+        matchCount: null, //已匹配的数目
+        pushCount: null, //已经推送的数目
+        enterpriseCount: 0, //已入库的企业数目
+        requirementCount: null, //已入库的需求数目
         hasFinishRequirement: null,
         requirePercent: null,
         hasPushMatch: null,
       },
-      infoList: {}
-      ,
+      infoList: {},
       count: null,
     };
   },
@@ -144,15 +148,14 @@ export default {
 
         const c = response.data.hasPushMatch;
         const d = response.data.matchCount;
-        if (((c / d) * 100) < 1) {
-          this.infoList.pushPercent = 1
+        if ((c / d) * 100 < 1) {
+          this.infoList.pushPercent = 1;
         }
         // alert((a / b) * 100)
-        this.infoList.requirePercent = (a / b) * 100
+        this.infoList.requirePercent = (a / b) * 100;
       });
-    }
+    },
   },
-
 };
 </script>
 
@@ -182,7 +185,6 @@ export default {
   display: inline-block;
   width: 1em;
   height: 1em;
-
 }
 
 .container {
@@ -217,11 +219,7 @@ export default {
     margin: 0;
   }
 
-  font-family: "open sans",
-  "Helvetica Neue",
-  Helvetica,
-  Arial,
-  sans-serif;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   color: #676a6c;
   overflow-x: hidden;
@@ -296,7 +294,6 @@ export default {
   font-size: 30px;
   font-weight: 700;
   color: #74c65d;
-
 }
 
 .card i {
