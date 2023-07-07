@@ -1,192 +1,152 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      size="small"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="企业名" prop="enterpriseName" label-width="120px">
-        <el-input
-          v-model="queryParams.enterpriseName"
-          placeholder="请输入企业名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.enterpriseName" placeholder="请输入企业名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="企业信用代码" prop="enterpriseCreditCode" label-width="120px">
-        <el-input
-          v-model="queryParams.enterpriseCreditCode"
-          placeholder="请输入企业信用代码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.enterpriseCreditCode" placeholder="请输入企业信用代码" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="企业注册资本" prop="registeredCapital" label-width="120px">
-        <el-input
-          v-model="queryParams.registeredCapital"
-          placeholder="请输入企业注册资本"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.registeredCapital" placeholder="请输入企业注册资本" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="企业关键词" prop="enterpriseKeywords" label-width="120px">
-        <el-input
-          v-model="queryParams.enterpriseKeywords"
-          placeholder="请输入企业关键词"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.enterpriseKeywords" placeholder="请输入企业关键词" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
+      <!-- 级联面板 -->
+      <el-row :gutter="16" justify="between" cols="8">
+        <el-col :span="2" offset="1" style="margin-top: 20px; margin-bottom: 20px;">
+          <span class="unit-tag">所属行业</span>
+        </el-col>
+        <template v-for="index in 20">
+          <el-col :span="2" :offset="0.5" style="margin-top: 20px; margin-bottom: 20px;">
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                计算机<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-cascader-panel :options="options" :props="{ multiple: true, props }"></el-cascader-panel>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+        </template>
+      </el-row>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
-          >搜索</el-button
-        >
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['kyfz:enterprise:add']"
-          >新增</el-button
-        >
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['kyfz:enterprise:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['kyfz:enterprise:edit']"
-          >修改</el-button
-        >
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['kyfz:enterprise:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['kyfz:enterprise:remove']"
-          >删除</el-button
-        >
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['kyfz:enterprise:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['kyfz:enterprise:export']"
-          >导出</el-button
-        >
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['kyfz:enterprise:export']">导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table
-      v-loading="loading"
-      :data="enterpriseList"
-      @selection-change="handleSelectionChange"
-    >
+    <!-- 卡片实现 -->
+    <div>
+      <el-table v-loading="loading" :data="enterpriseList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="企业信息" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-card class="card-item">
+              <div class="card-actions">
+                <div class="card-content">
+                  <div class="card-row">
+                    <span class="card-label">企业名:</span>
+                    <span class="card-value">{{ scope.row.enterpriseName }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">企业信用代码:</span>
+                    <span class="card-value">{{ scope.row.enterpriseCreditCode }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">企业描述:</span>
+                    <span class="card-value" :title="scope.row.enterpriseDescribe">
+                      {{ scope.row.enterpriseDescribe && scope.row.enterpriseDescribe.length > 13 ?
+                        scope.row.enterpriseDescribe.substring(0, 13) + '...' : scope.row.enterpriseDescribe }}
+                    </span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">企业注册资本:</span>
+                    <span class="card-value">{{ scope.row.registeredCapital }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">企业关键词:</span>
+                    <span class="card-value">{{ scope.row.enterpriseKeywords }}</span>
+                  </div>
+                </div>
+                <div class="card-actions-right">
+                  <div class="buttons-container">
+                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                      v-hasPermi="['kyfz:enterprise:edit']">修改</el-button>
+                    <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                      v-hasPermi="['kyfz:enterprise:remove']">删除</el-button>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+
+    <!-- 原来表格显示 -->
+    <!-- <el-table v-loading="loading" :data="enterpriseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="企业名" align="center" prop="enterpriseName" />
       <el-table-column label="企业信用代码" align="center" prop="enterpriseCreditCode" />
-      <el-table-column
-        label="企业描述"
-        align="center"
-        :show-overflow-tooltip="true"
-        prop="enterpriseDescribe"
-      />
+      <el-table-column label="企业描述" align="center" :show-overflow-tooltip="true" prop="enterpriseDescribe" />
       <el-table-column label="企业注册资本" align="center" prop="registeredCapital" />
       <el-table-column label="企业关键词" align="center" prop="enterpriseKeywords" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:enterprise:edit']"
-            >修改</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:enterprise:remove']"
-            >删除</el-button
-          >
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:enterprise:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['kyfz:enterprise:remove']">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改企业管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="企业名" prop="enterpriseName">
-          <el-input
-            v-model="form.enterpriseName"
-            placeholder="请输入企业名"
-            style="width: 600px"
-          />
+          <el-input v-model="form.enterpriseName" placeholder="请输入企业名" style="width: 600px" />
         </el-form-item>
-        <el-form-item
-          label="企业信用代码"
-          prop="enterpriseCreditCode"
-          label-width="250px"
-        >
-          <el-input
-            v-model="form.enterpriseCreditCode"
-            placeholder="请输入企业信用代码"
-            style="width: 600px"
-          />
+        <el-form-item label="企业信用代码" prop="enterpriseCreditCode" label-width="250px">
+          <el-input v-model="form.enterpriseCreditCode" placeholder="请输入企业信用代码" style="width: 600px" />
         </el-form-item>
         <el-form-item label="企业描述" prop="enterpriseDescribe" label-width="250px">
-          <el-input
-            v-model="form.enterpriseDescribe"
-            type="textarea"
-            placeholder="请输入内容"
-            style="width: 600px"
-            :autosize="{ minRows: 4, maxRows: 8 }"
-          />
+          <el-input v-model="form.enterpriseDescribe" type="textarea" placeholder="请输入内容" style="width: 600px"
+            :autosize="{ minRows: 4, maxRows: 8 }" />
         </el-form-item>
         <el-form-item label="企业注册资本" prop="registeredCapital" label-width="250px">
-          <el-input
-            v-model="form.registeredCapital"
-            placeholder="请输入企业注册资本"
-            style="width: 600px"
-          />
+          <el-input v-model="form.registeredCapital" placeholder="请输入企业注册资本" style="width: 600px" />
         </el-form-item>
         <el-form-item label="企业关键词" prop="enterpriseKeywords" label-width="250px">
-          <el-input
-            v-model="form.enterpriseKeywords"
-            placeholder="请输入企业关键词"
-            style="width: 600px"
-          />
+          <el-input v-model="form.enterpriseKeywords" placeholder="请输入企业关键词" style="width: 600px" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -210,6 +170,51 @@ export default {
   name: "Enterprise",
   data() {
     return {
+      // 行业数据
+      options: [
+        {
+          value: '计算机行业',
+          label: '计算机行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        },
+        {
+          value: '电子信息行业',
+          label: '电子信息行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        },
+        {
+          value: '人工智能行业',
+          label: '人工智能行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        }
+      ],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -342,7 +347,7 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -361,5 +366,69 @@ export default {
 <style>
 .el-tooltip__popper {
   max-width: 60%;
+}
+</style>
+
+<style scoped>
+/* 卡片定制 */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.card-content-left {
+  flex: 1;
+}
+
+.card-content-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-row {
+  flex-basis: 33.3%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-item {
+  background-color: #f7fbff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-label {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.card-value {
+  font-family: Arial, sans-serif;
+  color: #666;
 }
 </style>

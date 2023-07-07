@@ -17,14 +17,42 @@
     <div style="margin-top: 40px">
       <div id="content">
         <div v-show="activeTab === '综合搜索'">
-          <el-col :span="3" v-for="(o, index) in 12" :key="o" :offset="1">
+          <!-- <el-col :span="3" v-for="(o, index) in 12" :key="o" :offset="1">
             <el-card :body-style="{ padding: '0px' }" style="margin-top: 20px">
               <img src="./test.png" class="image">
               <div style="padding: 14px;">
                 <span>计算机行业</span>
               </div>
             </el-card>
-          </el-col>
+          </el-col> -->
+          <template>
+            <div>
+              <div class="menu-row" v-for="row in 2" :key="row">
+                <el-dropdown v-for="col in 5" :key="col" class="custom-dropdown" style="margin-right: 80px"
+                  hide-timeout="800">
+                  <div class="dropdown-wrapper">
+                    <el-button type="primary" style="background-color: #ffffff;color:black">
+                      <div class="image-wrapper">
+                        <img src="./test.png" alt="菜单图片" width="50px">
+                      </div>
+                      计算机行业<i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu ref="menu" slot="dropdown" class="horizontal-menu my-menu">
+                      <el-dropdown-item>计算机硬件</el-dropdown-item>
+                      <el-dropdown-item>计算机软件</el-dropdown-item>
+                      <el-dropdown-item>计算机应用软件</el-dropdown-item>
+                      <el-dropdown-item>云计算</el-dropdown-item>
+                      <el-dropdown-item>人工智能</el-dropdown-item>
+                      <el-dropdown-item>区块链</el-dropdown-item>
+                      <el-dropdown-item>网络空间安全</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </div>
+                </el-dropdown>
+              </div>
+            </div>
+          </template>
+
+
         </div>
         <div v-show="activeTab === '搜人才'">
           <div>
@@ -45,19 +73,52 @@
               <el-col :span="20" :xs="24">
                 <el-table v-loading="loading" :data="expertList" @selection-change="handleSelectionChange">
                   <el-table-column type="selection" width="55" align="center" />
-                  <el-table-column label="专家账号" align="center" prop="expertAccount" />
-                  <el-table-column label="专家姓名" align="center" prop="expertName" />
-                  <el-table-column label="专家职称" align="center" prop="expertPosition" />
-                  <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
-                  <el-table-column label="研究方向" align="center" prop="researchDirection" />
-                  <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+                  <el-table-column label="专家信息" align="center" class-name="small-padding fixed-width">
                     <template slot-scope="scope">
-                      <el-button size="mini" type="text" icon="el-icon-edit"
-                        @click="handleDetail(scope.row)">详情</el-button>
-                      <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                        v-hasPermi="['kyfz:expert:edit']">修改</el-button>
-                      <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                        v-hasPermi="['kyfz:expert:remove']">删除</el-button>
+                      <el-card class="card-item">
+                        <div class="card-actions">
+                          <div class="card-content">
+                            <div class="card-row">
+                              <span class="card-label">专家姓名:</span>
+                              <span class="card-value">{{ scope.row.expertName }}</span>
+                            </div>
+                            <div class="card-row">
+                              <span class="card-label">专家账号:</span>
+                              <span class="card-value">{{ scope.row.expertAccount }}</span>
+                            </div>
+                            <div class="card-row">
+                              <span class="card-label">专家职称:</span>
+                              <span class="card-value">{{ scope.row.expertPosition }}</span>
+                            </div>
+                            <div class="card-row">
+                              <span class="card-label">所属单位:</span>
+                              <span class="card-value" :title="scope.row.expertAffiliation">
+                                {{ scope.row.expertAffiliation && scope.row.expertAffiliation.length > 15 ?
+                                  scope.row.expertAffiliation.substring(0, 15) + '...' : scope.row.expertAffiliation }}
+                              </span>
+                            </div>
+                            <div class="card-row">
+                              <span class="card-label">研究方向:</span>
+                              <span class="card-value">{{ scope.row.researchDirection }}</span>
+                            </div>
+                          </div>
+                          <div class="card-actions-right">
+                            <div class="buttons-container">
+                              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)">
+                                详情
+                              </el-button>
+                              <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                                v-hasPermi="['kyfz:expert:edit']">
+                                修改
+                              </el-button>
+                              <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                                v-hasPermi="['kyfz:expert:remove']">
+                                删除
+                              </el-button>
+                            </div>
+                          </div>
+                        </div>
+                      </el-card>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -198,7 +259,20 @@ export default {
   created() {
     this.getList();
   },
+  mounted() {
+    this.setMenuPosition();
+  },
   methods: {
+    // 
+    setMenuPosition() {
+      const firstDropdown = this.$refs.firstDropdown.$el;
+      const menu = this.$refs.menu;
+
+      if (firstDropdown && menu) {
+        const dropdownRect = firstDropdown.getBoundingClientRect();
+        menu.style.left = `${dropdownRect.left}px`;
+      }
+    },
     // 学院数据显示
     filterNode(value, data) {
       if (!value) return true;
@@ -406,7 +480,7 @@ export default {
 }
 </style>
 
-<style >
+<style>
 .blue {
   background-color: rgb(41, 64, 106);
 }
@@ -426,5 +500,101 @@ export default {
 .margin-top .my-label,
 .margin-top .my-content {
   color: white;
+}
+</style>
+
+<style scoped>
+.dropdown-wrapper .image-wrapper {
+  margin-bottom: 10px;
+}
+
+.custom-dropdown .el-dropdown-menu {
+  background-color: white;
+}
+
+.horizontal-menu {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.horizontal-menu .el-dropdown-item {
+  flex-basis: 100%;
+}
+
+.menu-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 100px;
+}
+
+.my-menu {
+
+  left: 300px !important;
+  width: 950px;
+}
+</style>
+
+
+<style scoped>
+/* 卡片定制 */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.card-content-left {
+  flex: 1;
+}
+
+.card-content-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-row {
+  flex-basis: 33.3%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-item {
+  background-color: #f7fbff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-label {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.card-value {
+  font-family: Arial, sans-serif;
+  color: #666;
 }
 </style>

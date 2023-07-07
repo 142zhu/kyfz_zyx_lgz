@@ -1,253 +1,165 @@
 <template>
   <div class="app-container">
-    <el-form
-      :model="queryParams"
-      ref="queryForm"
-      size="small"
-      :inline="true"
-      v-show="showSearch"
-      label-width="68px"
-    >
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="姓名" prop="expertName" label-width="120px">
-        <el-input
-          v-model="queryParams.expertName"
-          placeholder="请输入专家姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="职称" prop="expertPosition" label-width="120px">
-        <el-input
-          v-model="queryParams.expertPosition"
-          placeholder="请输入专家职称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+        <el-input v-model="queryParams.expertPosition" placeholder="请输入专家职称" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item
-        label="研究方向"
-        prop="researchDirection"
-        label-width="120px"
-      >
-        <el-input
-          v-model="queryParams.researchDirection"
-          placeholder="请输入研究方向"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="研究方向" prop="researchDirection" label-width="120px">
+        <el-input v-model="queryParams.researchDirection" placeholder="请输入研究方向" clearable
+          @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item
-        label="所属单位"
-        prop="expertAffiliation"
-        label-width="120px"
-      >
-        <el-input
-          v-model="queryParams.expertAffiliation"
-          placeholder="请输入专家所属单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+      <!-- 级联面板 -->
+      <el-row :gutter="16" justify="between" cols="8">
+        <el-col :span="2" offset="1" style="margin-top: 20px; margin-bottom: 20px;">
+          <span class="unit-tag">所属单位</span>
+        </el-col>
+        <template v-for="index in 20">
+          <el-col :span="2" :offset="0.5" style="margin-top: 20px; margin-bottom: 20px;">
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                计算机<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-cascader-panel :options="options" :props="{ multiple: true, props }"></el-cascader-panel>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+        </template>
+      </el-row>
       <el-form-item>
-        <el-button
-          type="primary"
-          icon="el-icon-search"
-          size="mini"
-          @click="handleQuery"
-          >搜索</el-button
-        >
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery"
-          >重置</el-button
-        >
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['kyfz:expert:add']"
-          >新增</el-button
-        >
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['kyfz:expert:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['kyfz:expert:edit']"
-          >修改</el-button
-        >
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['kyfz:expert:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['kyfz:expert:remove']"
-          >删除</el-button
-        >
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['kyfz:expert:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['kyfz:expert:export']"
-          >导出</el-button
-        >
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['kyfz:expert:export']">导出</el-button>
       </el-col>
-      <right-toolbar
-        :showSearch.sync="showSearch"
-        @queryTable="getList"
-      ></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
-
-    <el-table
-      v-loading="loading"
-      :data="expertList"
-      @selection-change="handleSelectionChange"
-    >
+    <!-- 卡片实现 -->
+    <div>
+      <el-table v-loading="loading" :data="expertList" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="专家信息" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-card class="card-item">
+              <div class="card-actions">
+                <div class="card-content">
+                  <div class="card-row">
+                    <span class="card-label">专家姓名:</span>
+                    <span class="card-value">{{ scope.row.expertName }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">专家账号:</span>
+                    <span class="card-value">{{ scope.row.expertAccount }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">专家职称:</span>
+                    <span class="card-value">{{ scope.row.expertPosition }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">所属单位:</span>
+                    <span class="card-value" :title="scope.row.expertAffiliation">
+                      {{ scope.row.expertAffiliation && scope.row.expertAffiliation.length > 15 ?
+                        scope.row.expertAffiliation.substring(0, 15) + '...' : scope.row.expertAffiliation }}
+                    </span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">研究方向:</span>
+                    <span class="card-value">{{ scope.row.researchDirection }}</span>
+                  </div>
+                </div>
+                <div class="card-actions-right">
+                  <div class="buttons-container">
+                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)">
+                      详情
+                    </el-button>
+                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+                      v-hasPermi="['kyfz:expert:edit']">
+                      修改
+                    </el-button>
+                    <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+                      v-hasPermi="['kyfz:expert:remove']">
+                      删除
+                    </el-button>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <!-- 普通表格显示 -->
+    <!-- <el-table v-loading="loading" :data="expertList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="专家账号" align="center" prop="expertAccount" />
       <el-table-column label="专家姓名" align="center" prop="expertName" />
       <el-table-column label="专家职称" align="center" prop="expertPosition" />
-      <el-table-column
-        label="专家所属单位"
-        align="center"
-        prop="expertAffiliation"
-      />
-      <el-table-column
-        label="研究方向"
-        align="center"
-        prop="researchDirection"
-      />
-      <el-table-column
-        label="操作"
-        align="center"
-        class-name="small-padding fixed-width"
-      >
+      <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+      <el-table-column label="研究方向" align="center" prop="researchDirection" />
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleDetail(scope.row)"
-            >详情</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:expert:edit']"
-            >修改</el-button
-          >
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:expert:remove']"
-            >删除</el-button
-          >
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)">详情</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['kyfz:expert:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['kyfz:expert:remove']">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </el-table> -->
 
-    <pagination
-      v-show="total > 0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      @pagination="getList" />
 
     <!-- 添加或修改专家管理对话框 -->
-    <el-dialog
-      :title="title"
-      :visible.sync="open"
-      width="1000px"
-      append-to-body
-    >
+    <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="专家信息状态" prop="expertSignificance" required>
-          <el-switch
-            v-model="form.expertSignificance"
-            active-text="有效"
-            inactive-text="无效"
-            inactive-color="#FF0000"
-            :active-value="'有效'"
-            :inactive-value="'无效'"
-            style="width: 600px"
-          ></el-switch>
+          <el-switch v-model="form.expertSignificance" active-text="有效" inactive-text="无效" inactive-color="#FF0000"
+            :active-value="'有效'" :inactive-value="'无效'" style="width: 600px"></el-switch>
         </el-form-item>
         <el-form-item label="专家账号" prop="expertAccount">
-          <el-input
-            v-model="form.expertAccount"
-            placeholder="请输入专家账号"
-            style="width: 600px"
-          />
+          <el-input v-model="form.expertAccount" placeholder="请输入专家账号" style="width: 600px" />
         </el-form-item>
         <el-form-item label="专家姓名" prop="expertName">
-          <el-input
-            v-model="form.expertName"
-            placeholder="请输入专家姓名"
-            style="width: 600px"
-          />
+          <el-input v-model="form.expertName" placeholder="请输入专家姓名" style="width: 600px" />
         </el-form-item>
         <el-form-item label="专家职称" prop="expertPosition">
-          <el-input
-            v-model="form.expertPosition"
-            placeholder="请输入专家职称"
-            style="width: 600px"
-          />
+          <el-input v-model="form.expertPosition" placeholder="请输入专家职称" style="width: 600px" />
         </el-form-item>
         <el-form-item label="专家所属单位" prop="expertAffiliation">
-          <el-input
-            v-model="form.expertAffiliation"
-            placeholder="请输入专家所属单位"
-            style="width: 600px"
-          />
+          <el-input v-model="form.expertAffiliation" placeholder="请输入专家所属单位" style="width: 600px" />
         </el-form-item>
         <el-form-item label="一级学科" prop="primaryDiscipline">
-          <el-input
-            v-model="form.primaryDiscipline"
-            placeholder="请输入一级学科"
-            style="width: 600px"
-          />
+          <el-input v-model="form.primaryDiscipline" placeholder="请输入一级学科" style="width: 600px" />
         </el-form-item>
         <el-form-item label="二级学科" prop="secondaryDiscipline">
-          <el-input
-            v-model="form.secondaryDiscipline"
-            placeholder="请输入二级学科"
-            style="width: 600px"
-          />
+          <el-input v-model="form.secondaryDiscipline" placeholder="请输入二级学科" style="width: 600px" />
         </el-form-item>
         <el-form-item label="三级学科" prop="tertiaryDiscipline">
-          <el-input
-            v-model="form.tertiaryDiscipline"
-            placeholder="请输入三级学科"
-            style="width: 600px"
-          />
+          <el-input v-model="form.tertiaryDiscipline" placeholder="请输入三级学科" style="width: 600px" />
         </el-form-item>
         <el-form-item label="研究方向" prop="researchDirection">
-          <el-input
-            v-model="form.researchDirection"
-            placeholder="请输入研究方向"
-            style="width: 600px"
-          />
+          <el-input v-model="form.researchDirection" placeholder="请输入研究方向" style="width: 600px" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -257,53 +169,20 @@
     </el-dialog>
 
     <!-- 详细信息弹窗 -->
-    <el-dialog
-      :title="title"
-      :visible.sync="openDetail"
-      width="1000px"
-      append-to-body
-    >
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
       <div class="match-detail" style="margin-top: -20px">
         <div class="match-detail-header">
           <h3 class="match-detail-title">专家详细信息</h3>
         </div>
         <el-table :data="[expertDetail]" class="match-detail-table">
-          <el-table-column
-            label="专家账号"
-            align="center"
-            prop="expertAccount"
-          />
+          <el-table-column label="专家账号" align="center" prop="expertAccount" />
           <el-table-column label="专家姓名" align="center" prop="expertName" />
-          <el-table-column
-            label="专家职称"
-            align="center"
-            prop="expertPosition"
-          />
-          <el-table-column
-            label="专家所属单位"
-            align="center"
-            prop="expertAffiliation"
-          />
-          <el-table-column
-            label="专家研究方向"
-            align="center"
-            prop="researchDirection"
-          />
-          <el-table-column
-            label="一级学科"
-            align="center"
-            prop="primaryDiscipline"
-          />
-          <el-table-column
-            label="二级学科"
-            align="center"
-            prop="secondaryDiscipline"
-          />
-          <el-table-column
-            label="三级学科"
-            align="center"
-            prop="researchDirection"
-          />
+          <el-table-column label="专家职称" align="center" prop="expertPosition" />
+          <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+          <el-table-column label="一级学科" align="center" prop="primaryDiscipline" />
+          <el-table-column label="二级学科" align="center" prop="secondaryDiscipline" />
+          <el-table-column label="三级学科" align="center" prop="researchDirection" />
         </el-table>
         <div class="match-detail-result">
           <h4>专家研究成果</h4>
@@ -311,19 +190,13 @@
             <div>
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
-                <el-tooltip
-                  placement="top"
-                  class="match-detail-item project"
-                  v-for="item in expertDetail.projectArray"
-                  :key="item"
-                  :content="
-                    '项目来源：' +
+                <el-tooltip placement="top" class="match-detail-item project" v-for="item in expertDetail.projectArray"
+                  :key="item" :content="'项目来源：' +
                     item.dataSource +
                     '，金额：' +
                     item.startFunds +
                     '万元'
-                  "
-                >
+                    ">
                   <span>{{ item.projectName }} </span>
                 </el-tooltip>
               </div>
@@ -331,14 +204,8 @@
             <div>
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
-                <el-tooltip
-                  placement="top"
-                  class="match-detail-item thesis"
-                  v-for="item in expertDetail.thesisArray"
-                  :key="item"
-                  content="Top center"
-                  disabled
-                >
+                <el-tooltip placement="top" class="match-detail-item thesis" v-for="item in expertDetail.thesisArray"
+                  :key="item" content="Top center" disabled>
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -347,14 +214,8 @@
               <!-- 原著作 -->
               <h5>知识产权</h5>
               <div class="match-detail-decorate">
-                <el-tooltip
-                  placement="top"
-                  class="match-detail-item work"
-                  v-for="item in expertDetail.workArray"
-                  :key="item"
-                  content="Top center"
-                  disabled
-                >
+                <el-tooltip placement="top" class="match-detail-item work" v-for="item in expertDetail.workArray"
+                  :key="item" content="Top center" disabled>
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -363,14 +224,8 @@
               <!-- 原证书 -->
               <h5>其他</h5>
               <div class="match-detail-decorate">
-                <el-tooltip
-                  placement="top"
-                  class="match-detail-item certificate"
-                  v-for="item in expertDetail.certificateArray"
-                  :key="item"
-                  content="Top center"
-                  disabled
-                >
+                <el-tooltip placement="top" class="match-detail-item certificate"
+                  v-for="item in expertDetail.certificateArray" :key="item" content="Top center" disabled>
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -383,11 +238,7 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button
-              type="primary"
-              @click="handleECharts()"
-              style="float: right"
-            >
+            <el-button type="primary" @click="handleECharts()" style="float: right">
               团队关系图
             </el-button>
           </div>
@@ -422,6 +273,51 @@ export default {
   inheritAttrs: false,
   data() {
     return {
+      // 行业数据
+      options: [
+        {
+          value: '计算机行业',
+          label: '计算机行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        },
+        {
+          value: '电子信息行业',
+          label: '电子信息行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        },
+        {
+          value: '人工智能行业',
+          label: '人工智能行业',
+          children: [
+            {
+              value: '计算机硬件',
+              label: '计算机硬件'
+            },
+            {
+              value: '计算机软件',
+              label: '计算机软件'
+            }
+          ]
+        }
+      ],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -675,7 +571,7 @@ export default {
           this.getList();
           this.$modal.msgSuccess("删除成功");
         })
-        .catch(() => {});
+        .catch(() => { });
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -723,9 +619,71 @@ export default {
 </script>
 
 <style scoped>
-.inputDeep >>> .el-input__inner {
+.inputDeep>>>.el-input__inner {
   border: 0px;
   box-shadow: 0 0 0 0px;
+}
+
+/* 卡片定制 */
+.button-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.card-content-left {
+  flex: 1;
+}
+
+.card-content-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-row {
+  flex-basis: 33.3%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  margin-bottom: 8px;
+}
+
+.card-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card-item {
+  background-color: #f7fbff;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.card-label {
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.card-value {
+  font-family: Arial, sans-serif;
+  color: #666;
 }
 </style>
 
@@ -785,7 +743,7 @@ export default {
   background-color: #f5f7fa;
 }
 
-.match-detail-result-info > div {
+.match-detail-result-info>div {
   margin-bottom: 10px;
 }
 
@@ -840,7 +798,7 @@ export default {
   flex-wrap: wrap;
 }
 
-.match-detail-team-info > span {
+.match-detail-team-info>span {
   display: inline-flex;
   align-items: center;
   margin-right: 10px;
