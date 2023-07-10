@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="68px">
       <el-form-item label="推送编号" prop="pushId">
         <el-input v-model="queryParams.pushId" placeholder="请输入推送编号" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
@@ -20,9 +20,13 @@
         <el-input v-model="queryParams.feebback" placeholder="请输入反馈状态" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="推送时间" prop="pushTime">
-        <el-date-picker clearable v-model="queryParams.pushTime" type="date" value-format="yyyy-MM-dd"
-          placeholder="请选择推送时间">
-        </el-date-picker>
+        <el-date-picker
+          v-model="queryParams.pushTime"
+          clearable
+          type="date"
+          value-format="yyyy-MM-dd"
+          placeholder="请选择推送时间"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -32,14 +36,37 @@
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:record:remove']">删除</el-button>
+        <el-button
+          v-hasPermi="['kyfz:record:add']"
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:record:export']">导出</el-button>
+        <el-button
+          v-hasPermi="['kyfz:record:remove']"
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+        >删除</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <el-col :span="1.5">
+        <el-button
+          v-hasPermi="['kyfz:record:export']"
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+        >导出</el-button>
+      </el-col>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
     <el-table v-loading="loading" :data="recordList" @selection-change="handleSelectionChange">
@@ -58,14 +85,24 @@
 
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-document" @click="handleDetail(scope.row)"
-            v-hasPermi="['kyfz:record:edit']">详情</el-button>
+          <el-button
+            v-hasPermi="['kyfz:record:edit']"
+            size="mini"
+            type="text"
+            icon="el-icon-document"
+            @click="handleDetail(scope.row)"
+          >详情</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 推送详情对话框 -->
     <!-- 详细信息弹窗 -->
@@ -83,15 +120,20 @@
           <el-table-column label="匹配分值" align="center" prop="matchScore" />
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" icon="el-icon-edit" @click="handlePush(scope.row)"
-                v-has-permission="'kyfz:match:push'">推送</el-button>
+              <el-button
+                v-has-permission="'kyfz:match:push'"
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handlePush(scope.row)"
+              >推送</el-button>
             </template>
           </el-table-column>
         </el-table>
         <div class="match-detail-keywords">
           <h4>需求关键词</h4>
           <div class="match-detail-keywords-info">
-            <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br /></span>
+            <span v-for="item in matchDetails.requirementKeywordsArray" :key="item">{{ item }}<br></span>
           </div>
         </div>
         <div class="match-detail-result">
@@ -100,29 +142,32 @@
             <div>
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item project" v-for="item in matchDetails.projectNamesArray" :key="item">{{ item
+                <span v-for="item in matchDetails.projectNamesArray" :key="item" class="match-detail-item project">{{ item
                 }}</span>
               </div>
             </div>
             <div>
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item thesis" v-for="item in matchDetails.thesisNamesArray" :key="item">{{ item
+                <span v-for="item in matchDetails.thesisNamesArray" :key="item" class="match-detail-item thesis">{{ item
                 }}</span>
               </div>
             </div>
             <div>
               <h5>相关著作</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item work" v-for="item in matchDetails.workNamesArray" :key="item">{{ item
+                <span v-for="item in matchDetails.workNamesArray" :key="item" class="match-detail-item work">{{ item
                 }}</span>
               </div>
             </div>
             <div>
               <h5>相关证书</h5>
               <div class="match-detail-decorate">
-                <span class="match-detail-item certificate" v-for="item in matchDetails.certificateNamesArray"
-                  :key="item">{{ item }}</span>
+                <span
+                  v-for="item in matchDetails.certificateNamesArray"
+                  :key="item"
+                  class="match-detail-item certificate"
+                >{{ item }}</span>
               </div>
             </div>
           </div>
@@ -145,21 +190,34 @@
         </div>
       </div>
     </el-dialog>
+
+    <!-- 添加或修改推送记录对话框 -->
+    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="200px">
+        <el-form-item label="匹配编号" prop="matchId">
+          <el-input v-model="form.matchId" placeholder="请输入匹配编号" style="width: 500px" />
+        </el-form-item>
+        <el-form-item label="反馈状态" prop="feebback">
+          <el-input v-model="form.feebback" placeholder="请输入反馈状态" style="width: 500px" />
+        </el-form-item>
+        <el-form-item label="推送时间" prop="pushTime">
+          <el-date-picker v-model="form.pushTime" clearable type="date" value-format="yyyy-MM-dd" placeholder="请选择推送时间" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import {
-  addRecord,
-  delRecord,
-  getRecord,
-  listRecord,
-  updateRecord,
-} from "@/api/kyfz/push_record";
-
-import { getMatchDetails } from "@/api/kyfz/match";
+import { getMatchDetails } from '@/api/kyfz/match'
+import { addRecord, delRecord, getRecord, listRecord, updateRecord } from '@/api/kyfz/push_record'
 export default {
-  name: "Record",
+  name: 'Record',
   data() {
     return {
       // 遮罩层
@@ -177,7 +235,7 @@ export default {
       // 推送记录表格数据
       recordList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       openDetail: false,
@@ -189,33 +247,32 @@ export default {
         pushTime: null,
         feebback: null,
         projectName: null,
-        expertName: null,
-        feebback: null,
+        expertName: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {},
-      matchDetails: [],
-    };
+      matchDetails: []
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   methods: {
     /** 查询推送记录列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listRecord(this.queryParams).then((response) => {
-        this.recordList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.recordList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -227,158 +284,158 @@ export default {
         createBy: null,
         createTime: null,
         updateBy: null,
-        updateTime: null,
-      };
-      this.resetForm("form");
+        updateTime: null
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.pushId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
+      this.ids = selection.map((item) => item.pushId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.open = true;
-      this.title = "添加推送记录";
+      this.reset()
+      this.open = true
+      this.title = '添加推送记录'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      const pushId = row.pushId || this.ids;
+      this.reset()
+      const pushId = row.pushId || this.ids
       getRecord(pushId).then((response) => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改推送记录";
-      });
+        this.form = response.data
+        this.open = true
+        this.title = '修改推送记录'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.pushId != null) {
             updateRecord(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
+            })
           } else {
             addRecord(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('新增成功')
+              this.open = false
+              this.getList()
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const pushIds = row.pushId || this.ids;
+      const pushIds = row.pushId || this.ids
       this.$modal
         .confirm('是否确认删除推送记录编号为"' + pushIds + '"的数据项？')
-        .then(function () {
-          return delRecord(pushIds);
+        .then(function() {
+          return delRecord(pushIds)
         })
         .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
+          this.getList()
+          this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => { });
+        .catch(() => { })
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download(
-        "kyfz/record/export",
+        'kyfz/record/export',
         {
-          ...this.queryParams,
+          ...this.queryParams
         },
         `record_${new Date().getTime()}.xlsx`
-      );
+      )
     },
-    /**详细信息按钮操作 */
+    /** 详细信息按钮操作 */
     handleDetail(row) {
-      //表单内容重置
-      this.reset();
-      //获取到当前行匹配信息的id
-      const matchId = row.matchId || this.ids;
-      const feebback1 = row.feebback;
-      const pushTime = row.pushTime;
+      // 表单内容重置
+      this.reset()
+      // 获取到当前行匹配信息的id
+      const matchId = row.matchId || this.ids
+      const feebback1 = row.feebback
+      const pushTime = row.pushTime
       getMatchDetails(matchId).then((response) => {
-        this.matchDetails = response.data;
-        if (feebback1 == 1) {
-          this.matchDetails.feebback = "已点击（有意向）";
-        } else if (feebback1 == 1 || feebback1 == null) {
-          this.matchDetails.feebback = "未点击";
-        } else if (feebback1 == 2) {
-          this.matchDetails.feebback = "已点击（无意向）";
+        this.matchDetails = response.data
+        if (feebback1 === 1) {
+          this.matchDetails.feebback = '已点击（有意向）'
+        } else if (feebback1 === 1 || feebback1 == null) {
+          this.matchDetails.feebback = '未点击'
+        } else if (feebback1 === 2) {
+          this.matchDetails.feebback = '已点击（无意向）'
         }
 
-        this.matchDetails.pushTime = pushTime;
+        this.matchDetails.pushTime = pushTime
         if (response.data.requirementKeywords != null) {
           this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.requirementKeywordsArray = "无";
+          this.matchDetails.requirementKeywordsArray = '无'
         }
         if (response.data.projectNames != null) {
           this.matchDetails.projectNamesArray = response.data.projectNames
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.projectNamesArray = "无";
+          this.matchDetails.projectNamesArray = '无'
         }
         if (response.data.teamMembers != null) {
           this.matchDetails.teamMembersArray = response.data.teamMembers
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.teamMembersArray = "无";
+          this.matchDetails.teamMembersArray = '无'
         }
         if (response.data.thesisNames != null) {
           this.matchDetails.thesisNamesArray = response.data.thesisNames
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.thesisNamesArray = "无";
+          this.matchDetails.thesisNamesArray = '无'
         }
         if (response.data.workNames != null) {
           this.matchDetails.workNamesArray = response.data.workNames
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.workNamesArray = "无";
+          this.matchDetails.workNamesArray = '无'
         }
         if (response.data.certificateNames != null) {
           this.matchDetails.certificateNamesArray = response.data.certificateNames
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.matchDetails.certificateNamesArray = "无";
+          this.matchDetails.certificateNamesArray = '无'
         }
         if (response.data.score != null) {
-          this.matchDetails.value2 = response.data.score;
+          this.matchDetails.value2 = response.data.score
         } else {
-          this.matchDetails.value2 = null;
+          this.matchDetails.value2 = null
         }
-        this.openDetail = true;
-        this.title = "详细信息";
-      });
-    },
-  },
-};
+        this.openDetail = true
+        this.title = '详细信息'
+      })
+    }
+  }
+}
 </script>
 
 <style scoped>

@@ -8,24 +8,24 @@ module.exports = {
   env: {
     browser: true,
     node: true,
-    es6: true,
+    es6: true
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
 
   // add your custom rules here
-  //it is base on https://github.com/vuejs/eslint-config-vue
+  // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
-    "vue/max-attributes-per-line": [2, {
-      "singleline": 10,
-      "multiline": {
-        "max": 1,
-        "allowFirstLine": false
+    'vue/max-attributes-per-line': [2, {
+      'singleline': 10,
+      'multiline': {
+        'max': 1,
+        'allowFirstLine': false
       }
     }],
-    "vue/singleline-html-element-content-newline": "off",
-    "vue/multiline-html-element-content-newline":"off",
-    "vue/name-property-casing": ["error", "PascalCase"],
-    "vue/no-v-html": "off",
+    'vue/singleline-html-element-content-newline': 'off',
+    'vue/multiline-html-element-content-newline': 'off',
+    'vue/name-property-casing': ['error', 'PascalCase'],
+    'vue/no-v-html': 'off',
     'accessor-pairs': 2,
     'arrow-spacing': [2, {
       'before': true,
@@ -48,15 +48,13 @@ module.exports = {
     'curly': [2, 'multi-line'],
     'dot-location': [2, 'property'],
     'eol-last': 2,
-    'eqeqeq': ["error", "always", {"null": "ignore"}],
+    'eqeqeq': ['error', 'always', { 'null': 'ignore' }],
     'generator-star-spacing': [2, {
       'before': true,
       'after': true
     }],
     'handle-callback-err': [2, '^(err|error)$'],
-    'indent': [2, 2, {
-      'SwitchCase': 1
-    }],
+    'indent': ['off', 2],
     'jsx-quotes': [2, 'prefer-single'],
     'key-spacing': [2, {
       'beforeColon': false,

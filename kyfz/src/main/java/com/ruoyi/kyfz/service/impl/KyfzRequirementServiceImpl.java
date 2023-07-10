@@ -121,4 +121,42 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     public int updateKyfzRequirementStatusById(Long requirementId) {
         return kyfzRequirementMapper.updateKyfzRequirementStatusById(requirementId);
     }
+
+    /**
+     * 查询需求管理列表
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 需求管理
+     */
+    @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
+    public List<KyfzRequirement> selectKyfzRequirementList_staging(KyfzRequirement kyfzRequirement) {
+        return kyfzRequirementMapper.selectKyfzRequirementList_staging(kyfzRequirement);
+    }
+
+    /**
+     * 新增需求管理
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 结果
+     */
+    @Override
+    public int insertKyfzRequirement_staging(KyfzRequirement kyfzRequirement) {
+        kyfzRequirement.setCreateTime(DateUtils.getNowDate());
+        kyfzRequirement.setCreatBy(SecurityUtils.getUsername());
+        kyfzRequirement.setUserId(SecurityUtils.getUserId());
+        return kyfzRequirementMapper.insertKyfzRequirement_staging(kyfzRequirement);
+    }
+
+    /**
+     * 修改需求管理
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 结果
+     */
+    @Override
+    public int updateKyfzRequirement_staging(KyfzRequirement kyfzRequirement) {
+        kyfzRequirement.setUpdateTime(DateUtils.getNowDate());
+        return kyfzRequirementMapper.updateKyfzRequirement_staging(kyfzRequirement);
+    }
 }

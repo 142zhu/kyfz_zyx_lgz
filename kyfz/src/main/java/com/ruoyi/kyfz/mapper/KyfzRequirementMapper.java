@@ -75,4 +75,28 @@ public interface KyfzRequirementMapper {
      * @return 结果
      */
     public int updateKyfzRequirementStatusById(Long requirementId);
+
+     /**
+     * 查询暂时的需求管理列表
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 需求管理集合
+     */
+    public List<KyfzRequirement> selectKyfzRequirementList_staging(KyfzRequirement kyfzRequirement);
+
+    /**
+     * 新增暂时的需求管理
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 结果
+     */
+    public int insertKyfzRequirement_staging(KyfzRequirement kyfzRequirement);
+
+    /**
+     * 修改暂时的需求管理
+     * 
+     * @param kyfzRequirement 需求管理
+     * @return 结果
+     */
+    public int updateKyfzRequirement_staging(KyfzRequirement kyfzRequirement);
 }

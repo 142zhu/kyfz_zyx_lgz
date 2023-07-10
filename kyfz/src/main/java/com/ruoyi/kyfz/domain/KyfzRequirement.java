@@ -155,6 +155,9 @@ public class KyfzRequirement extends BaseEntity {
     /** 用户ID */
     private Long userId;
 
+    /** 用户ID */
+    private Long taskId;
+
     public void setRequirementId(Long requirementId) {
         this.requirementId = requirementId;
     }
@@ -468,5 +471,13 @@ public class KyfzRequirement extends BaseEntity {
                 .append("requirementDescription", getRequirementDescription())
                 .append("requirementReleaseTime", getRequirementReleaseTime())
                 .toString();
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
     }
 }

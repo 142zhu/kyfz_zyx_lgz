@@ -1,5 +1,28 @@
 package com.ruoyi.kyfz.controller;
 
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -9,16 +32,6 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
 import com.ruoyi.kyfz.service.IKyfzRequirementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * 需求管理Controller
@@ -131,5 +144,36 @@ public class KyfzRequirementController extends BaseController {
 
         System.out.println("responseBody:" + body);
         return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
+    }
+
+    /**
+     * 查询暂时的需求管理列表
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:requirement:list')")
+    @GetMapping("/list_staging")
+    public TableDataInfo list_staging(KyfzRequirement kyfzRequirement) {
+        startPage();
+        List<KyfzRequirement> list = kyfzRequirementService.selectKyfzRequirementList_staging(kyfzRequirement);
+        return getDataTable(list);
+    }
+
+    /**
+     * 新增暂时的需求管理
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:requirement:add')")
+    @Log(title = "需求管理", businessType = BusinessType.INSERT)
+    @PostMapping("/add_staging")
+    public AjaxResult add_staging(@RequestBody KyfzRequirement kyfzRequirement) {
+        return toAjax(kyfzRequirementService.insertKyfzRequirement_staging(kyfzRequirement));
+    }
+
+    /**
+     * 修改需求管理
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:requirement:edit')")
+    @Log(title = "需求管理", businessType = BusinessType.UPDATE)
+    @PutMapping("/eidt_staging")
+    public AjaxResult eidt_staging(@RequestBody KyfzRequirement kyfzRequirement) {
+        return toAjax(kyfzRequirementService.updateKyfzRequirement_staging(kyfzRequirement));
     }
 }

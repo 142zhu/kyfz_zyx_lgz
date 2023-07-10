@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
     <el-form
-      :model="queryParams"
+      v-show="showSearch"
       ref="queryForm"
+      :model="queryParams"
       size="small"
       :inline="true"
-      v-show="showSearch"
       label-width="68px"
     >
       <el-form-item label="需求名称" prop="projectName">
@@ -30,8 +30,7 @@
             :key="item.enterpriseName"
             :label="item.enterpriseName"
             :value="item.enterpriseName"
-          >
-          </el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="需求状态" prop="requirementStatus">
@@ -45,60 +44,58 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-          >
-          </el-option>
+          />
         </el-select>
       </el-form-item>
       <el-form-item label="发布时间" prop="requirementReleaseTime">
         <el-date-picker
-          clearable
           v-model="queryParams.requirementReleaseTime"
+          clearable
           type="date"
           value-format="yyyy-MM-dd"
           placeholder="请输入发布时间"
           @keyup.enter.native="handleQuery"
-        >
-        </el-date-picker>
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery"
-          >搜索</el-button
-        >
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+        >搜索</el-button>
         <el-button
           type="primary"
           icon="el-icon-document"
           size="mini"
           @click="handleMatch_2"
-          >匹配</el-button
-        >
+        >匹配</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['kyfz:requirement:add']"
           type="primary"
           plain
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['kyfz:requirement:add']"
-          >新增</el-button
-        >
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
+          v-hasPermi="['kyfz:requirement:remove']"
           type="danger"
           plain
           icon="el-icon-delete"
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['kyfz:requirement:remove']"
-          >删除</el-button
-        >
+        >删除</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
     <el-table
@@ -124,28 +121,25 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
+            v-hasPermi="['kyfz:requirement:edit']"
             size="mini"
             type="text"
             icon="el-icon-search"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:requirement:edit']"
-            >详情</el-button
-          >
+          >详情</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-document"
             @click="handleMatch(scope.row)"
-            >匹配</el-button
-          >
+          >匹配</el-button>
           <el-button
+            v-hasPermi="['kyfz:requirement:remove']"
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:requirement:remove']"
-            >删除</el-button
-          >
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -168,36 +162,36 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="需求编号" prop="requirementId" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.requirementId"
             placeholder="无需填写（自动生成）"
             :readonly="true"
-            ref="idInput"
           />
         </el-form-item>
         <el-form-item label="需求名称" prop="projectName">
           <el-input
+            ref="idInput"
             v-model="form.projectName"
             placeholder=""
             :readonly="editable"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="需求关键词" prop="requirementKeywords">
           <el-input
+            ref="idInput"
             v-model="form.requirementKeywords"
             placeholder=""
             :readonly="editable"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="需求描述" prop="requirementDescription">
           <el-input
+            ref="idInput"
             v-model="form.requirementDescription"
             placeholder=""
             :readonly="editable"
-            ref="idInput"
             style="width: 600px"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4 }"
@@ -205,25 +199,24 @@
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
           <el-input
+            ref="idInput"
             v-model="form.projectCategory"
             placeholder=""
             :readonly="editable"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="需求发布时间" prop="requirementReleaseTime">
           <el-date-picker
-            clearable
+            ref="idInput"
             v-model="form.requirementReleaseTime"
+            clearable
             type="date"
             value-format="yyyy-MM-dd"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
-          >
-          </el-date-picker>
+          />
         </el-form-item>
         <el-form-item label="需求状态" prop="requirementStatus">
           <el-select
@@ -238,8 +231,7 @@
               :key="item.value"
               :label="item.label"
               :value="item.value"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
@@ -258,36 +250,35 @@
               :key="item.enterpriseName"
               :label="item.enterpriseName"
               :value="item.enterpriseName"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.enterpriseKeywords"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="公司简介" prop="enterpriseDescribe" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.enterpriseDescribe"
             type="textarea"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </el-form-item>
         <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.registeredCapital"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
@@ -331,7 +322,7 @@
             style="width: 600px"
           />
         </el-form-item>
-        <el-form-item label="需求状态" prop="requirementStatus" v-if="false">
+        <el-form-item v-if="false" label="需求状态" prop="requirementStatus">
           <el-select
             v-model="form.requirementStatus"
             filterable
@@ -344,7 +335,7 @@
               :label="item.label"
               :value="item.value"
               :selected="index === 1"
-            ></el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="公司名称" prop="enterpriseName">
@@ -362,36 +353,35 @@
               :key="item.enterpriseName"
               :label="item.enterpriseName"
               :value="item.enterpriseName"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="公司关键词" prop="enterpriseKeywords" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.enterpriseKeywords"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
         <el-form-item label="公司简介" prop="enterpriseDescribe">
           <el-input
+            ref="idInput"
             v-model="form.enterpriseDescribe"
             type="textarea"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
             :autosize="{ minRows: 4, maxRows: 6 }"
           />
         </el-form-item>
         <el-form-item label="注册资本" prop="registeredCapital" class="inputDeep">
           <el-input
+            ref="idInput"
             v-model="form.registeredCapital"
             placeholder=""
             :readonly="true"
-            ref="idInput"
             style="width: 600px"
           />
         </el-form-item>
@@ -406,20 +396,20 @@
 
 <script>
 import {
-  addRequirement,
-  delRequirement,
-  getRequirement,
-  handleMatch,
-  listRequirement,
-  listenterprise,
-  updateRequirement,
-} from "@/api/kyfz/requirement";
-import DictData from "@/components/DictData";
-DictData.install();
+addRequirement,
+delRequirement,
+getRequirement,
+handleMatch,
+listRequirement,
+listenterprise,
+updateRequirement
+} from '@/api/kyfz/requirement'
+import DictData from '@/components/DictData'
+DictData.install()
 
 export default {
-  name: "Requirement",
-  dicts: ["requirement_status"],
+  name: 'Requirement',
+  dicts: ['requirement_status'],
   data() {
     return {
       editable: true,
@@ -438,7 +428,7 @@ export default {
       // 需求管理表格数据
       requirementList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       open1: false,
@@ -476,73 +466,80 @@ export default {
         requirementDescription: null,
         requirementReleaseTime: null,
         enterpriseName: null,
-        requirementId: null,
+        requirementId: null
       },
       // 表单参数
       form: {
-        requirementStatus: "",
+        requirementStatus: ''
       },
-      //企业列表
+      // 企业列表
       enterpriseList: [],
       // 表单校验
-      rules: {},
-    };
+      rules: {}
+    }
   },
   created() {
-    this.getList();
-    this.getenterpriseList();
+    this.getList()
+    this.getenterpriseList()
+  },
+  mounted() {
+    // 初始时设置readonly属性
+    this.$nextTick(() => {
+      const input = this.$refs.idInput.$el.querySelector('input')
+      input.setAttribute('readonly', this.editable)
+    })
   },
   methods: {
     /** 切换编辑状态 */
     toggleEdit() {
-      this.editable = !this.editable;
+      this.editable = !this.editable
       this.$nextTick(() => {
         // 延迟调用，确保DOM更新完成
-        const input = this.$refs.idInput.$el.querySelector("input");
-        input.setAttribute("readonly", this.editable);
-      });
+        const input = this.$refs.idInput.$el.querySelector('input')
+        input.setAttribute('readonly', this.editable)
+      })
     },
     /** 查询所有企业名*/
     getenterpriseList() {
-      this.loading = true;
+      this.loading = true
       listenterprise(this.queryParams).then((response) => {
-        this.enterpriseList = response.rows;
-        this.loading = false;
-      });
+        this.enterpriseList = response.rows
+        this.loading = false
+      })
     },
     /** 选择企业列表后自动填充企业信息列表 */
     handleChange(value) {
       const selectedEnterprise = this.enterpriseList.find(
         (item) => item.enterpriseName === value
-      );
-      this.form.enterpriseDescribe = selectedEnterprise.enterpriseDescribe;
-      this.form.registeredCapital = selectedEnterprise.registeredCapital;
-      this.form.enterpriseNumber = selectedEnterprise.enterpriseId;
+      )
+      this.form.enterpriseDescribe = selectedEnterprise.enterpriseDescribe
+      this.form.registeredCapital = selectedEnterprise.registeredCapital
+      this.form.enterpriseNumber = selectedEnterprise.enterpriseId
     },
 
     handleChange_1(value) {
       const selectedEnterprise1 = this.enterpriseList.find(
         (item) => item.enterpriseName === value
-      );
-      this.queryParams.enterpriseName = selectedEnterprise1.enterpriseName;
-      this.queryParams.enterpriseDescribe = selectedEnterprise1.enterpriseDescribe;
-      this.queryParams.registeredCapital = selectedEnterprise1.registeredCapital;
-      this.queryParams.enterpriseNumber = selectedEnterprise1.enterpriseId;
+      )
+      this.queryParams.enterpriseName = selectedEnterprise1.enterpriseName
+      this.queryParams.enterpriseDescribe = selectedEnterprise1.enterpriseDescribe
+      this.queryParams.registeredCapital = selectedEnterprise1.registeredCapital
+      this.queryParams.enterpriseNumber = selectedEnterprise1.enterpriseId
     },
     /** 查询需求管理列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listRequirement(this.queryParams).then((response) => {
-        this.requirementList = response.rows;
-        this.queryParams.requirementId = response.rows[0].requirementId;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.requirementList = response.rows
+        this.queryParams.requirementId = response.rows[0].requirementId
+        this.total = response.total
+        this.loading = false
+      })
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -579,130 +576,123 @@ export default {
         updateTime: null,
         requirementKeywords: null,
         requirementDescription: null,
-        requirementReleaseTime: null,
-      };
-      this.resetForm("form");
+        requirementReleaseTime: null
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
 
     // 搜索框配匹配按钮，新建项目并匹配
     handleMatch_2() {
       addRequirement(this.queryParams).then((response) => {
-        this.$modal.msgSuccess("新增成功,正在匹配中");
-        this.open1 = false;
-        this.getList();
-        this.handleMatch(this.queryParams);
-      });
+        this.$modal.msgSuccess('新增成功,正在匹配中')
+        this.open1 = false
+        this.getList()
+        this.handleMatch(this.queryParams)
+      })
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.requirementId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
+      this.ids = selection.map((item) => item.requirementId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.getenterpriseList();
-      this.form.requirementStatus = this.dict.type.requirement_status[0].value;
-      this.open1 = true;
-      this.title = "新增需求管理";
+      this.reset()
+      this.getenterpriseList()
+      this.form.requirementStatus = this.dict.type.requirement_status[0].value
+      this.open1 = true
+      this.title = '新增需求管理'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      this.getenterpriseList();
-      const requirementId = row.requirementId || this.ids;
+      this.reset()
+      this.getenterpriseList()
+      const requirementId = row.requirementId || this.ids
       getRequirement(requirementId).then((response) => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "需求详情";
-      });
+        this.form = response.data
+        this.open = true
+        this.title = '需求详情'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.requirementId != null) {
             updateRequirement(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
+            })
           } else {
             addRequirement(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
-              this.open1 = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('新增成功')
+              this.open1 = false
+              this.getList()
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const requirementIds = row.requirementId || this.ids;
+      const requirementIds = row.requirementId || this.ids
       this.$modal
         .confirm('是否确认删除需求管理编号为"' + requirementIds + '"的数据项？')
-        .then(function () {
-          return delRequirement(requirementIds);
+        .then(function() {
+          return delRequirement(requirementIds)
         })
         .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
+          this.getList()
+          this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => {});
+        .catch(() => {})
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download(
-        "kyfz/requirement/export",
+        'kyfz/requirement/export',
         {
-          ...this.queryParams,
+          ...this.queryParams
         },
         `requirement_${new Date().getTime()}.xlsx`
-      );
+      )
     },
 
-    handleMatch2(row) {
-      const requirementId = row.requirementId;
-      pushRequirementId(requirementId).then((response) => {
-        this.$modal.msgSuccess("推送匹配成功");
-      });
-    },
+    // handleMatch2(row) {
+    //   const requirementId = row.requirementId
+    //   pushRequirementId(requirementId).then((response) => {
+    //     this.$modal.msgSuccess('推送匹配成功')
+    //   })
+    // },
 
     async handleMatch(row) {
-      debugger;
+      debugger
       handleMatch({ requirementId: row.requirementId })
         .then((res) => {
-          if (200 === res.code) {
-            this.$modal.msgSuccess("算法调用成功");
+          if (res.code === 200) {
+            this.$modal.msgSuccess('算法调用成功')
           } else {
-            this.$modal.msgError("算法调用失败");
+            this.$modal.msgError('算法调用失败')
           }
         })
         .catch((e) => {
-          this.$modal.msgError("算法调用失败");
-        });
-    },
-  },
-  mounted() {
-    // 初始时设置readonly属性
-    this.$nextTick(() => {
-      const input = this.$refs.idInput.$el.querySelector("input");
-      input.setAttribute("readonly", this.editable);
-    });
-  },
-};
+          this.$modal.msgError('算法调用失败')
+        })
+    }
+  }
+}
 </script>
 
 <style scoped>

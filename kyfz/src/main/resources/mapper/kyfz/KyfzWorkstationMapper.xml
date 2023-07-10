@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzWorkstationMapper">
+    
+    <resultMap type="KyfzWorkstation" id="KyfzWorkstationResult">
+        <result property="taskId"    column="task_id"    />
+        <result property="taskName"    column="task_name"    />
+        <result property="taskSource"    column="task_source"    />
+        <result property="taskNumber"    column="task_number"    />
+        <result property="userId"    column="user_id"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="taskStatus"    column="task_status"    />
+    </resultMap>
+
+    <sql id="selectKyfzWorkstationVo">
+        select w.task_id, w.task_name, w.task_source, w.task_number, w.user_id, w.update_time, w.task_status from kyfz_workstation w
+        left join sys_user u on w.user_id=u.user_id
+        left join sys_dept d on d.dept_id=u.dept_id
+    </sql>
+
+    <select id="selectKyfzWorkstationList" parameterType="KyfzWorkstation" resultMap="KyfzWorkstationResult">
+        <include refid="selectKyfzWorkstationVo"/>
+        <where>  
+            <if test="taskName != null  and taskName != ''"> and task_name like concat('%', #{taskName}, '%')</if>
+            <if test="taskSource != null  and taskSource != ''"> and task_source like concat('%', #{taskSource}, '%')</if>
+            <if test="taskNumber != null  and taskNumber != ''"> and task_number like concat('%', #{taskNumber}, '%')</if>
+            ${params.dataScope}
+        </where>
+    </select>
+    
+    <select id="selectKyfzWorkstationByTaskId" parameterType="Long" resultMap="KyfzWorkstationResult">
+        <include refid="selectKyfzWorkstationVo"/>
+        where task_id = #{taskId}
+    </select>
+        
+    <insert id="insertKyfzWorkstation" parameterType="KyfzWorkstation" useGeneratedKeys="true" keyProperty="taskId">
+        insert into kyfz_workstation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="taskName != null">task_name,</if>
+            <if test="taskSource != null">task_source,</if>
+            <if test="taskNumber != null">task_number,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="taskStatus != null">task_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="taskName != null">#{taskName},</if>
+            <if test="taskSource != null">#{taskSource},</if>
+            <if test="taskNumber != null">#{taskNumber},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="taskStatus != null">#{taskStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzWorkstation" parameterType="KyfzWorkstation">
+        update kyfz_workstation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskName != null">task_name = #{taskName},</if>
+            <if test="taskSource != null">task_source = #{taskSource},</if>
+            <if test="taskNumber != null">task_number = #{taskNumber},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="taskStatus != null">task_status = #{taskStatus},</if>
+        </trim>
+        where task_id = #{taskId}
+    </update>
+
+    <delete id="deleteKyfzWorkstationByTaskId" parameterType="Long">
+        delete from kyfz_workstation where task_id = #{taskId}
+    </delete>
+
+    <delete id="deleteKyfzWorkstationByTaskIds" parameterType="String">
+        delete from kyfz_workstation where task_id in 
+        <foreach item="taskId" collection="array" open="(" separator="," close=")">
+            #{taskId}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,34 +1,42 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="68px">
       <el-form-item label="姓名" prop="expertName" label-width="120px">
         <el-input v-model="queryParams.expertName" placeholder="请输入专家姓名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
       <el-form-item label="职称" prop="expertPosition" label-width="120px">
-        <el-input v-model="queryParams.expertPosition" placeholder="请输入专家职称" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.expertPosition"
+          placeholder="请输入专家职称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="研究方向" prop="researchDirection" label-width="120px">
-        <el-input v-model="queryParams.researchDirection" placeholder="请输入研究方向" clearable
-          @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.researchDirection"
+          placeholder="请输入研究方向"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <!-- 级联面板 -->
       <el-row :gutter="16" justify="between" cols="8">
         <el-col :span="2" offset="1" style="margin-top: 20px; margin-bottom: 20px;">
           <span class="unit-tag">所属单位</span>
         </el-col>
-        <template v-for="index in 20">
+        <div v-for="index in 20" :key="index">
           <el-col :span="2" :offset="0.5" style="margin-top: 20px; margin-bottom: 20px;">
             <el-dropdown>
               <span class="el-dropdown-link">
-                计算机<i class="el-icon-arrow-down el-icon--right"></i>
+                计算机<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-cascader-panel :options="options" :props="{ multiple: true, props }"></el-cascader-panel>
+                <el-cascader-panel :options="options" :props="{ multiple: true, props }" />
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
-        </template>
+        </div>
       </el-row>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -37,22 +45,48 @@
     </el-form>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
-          v-hasPermi="['kyfz:expert:add']">新增</el-button>
+        <el-button
+          v-hasPermi="['kyfz:expert:add']"
+          type="primary"
+          plain
+          icon="el-icon-plus"
+          size="mini"
+          @click="handleAdd"
+        >新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
-          v-hasPermi="['kyfz:expert:edit']">修改</el-button>
+        <el-button
+          v-hasPermi="['kyfz:expert:edit']"
+          type="success"
+          plain
+          icon="el-icon-edit"
+          size="mini"
+          :disabled="single"
+          @click="handleUpdate"
+        >修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
-          v-hasPermi="['kyfz:expert:remove']">删除</el-button>
+        <el-button
+          v-hasPermi="['kyfz:expert:remove']"
+          type="danger"
+          plain
+          icon="el-icon-delete"
+          size="mini"
+          :disabled="multiple"
+          @click="handleDelete"
+        >删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['kyfz:expert:export']">导出</el-button>
+        <el-button
+          v-hasPermi="['kyfz:expert:export']"
+          type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+        >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
     <!-- 卡片实现 -->
     <div>
@@ -92,12 +126,22 @@
                     <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)">
                       详情
                     </el-button>
-                    <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-                      v-hasPermi="['kyfz:expert:edit']">
+                    <el-button
+                      v-hasPermi="['kyfz:expert:edit']"
+                      size="mini"
+                      type="text"
+                      icon="el-icon-edit"
+                      @click="handleUpdate(scope.row)"
+                    >
                       修改
                     </el-button>
-                    <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-                      v-hasPermi="['kyfz:expert:remove']">
+                    <el-button
+                      v-hasPermi="['kyfz:expert:remove']"
+                      size="mini"
+                      type="text"
+                      icon="el-icon-delete"
+                      @click="handleDelete(scope.row)"
+                    >
                       删除
                     </el-button>
                   </div>
@@ -127,15 +171,27 @@
       </el-table-column>
     </el-table> -->
 
-    <pagination v-show="total > 0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 添加或修改专家管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="专家信息状态" prop="expertSignificance" required>
-          <el-switch v-model="form.expertSignificance" active-text="有效" inactive-text="无效" inactive-color="#FF0000"
-            :active-value="'有效'" :inactive-value="'无效'" style="width: 600px"></el-switch>
+          <el-switch
+            v-model="form.expertSignificance"
+            active-text="有效"
+            inactive-text="无效"
+            inactive-color="#FF0000"
+            :active-value="'有效'"
+            :inactive-value="'无效'"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="专家账号" prop="expertAccount">
           <el-input v-model="form.expertAccount" placeholder="请输入专家账号" style="width: 600px" />
@@ -190,13 +246,18 @@
             <div>
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
-                <el-tooltip placement="top" class="match-detail-item project" v-for="item in expertDetail.projectArray"
-                  :key="item" :content="'项目来源：' +
+                <el-tooltip
+                  v-for="item in expertDetail.projectArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item project"
+                  :content="'项目来源：' +
                     item.dataSource +
                     '，金额：' +
                     item.startFunds +
                     '万元'
-                    ">
+                  "
+                >
                   <span>{{ item.projectName }} </span>
                 </el-tooltip>
               </div>
@@ -204,8 +265,14 @@
             <div>
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
-                <el-tooltip placement="top" class="match-detail-item thesis" v-for="item in expertDetail.thesisArray"
-                  :key="item" content="Top center" disabled>
+                <el-tooltip
+                  v-for="item in expertDetail.thesisArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item thesis"
+                  content="Top center"
+                  disabled
+                >
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -214,8 +281,14 @@
               <!-- 原著作 -->
               <h5>知识产权</h5>
               <div class="match-detail-decorate">
-                <el-tooltip placement="top" class="match-detail-item work" v-for="item in expertDetail.workArray"
-                  :key="item" content="Top center" disabled>
+                <el-tooltip
+                  v-for="item in expertDetail.workArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item work"
+                  content="Top center"
+                  disabled
+                >
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -224,8 +297,14 @@
               <!-- 原证书 -->
               <h5>其他</h5>
               <div class="match-detail-decorate">
-                <el-tooltip placement="top" class="match-detail-item certificate"
-                  v-for="item in expertDetail.certificateArray" :key="item" content="Top center" disabled>
+                <el-tooltip
+                  v-for="item in expertDetail.certificateArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item certificate"
+                  content="Top center"
+                  disabled
+                >
                   <span>{{ item }} </span>
                 </el-tooltip>
               </div>
@@ -238,7 +317,7 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" @click="handleECharts()" style="float: right">
+            <el-button type="primary" style="float: right" @click="handleECharts()">
               团队关系图
             </el-button>
           </div>
@@ -247,7 +326,7 @@
     </el-dialog>
     <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
       <div id="graph-chart" style="width: 500px; height: 500px">
-        <div :id="echartsId" style="width: 500px; height: 500px"></div>
+        <div :id="echartsId" style="width: 500px; height: 500px" />
       </div>
     </el-dialog>
   </div>
@@ -255,21 +334,21 @@
 
 <script>
 import {
-  addExpert,
-  delExpert,
-  getExpert,
-  getExpertDetail,
-  listExpert,
-  updateExpert,
-} from "@/api/kyfz/expert";
-import * as echarts from "echarts";
+addExpert,
+delExpert,
+getExpert,
+getExpertDetail,
+listExpert,
+updateExpert
+} from '@/api/kyfz/expert'
+import * as echarts from 'echarts'
 
 const getEchartsId = () => {
-  return new Date().getTime();
-};
+  return new Date().getTime()
+}
 
 export default {
-  name: "Expert",
+  name: 'Expert',
   inheritAttrs: false,
   data() {
     return {
@@ -338,7 +417,7 @@ export default {
       workList: [],
       certificateList: [],
       // 弹出层标题
-      title: "",
+      title: '',
       // 是否显示弹出层
       open: false,
       openDetail: false,
@@ -361,33 +440,33 @@ export default {
         workId: null,
         requirementId: null,
         expertTeams: null,
-        expertSignificance: null,
+        expertSignificance: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {},
       echartsId: null,
-      chartTitle: null,
-    };
+      chartTitle: null
+    }
   },
   created() {
-    this.getList();
-    this.echartsId = getEchartsId();
+    this.getList()
+    this.echartsId = getEchartsId()
   },
   methods: {
     // echarts
-    initChart: function () {
-      const myChart = echarts.init(document.getElementById(this.echartsId));
-      myChart.setOption(this.setOption());
-      myChart.resize(); //自适应大小
+    initChart: function() {
+      const myChart = echarts.init(document.getElementById(this.echartsId))
+      myChart.setOption(this.setOption())
+      myChart.resize() // 自适应大小
     },
 
     // echatrs 数据
-    setOption: function () {
-      let experts = this.expertDetail.teamMembersArray;
-      let nodes = [];
-      let links = [];
+    setOption: function() {
+      const experts = this.expertDetail.teamMembersArray
+      const nodes = []
+      const links = []
 
       // 构造nodes数组
       for (let i = 0; i < experts.length; i++) {
@@ -396,64 +475,63 @@ export default {
           category: i >= 1 ? 1 : 0,
           itemStyle: {
             color:
-              experts[i] != this.expertDetail.expertName
-                ? "#5470C6"
-                : "#EE6666",
-          },
-        });
+              experts[i] !== this.expertDetail.expertName
+                ? '#5470C6'
+                : '#EE6666'
+          }
+        })
       }
 
       // 构造links数组
       for (let j = 1; j < experts.length; j++) {
         links.push({
           source: experts[0],
-          target: experts[j],
-        });
+          target: experts[j]
+        })
       }
 
-      let option = {
+      const option = {
         title: {
-          text: "",
+          text: ''
         },
         tooltip: {
-          formatter: function (params) {
-            if (params.data.category != 0) {
-              return "团队成员";
+          formatter: function(params) {
+            if (params.data.category !== 0) {
+              return '团队成员'
             }
-            return "团队负责人";
-          },
-        }, //提示框
+            return '团队负责人'
+          }
+        }, // 提示框
         animationDurationUpdate: 1500,
-        animationEasingUpdate: "quinticInOut",
+        animationEasingUpdate: 'quinticInOut',
         series: [
           {
-            type: "graph",
-            layout: "force",
+            type: 'graph',
+            layout: 'force',
             // symbolSize: 50, //倘若该属性不在link里，则其表示节点的大小；否则即为线两端标记的大小
             symbolSize: (value, params) => {
               switch (params.data.category) {
                 case 0:
-                  return 100;
-                  break;
+                  return 100
+
                 case 1:
-                  return 50;
-                  break;
+                  return 50
               }
             },
-            roam: true, //鼠标缩放功能
+            roam: true, // 鼠标缩放功能
             label: {
-              show: true, //是否显示标签
+              show: true // 是否显示标签
             },
-            focusNodeAdjacency: true, //鼠标移到节点上时突出显示结点以及邻节点和边
-            edgeSymbol: ["none", "arrow"], //关系两边的展现形式，也即图中线两端的展现形式。arrow为箭头
+            focusNodeAdjacency: true, // 鼠标移到节点上时突出显示结点以及邻节点和边
+            edgeSymbol: ['none', 'arrow'], // 关系两边的展现形式，也即图中线两端的展现形式。arrow为箭头
             edgeSymbolSize: [4, 10],
             draggable: true,
             edgeLabel: {
-              fontSize: 20, //关系（也即线）上的标签字体大小
+              fontSize: 20 // 关系（也即线）上的标签字体大小
             },
             force: {
               repulsion: 200,
-              edgeLength: 120,
+              edgeLength: 120
             },
 
             data: nodes,
@@ -461,28 +539,28 @@ export default {
             lineStyle: {
               opacity: 0.9,
               width: 2,
-              curveness: 0,
-            },
-          },
-        ],
-      };
-      return option;
+              curveness: 0
+            }
+          }
+        ]
+      }
+      return option
     },
 
     /** 查询专家管理列表 */
     getList() {
-      this.loading = true;
+      this.loading = true
       listExpert(this.queryParams).then((response) => {
-        this.expertList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+        this.expertList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
     },
 
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.open = false
+      this.reset()
     },
     // 表单重置
     reset() {
@@ -502,120 +580,120 @@ export default {
         workId: null,
         requirementId: null,
         expertTeams: null,
-        expertSignificance: null,
-      };
-      this.resetForm("form");
+        expertSignificance: null
+      }
+      this.resetForm('form')
     },
     /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
+      this.queryParams.pageNum = 1
+      this.getList()
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
+      this.resetForm('queryForm')
+      this.handleQuery()
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map((item) => item.expertId);
-      this.single = selection.length !== 1;
-      this.multiple = !selection.length;
+      this.ids = selection.map((item) => item.expertId)
+      this.single = selection.length !== 1
+      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.reset();
-      this.form.expertSignificance = "有效";
-      this.open = true;
-      this.title = "添加专家管理";
+      this.reset()
+      this.form.expertSignificance = '有效'
+      this.open = true
+      this.title = '添加专家管理'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
-      const expertId = row.expertId || this.ids;
+      this.reset()
+      const expertId = row.expertId || this.ids
       getExpert(expertId).then((response) => {
-        this.form = response.data;
-        this.open = true;
-        this.title = "修改专家管理";
-      });
+        this.form = response.data
+        this.open = true
+        this.title = '修改专家管理'
+      })
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate((valid) => {
+      this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.expertId != null) {
             updateExpert(this.form).then((response) => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('修改成功')
+              this.open = false
+              this.getList()
+            })
           } else {
             addExpert(this.form).then((response) => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
+              this.$modal.msgSuccess('新增成功')
+              this.open = false
+              this.getList()
+            })
           }
         }
-      });
+      })
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const expertIds = row.expertId || this.ids;
+      const expertIds = row.expertId || this.ids
       this.$modal
         .confirm('是否确认删除专家管理编号为"' + expertIds + '"的数据项？')
-        .then(function () {
-          return delExpert(expertIds);
+        .then(function() {
+          return delExpert(expertIds)
         })
         .then(() => {
-          this.getList();
-          this.$modal.msgSuccess("删除成功");
+          this.getList()
+          this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => { });
+        .catch(() => { })
     },
     /** 导出按钮操作 */
     handleExport() {
       this.download(
-        "kyfz/expert/export",
+        'kyfz/expert/export',
         {
-          ...this.queryParams,
+          ...this.queryParams
         },
         `expert_${new Date().getTime()}.xlsx`
-      );
+      )
     },
     handleDetail(row) {
-      //表单内容重置
-      this.reset();
-      this.loading = false;
-      const expertId = row.expertId;
-      this.expertDetail.expertName = row.expertName;
-      this.expertDetail.expertPosition = row.expertPosition; //职称
-      this.expertDetail.expertAffiliation = row.expertAffiliation; //所属单位
-      this.expertDetail.researchDirection = row.researchDirection; //研究方向
-      this.expertDetail.expertAccount = row.expertAccount; //账号
+      // 表单内容重置
+      this.reset()
+      this.loading = false
+      const expertId = row.expertId
+      this.expertDetail.expertName = row.expertName
+      this.expertDetail.expertPosition = row.expertPosition // 职称
+      this.expertDetail.expertAffiliation = row.expertAffiliation // 所属单位
+      this.expertDetail.researchDirection = row.researchDirection // 研究方向
+      this.expertDetail.expertAccount = row.expertAccount // 账号
 
       getExpertDetail(expertId).then((response) => {
-        this.expertDetail = response.data;
+        this.expertDetail = response.data
         if (response.data.teamMembers != null) {
           this.expertDetail.teamMembersArray = response.data.teamMembers
             .trim()
-            .split(/[,，、]/);
+            .split(/[,，、]/)
         } else {
-          this.expertDetail.teamMembersArray = "无";
+          this.expertDetail.teamMembersArray = '无'
         }
-        this.openDetail = true;
-      });
+        this.openDetail = true
+      })
     },
     handleECharts() {
-      this.chartTitle = "团队成员关系图";
-      this.openECharts = true;
+      this.chartTitle = '团队成员关系图'
+      this.openECharts = true
       this.$nextTick(() => {
-        this.initChart();
-      });
-      this.myChart.resize(); //自适应大小
-    },
-  },
-};
+        this.initChart()
+      })
+      this.myChart.resize() // 自适应大小
+    }
+  }
+}
 </script>
 
 <style scoped>
