@@ -135,7 +135,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     }
 
     /**
-     * 新增需求管理
+     * 新增暂时的需求管理
      * 
      * @param kyfzRequirement 需求管理
      * @return 结果
@@ -149,7 +149,7 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     }
 
     /**
-     * 修改需求管理
+     * 修改暂时的需求管理
      * 
      * @param kyfzRequirement 需求管理
      * @return 结果
@@ -158,5 +158,28 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     public int updateKyfzRequirement_staging(KyfzRequirement kyfzRequirement) {
         kyfzRequirement.setUpdateTime(DateUtils.getNowDate());
         return kyfzRequirementMapper.updateKyfzRequirement_staging(kyfzRequirement);
+    }
+
+    /**
+     * 批量暂时的删除需求管理
+     * 
+     * @param requirementIds 需要删除的需求管理主键
+     * @return 结果
+     */
+    @Override
+    public int deleteKyfzRequirementByRequirementIds_staging(Long[] requirementIds) {
+        return kyfzRequirementMapper.deleteKyfzRequirementByRequirementIds_staging(requirementIds);
+    }
+
+
+    /**
+     * 查询暂时的需求管理
+     * 
+     * @param requirementId 需求管理主键
+     * @return 需求管理
+     */
+    @Override
+    public KyfzRequirement selectKyfzRequirementByRequirementId_staging(Long requirementId) {
+        return kyfzRequirementMapper.selectKyfzRequirementByRequirementId_staging(requirementId);
     }
 }

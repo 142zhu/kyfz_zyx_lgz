@@ -100,4 +100,20 @@ public interface IKyfzRequirementService {
      */
     public int updateKyfzRequirement_staging(KyfzRequirement kyfzRequirement);
 
+    /**
+     * 批量删除暂时的需求管理
+     * 
+     * @param requirementIds 需要删除的需求管理主键集合
+     * @return 结果
+     */
+    public int deleteKyfzRequirementByRequirementIds_staging(Long[] requirementIds);
+
+    /**
+     * 查询暂时的需求管理
+     * 
+     * @param requirementId 需求管理主键
+     * @return 需求管理
+     */
+    public KyfzRequirement selectKyfzRequirementByRequirementId_staging(Long requirementId);
+
 }

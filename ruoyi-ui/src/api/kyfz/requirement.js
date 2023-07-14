@@ -85,3 +85,19 @@ export function updateRequirement_staging(data) {
     data: data
   })
 }
+
+// 删除暂时的需求管理
+export function delRequirement_staging(requirementId) {
+  return request({
+    url: '/kyfz/requirement/del_staging/' + requirementId,
+    method: 'delete'
+  })
+}
+
+// 查询暂时的需求管理详细
+export function getRequirement_staging(requirementId) {
+  return request({
+    url: '/kyfz/requirement/get_staging/' + requirementId,
+    method: 'get'
+  })
+}

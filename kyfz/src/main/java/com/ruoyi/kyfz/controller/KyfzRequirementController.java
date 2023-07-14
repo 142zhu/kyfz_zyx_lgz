@@ -168,12 +168,32 @@ public class KyfzRequirementController extends BaseController {
     }
 
     /**
-     * 修改需求管理
+     * 修改暂时的需求管理
      */
     @PreAuthorize("@ss.hasPermi('kyfz:requirement:edit')")
     @Log(title = "需求管理", businessType = BusinessType.UPDATE)
     @PutMapping("/eidt_staging")
     public AjaxResult eidt_staging(@RequestBody KyfzRequirement kyfzRequirement) {
         return toAjax(kyfzRequirementService.updateKyfzRequirement_staging(kyfzRequirement));
+    }
+
+    /**
+     * 删除暂时的需求管理
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:requirement:remove')")
+    @Log(title = "需求管理", businessType = BusinessType.DELETE)
+    @DeleteMapping("/del_staging/{requirementIds}")
+    public AjaxResult remove_staging(@PathVariable Long[] requirementIds) {
+        return toAjax(kyfzRequirementService.deleteKyfzRequirementByRequirementIds_staging(requirementIds));
+    }
+
+
+    /**
+     * 获取暂时的需求管理详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('kyfz:requirement:query')")
+    @GetMapping(value = "/get_staging/{requirementId}")
+    public AjaxResult getInfo_staging(@PathVariable("requirementId") Long requirementId) {
+        return success(kyfzRequirementService.selectKyfzRequirementByRequirementId_staging(requirementId));
     }
 }

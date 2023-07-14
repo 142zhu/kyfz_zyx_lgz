@@ -54,20 +54,19 @@
         <result property="enterpriseKeywords" column="enterprise_Keywords" />
     </resultMap>
     <!-- 需求表左连接企业表 -->
-    <sql id="selectKyfzRequirementVo"> select p.requirement_id, p.project_name, p.contract_number, p.client,
-        p.project_leader, p.project_leader_job_number, p.project_members, p.support_unit,
-        p.support_unit_number, p.project_category, p.project_type, p.project_classification, p.project_nature,
-        p.service_national_economy, p.national_economy_sub_industry, p.socio_economic_objective,
-        p.start_project_time, p.end_project_time, p.total_budget, p.contract_type, p.first_discipline,
-        p.secondary_discipline, p.project_leader_unit, p.enterprise_number, p.campus_member_account,
-        p.requirement_status, p.creat_by, p.create_time,
-        p.update_by, p.update_time, p.requirement_keywords,
+    <sql id="selectKyfzRequirementVo"> select p.requirement_id, p.project_name, p.contract_number,
+        p.client, p.project_leader, p.project_leader_job_number, p.project_members, p.support_unit,
+        p.support_unit_number, p.project_category, p.project_type, p.project_classification,
+        p.project_nature, p.service_national_economy, p.national_economy_sub_industry,
+        p.socio_economic_objective, p.start_project_time, p.end_project_time, p.total_budget,
+        p.contract_type, p.first_discipline, p.secondary_discipline, p.project_leader_unit,
+        p.enterprise_number, p.campus_member_account, p.requirement_status, p.creat_by,
+        p.create_time, p.update_by, p.update_time, p.requirement_keywords,
         p.requirement_description, p.requirement_release_time, kyfz_enterprise.enterprise_name,
         kyfz_enterprise.enterprise_describe, kyfz_enterprise.registered_capital,
         kyfz_enterprise.enterprise_Keywords from kyfz_requirement p LEFT JOIN kyfz_enterprise ON
-        p.enterprise_number = kyfz_enterprise.enterprise_id
-        left join sys_user u on p.user_id=u.user_id
-        left join sys_dept d on d.dept_id=u.dept_id </sql>
+        p.enterprise_number = kyfz_enterprise.enterprise_id left join sys_user u on
+        p.user_id=u.user_id left join sys_dept d on d.dept_id=u.dept_id </sql>
     <select id="selectKyfzRequirementList" parameterType="KyfzRequirement"
         resultMap="KyfzRequirementResult">
         <include refid="selectKyfzRequirementVo" />
@@ -148,10 +147,9 @@
         requirement_description = #{requirementDescription}</if>
             <if
                 test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
-        '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if>
-         ${params.dataScope}
-        </where> ORDER BY
-        requirement_id DESC
+        '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if> ${params.dataScope}
+        </where>
+        ORDER BY requirement_id DESC
     </select>
     <select id="selectKyfzRequirementByRequirementId" parameterType="Long"
         resultMap="KyfzRequirementResult">
@@ -208,12 +206,13 @@
             <if test="creatBy != null">
         creat_by,</if> create_time,
             <if test="updateBy != null">update_by,</if>
-            <if test="userId != null">user_id,</if>
             <if
-                test="updateTime != null">update_time,</if>
-            <if test="requirementKeywords != null">
-        requirement_keywords,</if>
-            <if test="requirementDescription != null">requirement_description,</if>
+                test="userId != null">user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if
+                test="requirementKeywords != null"> requirement_keywords,</if>
+            <if
+                test="requirementDescription != null">requirement_description,</if>
         requirement_release_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -267,11 +266,10 @@
                 test="creatBy != null">#{creatBy},</if> sysdate(),
             <if test="updateBy != null">
         #{updateBy},</if>
-            <if test="userId != null">
-        #{userId},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if
-                test="requirementKeywords != null">#{requirementKeywords},</if>
+            <if test="userId != null"> #{userId},</if>
+            <if test="updateTime != null">
+        #{updateTime},</if>
+            <if test="requirementKeywords != null">#{requirementKeywords},</if>
             <if
                 test="requirementDescription != null">#{requirementDescription},</if> sysdate()
         </trim>
@@ -380,23 +378,22 @@
         </trim>
         where requirement_id = #{requirementId}
     </update>
-<!-- 查询暂时的需求 -->
+    <!-- 查询暂时的需求 -->
     <select id="selectKyfzRequirementList_staging" parameterType="KyfzRequirement"
-        resultMap="KyfzRequirementResult">
-        select p.requirement_id, p.project_name, p.contract_number, p.client,
-        p.project_leader, p.project_leader_job_number, p.project_members, p.support_unit,
-        p.support_unit_number, p.project_category, p.project_type, p.project_classification, p.project_nature,
-        p.service_national_economy, p.national_economy_sub_industry, p.socio_economic_objective,
-        p.start_project_time, p.end_project_time, p.total_budget, p.contract_type, p.first_discipline,
+        resultMap="KyfzRequirementResult"> select p.requirement_id, p.project_name,
+        p.contract_number, p.client, p.project_leader, p.project_leader_job_number,
+        p.project_members, p.support_unit, p.support_unit_number, p.project_category,
+        p.project_type, p.project_classification, p.project_nature, p.service_national_economy,
+        p.national_economy_sub_industry, p.socio_economic_objective, p.start_project_time,
+        p.end_project_time, p.total_budget, p.contract_type, p.first_discipline,
         p.secondary_discipline, p.project_leader_unit, p.enterprise_number, p.campus_member_account,
-        p.requirement_status, p.creat_by, p.create_time,
-        p.update_by, p.update_time, p.requirement_keywords,
-        p.requirement_description, p.requirement_release_time, kyfz_enterprise.enterprise_name,
-        kyfz_enterprise.enterprise_describe, kyfz_enterprise.registered_capital,
-        kyfz_enterprise.enterprise_Keywords from kyfz_staging_requirement p LEFT JOIN kyfz_enterprise ON
-        p.enterprise_number = kyfz_enterprise.enterprise_id
-        left join sys_user u on p.user_id=u.user_id
-        left join sys_dept d on d.dept_id=u.dept_id
+        p.requirement_status, p.creat_by, p.create_time, p.update_by, p.update_time,
+        p.requirement_keywords, p.requirement_description, p.requirement_release_time,
+        kyfz_enterprise.enterprise_name, kyfz_enterprise.enterprise_describe,
+        kyfz_enterprise.registered_capital, kyfz_enterprise.enterprise_Keywords from
+        kyfz_staging_requirement p LEFT JOIN kyfz_enterprise ON p.enterprise_number =
+        kyfz_enterprise.enterprise_id left join sys_user u on p.user_id=u.user_id left join sys_dept
+        d on d.dept_id=u.dept_id
         <where>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%',
         #{projectName}, '%')</if>
@@ -475,18 +472,16 @@
             <if
                 test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
         '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if>
-        <if
-                test="taskId != null  and taskId != ''"> and
-        task_id = #{taskId}</if>
-         ${params.dataScope}
-        </where> ORDER BY
-        requirement_id DESC
+            <if
+                test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
+        ${params.dataScope}
+        </where> ORDER BY requirement_id DESC
     </select>
     <!-- 新增暂时的需求 -->
-    <insert id="insertKyfzRequirement_staging" parameterType="KyfzRequirement" useGeneratedKeys="true"
-        keyProperty="requirementId"> insert into kyfz_staging_requirement
-        <trim prefix="(" suffix=")"
-            suffixOverrides=",">
+    <insert id="insertKyfzRequirement_staging" parameterType="KyfzRequirement"
+        useGeneratedKeys="true" keyProperty="requirementId"> insert into kyfz_staging_requirement
+        <trim
+            prefix="(" suffix=")" suffixOverrides=",">
             <if test="projectName != null">project_name,</if>
             <if test="contractNumber != null">
         contract_number,</if>
@@ -534,16 +529,18 @@
             <if test="creatBy != null">
         creat_by,</if> create_time,
             <if test="updateBy != null">update_by,</if>
-            <if test="userId != null">user_id,</if>
             <if
-                test="updateTime != null">update_time,</if>
-            <if test="requirementKeywords != null">
-        requirement_keywords,</if>
-            <if test="requirementDescription != null">requirement_description,</if>
-            <if test="taskId != null">task_id,</if>
-        requirement_release_time
+                test="userId != null">user_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if
+                test="requirementKeywords != null"> requirement_keywords,</if>
+            <if
+                test="requirementDescription != null">requirement_description,</if>
+            <if
+                test="taskId != null">task_id,</if> requirement_release_time
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <trim
+            prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
             <if test="contractNumber != null">
         #{contractNumber},</if>
@@ -594,11 +591,10 @@
                 test="creatBy != null">#{creatBy},</if> sysdate(),
             <if test="updateBy != null">
         #{updateBy},</if>
-            <if test="userId != null">
-        #{userId},</if>
-            <if test="updateTime != null">#{updateTime},</if>
-            <if
-                test="requirementKeywords != null">#{requirementKeywords},</if>
+            <if test="userId != null"> #{userId},</if>
+            <if test="updateTime != null">
+        #{updateTime},</if>
+            <if test="requirementKeywords != null">#{requirementKeywords},</if>
             <if
                 test="requirementDescription != null">#{requirementDescription},</if>
             <if
@@ -606,9 +602,9 @@
         </trim>
     </insert>
     <!-- 修改暂时的需求 -->
-    <update id="updateKyfzRequirement_staging" parameterType="KyfzRequirement"> update kyfz_staging_requirement
-        <trim
-            prefix="SET" suffixOverrides=",">
+    <update id="updateKyfzRequirement_staging" parameterType="KyfzRequirement"> update
+        kyfz_staging_requirement
+        <trim prefix="SET" suffixOverrides=",">
             <if test="projectName != null">project_name = #{projectName},</if>
             <if
                 test="contractNumber != null">contract_number = #{contractNumber},</if>
@@ -673,4 +669,28 @@
         = #{requirementReleaseTime},</if>
         </trim> where requirement_id = #{requirementId}
     </update>
+    <!-- 批量删除暂时的需求 -->
+    <delete id="deleteKyfzRequirementByRequirementIds_staging" parameterType="String"> delete from
+        kyfz_staging_requirement where requirement_id in
+        <foreach item="requirementId"
+            collection="array" open="(" separator="," close=")"> #{requirementId} </foreach>
+    </delete>
+    <!-- 查询具体的暂时的需求 -->
+    <select id="selectKyfzRequirementByRequirementId_staging" parameterType="Long"
+        resultMap="KyfzRequirementResult">
+        select p.requirement_id, p.project_name,
+        p.contract_number, p.client, p.project_leader, p.project_leader_job_number,
+        p.project_members, p.support_unit, p.support_unit_number, p.project_category,
+        p.project_type, p.project_classification, p.project_nature, p.service_national_economy,
+        p.national_economy_sub_industry, p.socio_economic_objective, p.start_project_time,
+        p.end_project_time, p.total_budget, p.contract_type, p.first_discipline,
+        p.secondary_discipline, p.project_leader_unit, p.enterprise_number, p.campus_member_account,
+        p.requirement_status, p.creat_by, p.create_time, p.update_by, p.update_time,
+        p.requirement_keywords, p.requirement_description, p.requirement_release_time,
+        kyfz_enterprise.enterprise_name, kyfz_enterprise.enterprise_describe,
+        kyfz_enterprise.registered_capital, kyfz_enterprise.enterprise_Keywords from
+        kyfz_staging_requirement p LEFT JOIN kyfz_enterprise ON p.enterprise_number =
+        kyfz_enterprise.enterprise_id left join sys_user u on p.user_id=u.user_id left join sys_dept
+        d on d.dept_id=u.dept_id where requirement_id = #{requirementId}
+    </select>
 </mapper>
