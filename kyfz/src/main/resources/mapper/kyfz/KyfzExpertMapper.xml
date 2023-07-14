@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.kyfz.mapper.KyfzExpertMapper">
-
     <resultMap type="KyfzExpert" id="KyfzExpertResult">
         <result property="expertId" column="expert_id" />
         <result property="expertAccount" column="expert_account" />
@@ -16,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="researchDirection" column="research_direction" />
         <result property="thesisId" column="thesis_id" />
         <result property="projectId" column="project_id" />
-        <result property="certificateId" column="certificate_id" />
+        <result property="certificateId" column="intellectual_property_id" />
         <result property="workId" column="work_id" />
         <result property="requirementId" column="requirement_id" />
         <result property="expertTeams" column="expert_teams" />
@@ -28,15 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="teamMember" column="team_member" />
         <result property="expertSignificance" column="expert_significance" />
         <result property="matchId" column="match_id" />
-
     </resultMap>
-
     <sql id="selectKyfzExpertVo">
-        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams ,team_members,expert_significance
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, intellectual_property_id, work_id, requirement_id, expert_teams ,team_members,expert_significance
         from kyfz_expert e
         left join kyfz_team t on t.team_id=e.expert_teams
     </sql>
-
     <select id="selectKyfzExpertList" parameterType="KyfzExpert" resultMap="KyfzExpertResult">
         <include refid="selectKyfzExpertVo"/>
         <where>
@@ -50,19 +46,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null  and researchDirection != ''"> and research_direction like concat('%', #{researchDirection}, '%')</if>
             <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
             <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
-            <if test="certificateId != null  and certificateId != ''"> and certificate_id = #{certificateId}</if>
+            <if test="certificateId != null  and certificateId != ''"> and intellectual_property_id = #{certificateId}</if>
             <if test="workId != null  and workId != ''"> and work_id = #{workId}</if>
             <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
             <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
         </where>
         ORDER BY expert_account DESC
     </select>
-
     <select id="selectKyfzExpertByExpertId" parameterType="Long" resultMap="KyfzExpertResult">
         <include refid="selectKyfzExpertVo"/>
         where expert_id = #{expertId}
     </select>
-
     <insert id="insertKyfzExpert" parameterType="KyfzExpert" useGeneratedKeys="true" keyProperty="expertId">
         insert into kyfz_expert
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -76,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null">research_direction,</if>
             <if test="thesisId != null">thesis_id,</if>
             <if test="projectId != null">project_id,</if>
-            <if test="certificateId != null">certificate_id,</if>
+            <if test="certificateId != null">intellectual_property_id,</if>
             <if test="workId != null">work_id,</if>
             <if test="requirementId != null">requirement_id,</if>
             <if test="expertTeams != null">expert_teams,</if>
@@ -100,7 +94,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             '有效'
         </trim>
     </insert>
-
     <update id="updateKyfzExpert" parameterType="KyfzExpert">
         update kyfz_expert
         <trim prefix="SET" suffixOverrides=",">
@@ -108,14 +101,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertName != null">expert_name = #{expertName},</if>
             <if test="expertPosition != null">expert_position = #{expertPosition},</if>
             <if test="expertAffiliation != null">expert_affiliation = #{expertAffiliation},</if>
-            
             <if test="primaryDiscipline != null">primary_discipline = #{primaryDiscipline},</if>
             <if test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
             <if test="tertiaryDiscipline != null">tertiary_discipline = #{tertiaryDiscipline},</if>
             <if test="researchDirection != null">research_direction = #{researchDirection},</if>
             <if test="thesisId != null">thesis_id = #{thesisId},</if>
             <if test="projectId != null">project_id = #{projectId},</if>
-            <if test="certificateId != null">certificate_id = #{certificateId},</if>
+            <if test="certificateId != null">intellectual_property_id = #{certificateId},</if>
             <if test="workId != null">work_id = #{workId},</if>
             <if test="requirementId != null">requirement_id = #{requirementId},</if>
             <if test="expertTeams != null">expert_teams = #{expertTeams},</if>
@@ -123,28 +115,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where expert_id = #{expertId}
     </update>
-
     <delete id="deleteKyfzExpertByExpertId" parameterType="Long">
         delete from kyfz_expert where expert_id = #{expertId}
     </delete>
-
     <delete id="deleteKyfzExpertByExpertIds" parameterType="String">
-        delete from kyfz_expert where expert_id in 
+        delete from kyfz_expert where expert_id in
         <foreach item="expertId" collection="array" open="(" separator="," close=")">
             #{expertId}
         </foreach>
     </delete>
-
     <!-- 通过专家账号搜索 -->
     <select id="selectKyfzExpertByExpertAccount" parameterType="String" resultMap="KyfzExpertResult">
         select expert_id, expert_account, expert_name, expert_position, expert_affiliation, 
         primary_discipline, secondary_discipline, tertiary_discipline, research_direction, 
-        thesis_id, project_id, certificate_id, work_id, requirement_id, expert_teams 
+        thesis_id, project_id, intellectual_property_id, work_id, requirement_id, expert_teams 
         from kyfz_expert
         where expert_account = #{expertAccount}
     </select>
-
-    
     <update id="updateMarkProject" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_project = CONCAT_WS('、', 
@@ -156,8 +143,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) 
         WHERE match_id=#{matchId}
     </update>
-
-  
     <update id="updateMarkWork" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_work = CONCAT_WS('、', 
@@ -170,7 +155,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         
         WHERE match_id=#{matchId}
     </update>
-
     <update id="updateMarkThesis" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_thesis = CONCAT_WS('、', 
@@ -182,7 +166,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) 
         WHERE match_id=#{matchId}
     </update>
-
     <update id="updateMarkCertificate" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_certificate = CONCAT_WS('、', 
@@ -194,8 +177,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) 
         WHERE match_id = #{matchId}
     </update>
-
-
     <update id="deleteMarkProject" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_project = REPLACE(
@@ -217,8 +198,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         WHERE match_id=#{matchId}
     </update>
-
-  
     <update id="deleteMarkWork" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_work = REPLACE(
@@ -240,7 +219,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         WHERE match_id=#{matchId}
     </update>
-
     <update id="deleteMarkThesis" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_thesis = REPLACE(
@@ -262,7 +240,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         WHERE match_id=#{matchId}
     </update>
-
     <update id="deleteMarkCertificate" parameterType="KyfzExpert">
         UPDATE kyfz_match
         SET mark_certificate = REPLACE(
@@ -284,7 +261,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         )
         WHERE match_id=#{matchId}
     </update>
-
     <select id="selectKyfzMatchMark" parameterType="Long" resultMap="KyfzExpertResult">
         select match_id,mark_project,mark_certificate,mark_thesis,mark_work 
         from kyfz_match
