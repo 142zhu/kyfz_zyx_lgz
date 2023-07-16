@@ -90,7 +90,7 @@ public interface KyfzMatchMapper {
      * @param Id 著作表主键
      * @return 著作名称
      */
-    public String selectWorkName(Long workId);
+    public String selectAwardName(Long workId);
 
     /***************************************************
      * 查询证书名称

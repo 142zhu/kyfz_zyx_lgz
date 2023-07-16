@@ -85,12 +85,12 @@ public interface IKyfzMatchService {
     public String selectThesisName(Long thesisId);
 
     /***************************************************
-     * 查询著作名称
+     * 查询奖项名称
      * 
-     * @param Id 著作表主键
-     * @return 著作名称
+     * @param Id 奖项表主键
+     * @return 奖项名称
      */
-    public String selectWorkName(Long workId);
+    public String selectAwardName(Long awardId);
 
     /***************************************************
      * 查询证书名称

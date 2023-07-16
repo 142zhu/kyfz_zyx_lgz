@@ -71,7 +71,43 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "著作id(多个)")
     private String workId;
 
+    /** 知识产权id(多个) */
+    @Excel(name = "知识产权id(多个)")
+    private String intellectualPropertyId;
+
+    /** 奖项id(多个) */
+    @Excel(name = "奖项id(多个)")
+    private String awardsId;
+
+    /** 其他成果id(多个) */
+    @Excel(name = "其他成果id(多个)")
+    private String otherResultsId;
+
     private boolean deleteBool;
+
+    public String getIntellectualPropertyId() {
+        return intellectualPropertyId;
+    }
+
+    public String getAwardsId() {
+        return awardsId;
+    }
+
+    public String getOtherResultsId() {
+        return otherResultsId;
+    }
+
+    public void setIntellectualPropertyId(String intellectualPropertyId) {
+        this.intellectualPropertyId = intellectualPropertyId;
+    }
+
+    public void setAwardsId(String awardsId) {
+        this.awardsId = awardsId;
+    }
+
+    public void setOtherResultsId(String otherResultsId) {
+        this.otherResultsId = otherResultsId;
+    }
 
     public Long getMatchId() {
         return matchId;
@@ -112,8 +148,41 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "多个项目名")
     private ArrayList projectArray;
 
-    @Excel(name = "多个项目名")
+    @Excel(name = "多个著作名")
     private ArrayList workArray;
+
+    @Excel(name = "多个奖项名")
+    private ArrayList awardArray;
+
+    @Excel(name = "多个知识产权名")
+    private ArrayList intellectualPropertArray;
+
+    public void setAwardArray(ArrayList awardArray) {
+        this.awardArray = awardArray;
+    }
+
+    public ArrayList getAwardArray() {
+        return awardArray;
+    }
+
+    public ArrayList getIntellectualPropertArray() {
+        return intellectualPropertArray;
+    }
+
+    public ArrayList getOtherResultsArray() {
+        return otherResultsArray;
+    }
+
+    public void setIntellectualPropertArray(ArrayList intellectualPropertArray) {
+        this.intellectualPropertArray = intellectualPropertArray;
+    }
+
+    public void setOtherResultsArray(ArrayList otherResultsArray) {
+        this.otherResultsArray = otherResultsArray;
+    }
+
+    @Excel(name = "多个项目名")
+    private ArrayList otherResultsArray;
 
     @Excel(name = "多个项目名")
     private ArrayList certificateArray;

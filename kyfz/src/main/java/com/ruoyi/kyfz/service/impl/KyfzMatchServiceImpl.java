@@ -126,8 +126,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * @param Id 著作表主键
      * @return 著作名称
      */
-    public String selectWorkName(Long workId) {
-        return kyfzMatchMapper.selectWorkName(workId);
+    public String selectAwardName(Long workId) {
+        return kyfzMatchMapper.selectAwardName(workId);
     }
 
     /***************************************************

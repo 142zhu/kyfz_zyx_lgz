@@ -121,8 +121,8 @@ public class KyfzExpertController extends BaseController {
         // 获取所有的id号码
         String thesisIds = expert.getThesisId();
         String projectIds = expert.getProjectId();
-        String workIds = expert.getWorkId();
-        String certificateIds = expert.getCertificateId();
+        String awardsIds = expert.getAwardsId();
+        String intellectualPropertyIds = expert.getIntellectualPropertyId();
         if (projectIds != null && !projectIds.isEmpty()) {
             ArrayList<KyfzProject> projectArray = new ArrayList<KyfzProject>();
             Long projectId[] = extractIds(projectIds);
@@ -140,24 +140,24 @@ public class KyfzExpertController extends BaseController {
             expert.setThesisArray(thesisArray);
         }
 
-        if (workIds != null && !workIds.isEmpty()) {
-            ArrayList<String> workArray = new ArrayList<>();
-            Long workId[] = extractIds(workIds);
-            for (int i = 0; i < workId.length; i++) {
-                String workName = kyfzMatchService.selectWorkName(workId[i]);
-                workArray.add(workName);
+        if (awardsIds != null && !awardsIds.isEmpty()) {
+            ArrayList<String> awardArray = new ArrayList<>();
+            Long awardId[] = extractIds(awardsIds);
+            for (int i = 0; i < awardId.length; i++) {
+                String awardName = kyfzMatchService.selectAwardName(awardId[i]);
+                awardArray.add(awardName);
             }
-            expert.setWorkArray(workArray);
+            expert.setAwardArray(awardArray);
         }
 
-        if (certificateIds != null && !certificateIds.isEmpty()) {
-            ArrayList<String> certificateArray = new ArrayList<>();
-            Long certificateId[] = extractIds(certificateIds);
-            for (int i = 0; i < certificateId.length; i++) {
-                String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);
-                certificateArray.add(certificateName);
+        if (intellectualPropertyIds != null && !intellectualPropertyIds.isEmpty()) {
+            ArrayList<String> intellectualPropertArray = new ArrayList<>();
+            Long intellectualPropertyId[] = extractIds(intellectualPropertyIds);
+            for (int i = 0; i < intellectualPropertyId.length; i++) {
+                String certificateName = kyfzMatchService.selectCertificateName(intellectualPropertyId[i]);
+                intellectualPropertArray.add(certificateName);
             }
-            expert.setWorkArray(certificateArray);
+            expert.setIntellectualPropertArray(intellectualPropertArray);
         }
         return success(expert);
     }
@@ -196,8 +196,8 @@ public class KyfzExpertController extends BaseController {
         // 专家对应的所有项目、论文、著作、证书id
         String thesisIds = expert.getThesisId();
         String projectIds = expert.getProjectId();
-        String workIds = expert.getWorkId();
-        String certificateIds = expert.getCertificateId();
+        String awardsIds = expert.getWorkId();
+        String intellectualPropertyIds = expert.getCertificateId();
         // 人工标注的id
 
         if (projectIds != null && !projectIds.isEmpty()) {
@@ -227,12 +227,12 @@ public class KyfzExpertController extends BaseController {
             expert.setThesisList(thesisList);
         }
 
-        if (workIds != null && !workIds.isEmpty()) {
+        if (awardsIds != null && !awardsIds.isEmpty()) {
             List<KyfzWork> workList = new ArrayList<KyfzWork>();
 
-            Long workId[] = extractIds(workIds);
+            Long workId[] = extractIds(awardsIds);
             for (int i = 0; i < workId.length; i++) {
-                String workName = kyfzMatchService.selectWorkName(workId[i]);
+                String workName = kyfzMatchService.selectAwardName(workId[i]);
                 KyfzWork work = new KyfzWork();
                 work.setWorkId(workId[i]);
                 work.setWorkName(workName);
@@ -241,10 +241,10 @@ public class KyfzExpertController extends BaseController {
             expert.setWorkList(workList);
         }
 
-        if (certificateIds != null && !certificateIds.isEmpty()) {
+        if (intellectualPropertyIds != null && !intellectualPropertyIds.isEmpty()) {
             List<KyfzCertificate> certificateList = new ArrayList<KyfzCertificate>();
 
-            Long certificateId[] = extractIds(certificateIds);
+            Long certificateId[] = extractIds(intellectualPropertyIds);
             for (int i = 0; i < certificateId.length; i++) {
                 String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);
                 KyfzCertificate certificate = new KyfzCertificate();

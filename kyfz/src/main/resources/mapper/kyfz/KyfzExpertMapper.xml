@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="researchDirection" column="research_direction" />
         <result property="thesisId" column="thesis_id" />
         <result property="projectId" column="project_id" />
-        <result property="certificateId" column="intellectual_property_id" />
+        <result property="certificateId" column="certificate_id" />
         <result property="workId" column="work_id" />
         <result property="requirementId" column="requirement_id" />
         <result property="expertTeams" column="expert_teams" />
@@ -27,9 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="teamMember" column="team_member" />
         <result property="expertSignificance" column="expert_significance" />
         <result property="matchId" column="match_id" />
+        <result property="intellectualPropertyId" column="intellectual_property_id" />
+        <result property="awardsId" column="awards_id" />
+        <result property="otherResultsId" column="other_results_id" />
     </resultMap>
     <sql id="selectKyfzExpertVo">
-        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, intellectual_property_id, work_id, requirement_id, expert_teams ,team_members,expert_significance
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, intellectual_property_id, awards_id, requirement_id, expert_teams ,team_members,expert_significance
         from kyfz_expert e
         left join kyfz_team t on t.team_id=e.expert_teams
     </sql>
@@ -46,8 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null  and researchDirection != ''"> and research_direction like concat('%', #{researchDirection}, '%')</if>
             <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
             <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
-            <if test="certificateId != null  and certificateId != ''"> and intellectual_property_id = #{certificateId}</if>
-            <if test="workId != null  and workId != ''"> and work_id = #{workId}</if>
+            <if test="intellectualPropertyId != null  and intellectualPropertyId != ''"> and intellectual_property_id = #{intellectualPropertyId}</if>
+            <if test="awardsId != null  and awardsId != ''"> and awards_id = #{awardsId}</if>
             <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
             <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
         </where>
@@ -70,8 +73,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null">research_direction,</if>
             <if test="thesisId != null">thesis_id,</if>
             <if test="projectId != null">project_id,</if>
-            <if test="certificateId != null">intellectual_property_id,</if>
-            <if test="workId != null">work_id,</if>
+            <if test="intellectualPropertyId != null">intellectual_property_id,</if>
+            <if test="awardsId != null">awards_id,</if>
             <if test="requirementId != null">requirement_id,</if>
             <if test="expertTeams != null">expert_teams,</if>
             expert_significance
@@ -87,8 +90,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null">#{researchDirection},</if>
             <if test="thesisId != null">#{thesisId},</if>
             <if test="projectId != null">#{projectId},</if>
-            <if test="certificateId != null">#{certificateId},</if>
-            <if test="workId != null">#{workId},</if>
+            <if test="intellectualPropertyId != null">#{intellectualPropertyId},</if>
+            <if test="awardsId != null">#{awardsId},</if>
             <if test="requirementId != null">#{requirementId},</if>
             <if test="expertTeams != null">#{expertTeams},</if>
             '有效'
@@ -107,8 +110,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="researchDirection != null">research_direction = #{researchDirection},</if>
             <if test="thesisId != null">thesis_id = #{thesisId},</if>
             <if test="projectId != null">project_id = #{projectId},</if>
-            <if test="certificateId != null">intellectual_property_id = #{certificateId},</if>
-            <if test="workId != null">work_id = #{workId},</if>
+            <if test="intellectualPropertyId != null">intellectual_property_id = #{intellectualPropertyId},</if>
+            <if test="awardsId != null">awards_id = #{awardsId},</if>
             <if test="requirementId != null">requirement_id = #{requirementId},</if>
             <if test="expertTeams != null">expert_teams = #{expertTeams},</if>
             <if test="expertSignificance != null">expert_significance = #{expertSignificance},</if>
@@ -128,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectKyfzExpertByExpertAccount" parameterType="String" resultMap="KyfzExpertResult">
         select expert_id, expert_account, expert_name, expert_position, expert_affiliation, 
         primary_discipline, secondary_discipline, tertiary_discipline, research_direction, 
-        thesis_id, project_id, intellectual_property_id, work_id, requirement_id, expert_teams 
+        thesis_id, project_id, intellectual_property_id, awards_id, requirement_id, expert_teams 
         from kyfz_expert
         where expert_account = #{expertAccount}
     </select>

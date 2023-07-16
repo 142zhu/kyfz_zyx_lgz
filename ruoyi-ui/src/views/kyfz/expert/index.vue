@@ -21,18 +21,20 @@
         />
       </el-form-item>
       <!-- 级联面板 -->
-      <el-row :gutter="16" justify="between" cols="8">
-        <el-col :span="2" offset="1" style="margin-top: 20px; margin-bottom: 20px;">
+      <el-row :gutter="16" justify="end" cols="8">
+        <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px;">
           <span class="unit-tag">所属单位</span>
         </el-col>
-        <div v-for="index in 20" :key="index">
+        <div v-for="item in classificationList" :key="item.categoryId">
           <el-col :span="2" :offset="0.5" style="margin-top: 20px; margin-bottom: 20px;">
             <el-dropdown>
               <span class="el-dropdown-link">
-                计算机<i class="el-icon-arrow-down el-icon--right" />
+                {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-cascader-panel :options="options" :props="{ multiple: true, props }" />
+                <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId"><span class="el-dropdown-link">
+                  {{ childItem.categoryName }}
+                </span></el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
@@ -278,11 +280,10 @@
               </div>
             </div>
             <div>
-              <!-- 原著作 -->
               <h5>知识产权</h5>
               <div class="match-detail-decorate">
                 <el-tooltip
-                  v-for="item in expertDetail.workArray"
+                  v-for="item in expertDetail.intellectualPropertArray"
                   :key="item"
                   placement="top"
                   class="match-detail-item work"
@@ -294,11 +295,10 @@
               </div>
             </div>
             <div>
-              <!-- 原证书 -->
-              <h5>其他</h5>
+              <h5>奖项</h5>
               <div class="match-detail-decorate">
                 <el-tooltip
-                  v-for="item in expertDetail.certificateArray"
+                  v-for="item in expertDetail.awardArray"
                   :key="item"
                   placement="top"
                   class="match-detail-item certificate"
@@ -333,6 +333,7 @@
 </template>
 
 <script>
+import { listClassification } from '@/api/kyfz/classification'
 import {
 addExpert,
 delExpert,
@@ -352,51 +353,9 @@ export default {
   inheritAttrs: false,
   data() {
     return {
-      // 行业数据
-      options: [
-        {
-          value: '计算机行业',
-          label: '计算机行业',
-          children: [
-            {
-              value: '计算机硬件',
-              label: '计算机硬件'
-            },
-            {
-              value: '计算机软件',
-              label: '计算机软件'
-            }
-          ]
-        },
-        {
-          value: '电子信息行业',
-          label: '电子信息行业',
-          children: [
-            {
-              value: '计算机硬件',
-              label: '计算机硬件'
-            },
-            {
-              value: '计算机软件',
-              label: '计算机软件'
-            }
-          ]
-        },
-        {
-          value: '人工智能行业',
-          label: '人工智能行业',
-          children: [
-            {
-              value: '计算机硬件',
-              label: '计算机硬件'
-            },
-            {
-              value: '计算机软件',
-              label: '计算机软件'
-            }
-          ]
-        }
-      ],
+      // 行业分类数据
+      options: [],
+      dropdownText: '计算机', // 默认显示的文本
       // 遮罩层
       loading: true,
       // 选中数组
@@ -411,6 +370,8 @@ export default {
       total: 0,
       // 专家管理表格数据
       expertList: [],
+      // 数据库行业分类表格数据
+      classificationList: [],
       expertDetail: [],
       projectList: [],
       thesisList: [],
@@ -436,8 +397,8 @@ export default {
         researchDirection: null,
         thesisId: null,
         projectId: null,
-        certificateId: null,
-        workId: null,
+        intellectualPropertyId: null,
+        awardsId: null,
         requirementId: null,
         expertTeams: null,
         expertSignificance: null
@@ -452,9 +413,19 @@ export default {
   },
   created() {
     this.getList()
+    this.getListClassification()
     this.echartsId = getEchartsId()
   },
   methods: {
+    /** 查询行业分类列表 */
+    getListClassification() {
+      this.loading = true
+      listClassification(this.queryParams).then((response) => {
+        this.classificationList = response.rows
+      })
+      this.loading = false
+    },
+
     // echarts
     initChart: function() {
       const myChart = echarts.init(document.getElementById(this.echartsId))
@@ -576,8 +547,8 @@ export default {
         researchDirection: null,
         thesisId: null,
         projectId: null,
-        certificateId: null,
-        workId: null,
+        intellectualPropertyId: null,
+        awardsId: null,
         requirementId: null,
         expertTeams: null,
         expertSignificance: null

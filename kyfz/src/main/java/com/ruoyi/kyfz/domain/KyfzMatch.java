@@ -33,19 +33,19 @@ public class KyfzMatch extends BaseEntity {
     private String matchScore;
 
     /** 相关论文（多个论文id） */
-    @Excel(name = "相关论文", readConverterExp = "多=个论文id")
+    @Excel(name = "相关论文", readConverterExp = "多个论文id")
     private String thesisId;
 
     /** 相关著作（多个著作id） */
-    @Excel(name = "相关著作", readConverterExp = "多=个著作id")
-    private String workId;
+    @Excel(name = "相关奖项", readConverterExp = "多个奖项id")
+    private String awardId;
 
     /** 相关证书（多个证书id） */
-    @Excel(name = "相关证书", readConverterExp = "多=个证书id")
+    @Excel(name = "相关证书", readConverterExp = "多个证书id")
     private String certificateId;
 
     /** 相关项目（多个项目id） */
-    @Excel(name = "相关项目", readConverterExp = "多=个项目id")
+    @Excel(name = "相关项目", readConverterExp = "多个项目id")
     private String projectId;
 
     /** 推送状态 */
@@ -108,9 +108,17 @@ public class KyfzMatch extends BaseEntity {
     /** 最大匹配分值 */
     private double maxMatchScore;
 
+    public void setMarkAward(String markAward) {
+        this.markAward = markAward;
+    }
+
     private String markProject;
 
-    private String markWork;
+    public String getMarkAward() {
+        return markAward;
+    }
+
+    private String markAward;
 
     private String markThesis;
 
@@ -138,14 +146,6 @@ public class KyfzMatch extends BaseEntity {
 
     public void setMarkProject(String markProject) {
         this.markProject = markProject;
-    }
-
-    public String getMarkWork() {
-        return markWork;
-    }
-
-    public void setMarkWork(String markWork) {
-        this.markWork = markWork;
     }
 
     public String getMarkThesis() {
@@ -334,12 +334,12 @@ public class KyfzMatch extends BaseEntity {
         return thesisId;
     }
 
-    public void setWorkId(String workId) {
-        this.workId = workId;
+    public void setAwardId(String workId) {
+        this.awardId = workId;
     }
 
-    public String getWorkId() {
-        return workId;
+    public String getAwardId() {
+        return awardId;
     }
 
     public void setCertificateId(String certificateId) {
@@ -374,7 +374,7 @@ public class KyfzMatch extends BaseEntity {
                 .append("requirementId", getRequirementId())
                 .append("matchScore", getMatchScore())
                 .append("thesisId", getThesisId())
-                .append("workId", getWorkId())
+                .append("awardId", getAwardId())
                 .append("certificateId", getCertificateId())
                 .append("projectId", getProjectId())
                 .append("createBy", getCreateBy())

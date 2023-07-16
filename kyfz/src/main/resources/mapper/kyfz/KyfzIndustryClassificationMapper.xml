@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzIndustryClassificationMapper">
+    
+    <resultMap type="KyfzIndustryClassification" id="KyfzIndustryClassificationResult">
+        <result property="categoryId"    column="category_id"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="level"    column="level"    />
+    </resultMap>
+
+    <sql id="selectKyfzIndustryClassificationVo">
+        select category_id, category_name, parent_id, level from kyfz_industry_classification
+    </sql>
+
+    <select id="selectKyfzIndustryClassificationList" parameterType="KyfzIndustryClassification" resultMap="KyfzIndustryClassificationResult">
+        <include refid="selectKyfzIndustryClassificationVo"/>
+        <where>  
+            <if test="categoryName != null  and categoryName != ''"> and category_name like concat('%', #{categoryName}, '%')</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzIndustryClassificationByCategoryId" parameterType="Long" resultMap="KyfzIndustryClassificationResult">
+        <include refid="selectKyfzIndustryClassificationVo"/>
+        where category_id = #{categoryId}
+    </select>
+        
+    <insert id="insertKyfzIndustryClassification" parameterType="KyfzIndustryClassification">
+        insert into kyfz_industry_classification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">category_id,</if>
+            <if test="categoryName != null">category_name,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="level != null">level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="level != null">#{level},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzIndustryClassification" parameterType="KyfzIndustryClassification">
+        update kyfz_industry_classification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryName != null">category_name = #{categoryName},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="level != null">level = #{level},</if>
+        </trim>
+        where category_id = #{categoryId}
+    </update>
+
+    <delete id="deleteKyfzIndustryClassificationByCategoryId" parameterType="Long">
+        delete from kyfz_industry_classification where category_id = #{categoryId}
+    </delete>
+
+    <delete id="deleteKyfzIndustryClassificationByCategoryIds" parameterType="String">
+        delete from kyfz_industry_classification where category_id in 
+        <foreach item="categoryId" collection="array" open="(" separator="," close=")">
+            #{categoryId}
+        </foreach>
+    </delete>
+</mapper>

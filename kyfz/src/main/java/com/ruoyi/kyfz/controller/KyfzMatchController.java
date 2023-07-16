@@ -94,7 +94,7 @@ public class KyfzMatchController extends BaseController {
         String thesiseIds = match1.getThesisId();
 
         // 从索引出的匹配表中获取匹配出来的著作id（多个id用逗号分隔开了）
-        String workIds = match1.getWorkId();
+        String awardIds = match1.getAwardId();
 
         // 从索引出的匹配表中获取匹配出来的证书id（多个id用逗号分隔开了）
         String certificateIds = match1.getCertificateId();
@@ -135,14 +135,14 @@ public class KyfzMatchController extends BaseController {
             match1.setStrArray1(strArray1);
         }
 
-        if (workIds != null && !workIds.isEmpty()) {
+        if (awardIds != null && !awardIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
             String workNames = "";
             ArrayList strArray2 = new ArrayList();
 
-            Long workId[] = extractIds(workIds);
-            for (int i = 0; i < workId.length; i++) {
-                String workName = kyfzMatchService.selectWorkName(workId[i]);
+            Long awardId[] = extractIds(awardIds);
+            for (int i = 0; i < awardId.length; i++) {
+                String workName = kyfzMatchService.selectAwardName(awardId[i]);
                 strArray2.add(workName);
 
             }
