@@ -83,6 +83,9 @@ public class KyfzExpert extends BaseEntity {
     @Excel(name = "其他成果id(多个)")
     private String otherResultsId;
 
+    /** 专家分类(多个) */
+    private String categoryId;
+
     private boolean deleteBool;
 
     public String getIntellectualPropertyId() {
@@ -503,5 +506,17 @@ public class KyfzExpert extends BaseEntity {
 
     public void setExpertSignificance(String expertSignificance) {
         this.expertSignificance = expertSignificance;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
     }
 }

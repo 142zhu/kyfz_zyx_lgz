@@ -48,7 +48,7 @@ public class TestImport {
         // importExpert("专家表.csv");
         // importEnterprise("企业表.csv");
         // importMatch("匹配表.csv");
-        // importRequirements("需求表.csv");
+        importRequirements("需求表.csv");
         // importTeam("团队表.csv");
         // importWork("著作表.csv");
         // importThesis("论文表.csv");
@@ -165,9 +165,9 @@ public class TestImport {
                 +
                 " `national_economy_sub_industry`, `socio_economic_objective`, `start_project_time`, `end_project_time`, `total_budget`,"
                 +
-                " `contract_type`, `first_discipline`, `secondary_discipline`, `project_leader_unit`, `enterprise_number`,"
+                " `contract_type`, `first_discipline`, `secondary_discipline`, `project_leader_unit`,"
                 +
-                " `campus_member_account`, `requirement_status` ) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+                " `campus_member_account`, `requirement_status`, `enterprise_number`) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
         for (String[] el : list) {
             Date date = null, date1 = null;
             try {

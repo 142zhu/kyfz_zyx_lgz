@@ -30,9 +30,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="intellectualPropertyId" column="intellectual_property_id" />
         <result property="awardsId" column="awards_id" />
         <result property="otherResultsId" column="other_results_id" />
+        <result property="categoryId" column="category_id" />
     </resultMap>
     <sql id="selectKyfzExpertVo">
-        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, project_id, intellectual_property_id, awards_id, requirement_id, expert_teams ,team_members,expert_significance
+        select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, 
+        project_id, intellectual_property_id, awards_id, requirement_id, expert_teams ,team_members,expert_significance,category_id
         from kyfz_expert e
         left join kyfz_team t on t.team_id=e.expert_teams
     </sql>
@@ -53,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="awardsId != null  and awardsId != ''"> and awards_id = #{awardsId}</if>
             <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
             <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
+            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
         ORDER BY expert_account DESC
     </select>
