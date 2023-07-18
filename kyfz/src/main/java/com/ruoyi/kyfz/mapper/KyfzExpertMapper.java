@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.mapper;
 
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzExpert;
 
 /**
@@ -138,4 +139,12 @@ public interface KyfzExpertMapper {
      * @return 匹配管理
      */
     public KyfzExpert selectKyfzMatchMark(Long matchId);
+
+    /**
+     * 查询专家id列表
+     * 
+     * @param kyfzExpert 专家管理
+     * @return 专家管理集合
+     */
+    public List<KyfzExpert> selectKyfzExpertIdsList(String[] expertAccounts);
 }

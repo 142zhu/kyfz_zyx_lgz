@@ -345,4 +345,12 @@ public class KyfzExpertController extends BaseController {
         return Id;
     }
 
+    /**
+     * 获取专家关系图数据
+     */
+    @GetMapping(value = "/getEchartData/{expertId}")
+    public AjaxResult getEchartExpertData(@PathVariable("expertId") Long expertId) {
+        return success(kyfzExpertService.getEchartExpertData(expertId));
+    }
+
 }

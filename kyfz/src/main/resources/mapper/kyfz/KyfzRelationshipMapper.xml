@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzRelationshipMapper">
+    <resultMap type="KyfzRelationship" id="KyfzRelationshipResult">
+        <result property="relationshipId"    column="relationship_id"    />
+        <result property="expertAId"    column="expert_A_id"    />
+        <result property="expertBId"    column="expert_B_id"    />
+        <result property="relationshipType"    column="relationship_type"    />
+        <result property="relationshipDescription"    column="relationship_description"    />
+        <result property="relationshipValue"    column="relationship_value"    />
+    </resultMap>
+    <sql id="selectKyfzRelationshipVo">
+        select relationship_id, expert_A_id, expert_B_id, relationship_type, relationship_description, relationship_value from kyfz_relationship
+    </sql>
+    <select id="selectKyfzRelationshipList" parameterType="KyfzRelationship" resultMap="KyfzRelationshipResult">
+        <include refid="selectKyfzRelationshipVo"/>
+        <where>
+            <if test="expertAId != null "> and expert_A_id = #{expertAId}</if>
+            <if test="expertBId != null "> and expert_B_id = #{expertBId}</if>
+            <if test="relationshipType != null  and relationshipType != ''"> and relationship_type = #{relationshipType}</if>
+            <if test="relationshipDescription != null  and relationshipDescription != ''"> and relationship_description = #{relationshipDescription}</if>
+            <if test="relationshipValue != null  and relationshipValue != ''"> and relationship_value = #{relationshipValue}</if>
+        </where>
+    </select>
+    <select id="selectKyfzRelationshipByRelationshipId" parameterType="Long" resultMap="KyfzRelationshipResult">
+        <include refid="selectKyfzRelationshipVo"/>
+        where relationship_id = #{relationshipId}
+    </select>
+    <insert id="insertKyfzRelationship" parameterType="KyfzRelationship">
+        insert into kyfz_relationship
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="relationshipId != null">relationship_id,</if>
+            <if test="expertAId != null">expert_A_id,</if>
+            <if test="expertBId != null">expert_B_id,</if>
+            <if test="relationshipType != null">relationship_type,</if>
+            <if test="relationshipDescription != null">relationship_description,</if>
+            <if test="relationshipValue != null">relationship_value,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="relationshipId != null">#{relationshipId},</if>
+            <if test="expertAId != null">#{expertAId},</if>
+            <if test="expertBId != null">#{expertBId},</if>
+            <if test="relationshipType != null">#{relationshipType},</if>
+            <if test="relationshipDescription != null">#{relationshipDescription},</if>
+            <if test="relationshipValue != null">#{relationshipValue},</if>
+        </trim>
+    </insert>
+    <update id="updateKyfzRelationship" parameterType="KyfzRelationship">
+        update kyfz_relationship
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expertAId != null">expert_A_id = #{expertAId},</if>
+            <if test="expertBId != null">expert_B_id = #{expertBId},</if>
+            <if test="relationshipType != null">relationship_type = #{relationshipType},</if>
+            <if test="relationshipDescription != null">relationship_description = #{relationshipDescription},</if>
+            <if test="relationshipValue != null">relationship_value = #{relationshipValue},</if>
+        </trim>
+        where relationship_id = #{relationshipId}
+    </update>
+    <delete id="deleteKyfzRelationshipByRelationshipId" parameterType="Long">
+        delete from kyfz_relationship where relationship_id = #{relationshipId}
+    </delete>
+    <delete id="deleteKyfzRelationshipByRelationshipIds" parameterType="String">
+        delete from kyfz_relationship where relationship_id in
+        <foreach item="relationshipId" collection="array" open="(" separator="," close=")">
+            #{relationshipId}
+        </foreach>
+    </delete>
+    <!-- 查找两个专家之间的关系 -->
+    <select id="selectKyfzRelationship_twoId" resultMap="KyfzRelationshipResult">
+        select * from kyfz_relationship
+        where expert_A_id = #{expertAId} and expert_B_id = #{expertBId}
+    </select>
+</mapper>

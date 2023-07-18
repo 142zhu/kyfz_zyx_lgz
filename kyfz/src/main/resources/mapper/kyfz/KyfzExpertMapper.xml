@@ -41,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectKyfzExpertList" parameterType="KyfzExpert" resultMap="KyfzExpertResult">
         <include refid="selectKyfzExpertVo"/>
         <where>
+            <if test="expertId != null  and expertId != ''"> and expert_id = #{expertId}</if>
             <if test="expertAccount != null  and expertAccount != ''"> and expert_account = #{expertAccount}</if>
             <if test="expertName != null  and expertName != ''"> and expert_name like concat('%', #{expertName}, '%')</if>
             <if test="expertPosition != null  and expertPosition != ''"> and expert_position like concat('%', #{expertPosition}, '%')</if>
@@ -271,5 +272,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select match_id,mark_project,mark_certificate,mark_thesis,mark_work 
         from kyfz_match
         where match_id=#{matchId}
+    </select>
+    <!-- 专家账号列表查询专家id -->
+    <select id="selectKyfzExpertIdsList" parameterType="String" resultMap="KyfzExpertResult">
+    select expert_id,expert_name from kyfz_expert where expert_account in
+        <foreach item="expertAccount" index="index" collection="array" open="(" separator="," close=")">
+            #{expertAccount}
+        </foreach>
     </select>
 </mapper>

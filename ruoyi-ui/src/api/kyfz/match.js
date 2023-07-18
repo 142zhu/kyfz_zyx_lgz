@@ -43,12 +43,11 @@ export function delMatch(matchId) {
   })
 }
 
-
-//查询 匹配详细信息
-//需要返回的信息包括需求、企业、推荐专家、专家研究方向、匹配分值、操作
-//需求关键词requirement_keywords→根据匹配表的需求id获取，传输到前端之后需要对需求关键词进行处理（因为关键词是通过逗号隔开的）
-//专家相关研究成果，通过匹配表中的专家账号（expertAccount）从专家表中获得，传输到前端之后也需要进行排序和二次处理
-//专家团队，通过需求表中的专家账号获取专家表中所属的团队id，再根据团队id向团队表获取团队的成员信息（感觉团队这里可以加上团队成员的数据可视化）
+// 查询 匹配详细信息
+// 需要返回的信息包括需求、企业、推荐专家、专家研究方向、匹配分值、操作
+// 需求关键词requirement_keywords→根据匹配表的需求id获取，传输到前端之后需要对需求关键词进行处理（因为关键词是通过逗号隔开的）
+// 专家相关研究成果，通过匹配表中的专家账号（expertAccount）从专家表中获得，传输到前端之后也需要进行排序和二次处理
+// 专家团队，通过需求表中的专家账号获取专家表中所属的团队id，再根据团队id向团队表获取团队的成员信息（感觉团队这里可以加上团队成员的数据可视化）
 export function getMatchDetails(matchIds) {
   return request({
     url: '/kyfz/match/' + matchIds,
@@ -60,10 +59,9 @@ export function getMatchDetails(matchIds) {
 export function pushMatch(matchId) {
   return request({
     url: '/kyfz/match/' + matchId,
-    method: 'put',
+    method: 'put'
   })
 }
-
 
 // 修改匹配列表
 export function updatePushRecord(data1) {

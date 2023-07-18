@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzTeamMapper">
+    
+    <resultMap type="KyfzTeam" id="KyfzTeamResult">
+        <result property="teamId"    column="team_id"    />
+        <result property="teamMembers"    column="team_members"    />
+        <result property="teamAccount"    column="team_account"    />
+        <result property="memberScores"    column="member_scores"    />
+        <result property="reseachDirections"    column="reseach_directions"    />
+    </resultMap>
+
+    <sql id="selectKyfzTeamVo">
+        select team_id, team_members, team_account, member_scores, reseach_directions from kyfz_team
+    </sql>
+
+    <select id="selectKyfzTeamList" parameterType="KyfzTeam" resultMap="KyfzTeamResult">
+        <include refid="selectKyfzTeamVo"/>
+        <where>  
+            <if test="teamMembers != null  and teamMembers != ''"> and team_members = #{teamMembers}</if>
+            <if test="teamAccount != null  and teamAccount != ''"> and team_account = #{teamAccount}</if>
+            <if test="memberScores != null  and memberScores != ''"> and member_scores = #{memberScores}</if>
+            <if test="reseachDirections != null  and reseachDirections != ''"> and reseach_directions = #{reseachDirections}</if>
+        </where>
+    </select>
+    
+    <select id="selectKyfzTeamByTeamId" parameterType="Long" resultMap="KyfzTeamResult">
+        <include refid="selectKyfzTeamVo"/>
+        where team_id = #{teamId}
+    </select>
+        
+    <insert id="insertKyfzTeam" parameterType="KyfzTeam">
+        insert into kyfz_team
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="teamId != null">team_id,</if>
+            <if test="teamMembers != null">team_members,</if>
+            <if test="teamAccount != null">team_account,</if>
+            <if test="memberScores != null">member_scores,</if>
+            <if test="reseachDirections != null">reseach_directions,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="teamId != null">#{teamId},</if>
+            <if test="teamMembers != null">#{teamMembers},</if>
+            <if test="teamAccount != null">#{teamAccount},</if>
+            <if test="memberScores != null">#{memberScores},</if>
+            <if test="reseachDirections != null">#{reseachDirections},</if>
+         </trim>
+    </insert>
+
+    <update id="updateKyfzTeam" parameterType="KyfzTeam">
+        update kyfz_team
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="teamMembers != null">team_members = #{teamMembers},</if>
+            <if test="teamAccount != null">team_account = #{teamAccount},</if>
+            <if test="memberScores != null">member_scores = #{memberScores},</if>
+            <if test="reseachDirections != null">reseach_directions = #{reseachDirections},</if>
+        </trim>
+        where team_id = #{teamId}
+    </update>
+
+    <delete id="deleteKyfzTeamByTeamId" parameterType="Long">
+        delete from kyfz_team where team_id = #{teamId}
+    </delete>
+
+    <delete id="deleteKyfzTeamByTeamIds" parameterType="String">
+        delete from kyfz_team where team_id in 
+        <foreach item="teamId" collection="array" open="(" separator="," close=")">
+            #{teamId}
+        </foreach>
+    </delete>
+</mapper>

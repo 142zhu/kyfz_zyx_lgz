@@ -25,16 +25,15 @@
       </el-col>
     </el-row>
 
-    
   </div>
 </template>
 
 <script>
-import PanelGroup from './dashboard/PanelGroup'
-import LineChart from './dashboard/LineChart'
-import RaddarChart from './dashboard/RaddarChart'
-import PieChart from './dashboard/PieChart'
 import BarChart from './dashboard/BarChart'
+import LineChart from './dashboard/LineChart'
+import PanelGroup from './dashboard/PanelGroup'
+import PieChart from './dashboard/PieChart'
+import RaddarChart from './dashboard/RaddarChart'
 
 const lineChartData = {
   newVisitis: {

@@ -11,7 +11,7 @@
           type="circle"
           style="transform: scale(1.5); display: inline-block"
           :percentage="infoList.requirePercent"
-        ></el-progress>
+        />
       </div>
 
       <div style="display: inline-block; margin-left: 150px">
@@ -24,14 +24,14 @@
           type="circle"
           style="transform: scale(1.5); display: inline-block"
           :percentage="infoList.pushPercent"
-        ></el-progress>
+        />
       </div>
     </div>
     <div>
-      <el-icon name="el-icon-search"></el-icon>
+      <el-icon name="el-icon-search" />
     </div>
     <div class="container">
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="project" style="color: black" />
         </i>
@@ -40,7 +40,7 @@
         <span>{{ infoList.projectCount }}</span>
       </el-card>
 
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="thesis" />
         </i>
@@ -48,7 +48,7 @@
         <h4>已入库：</h4>
         <span>{{ infoList.thesisCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="work" />
         </i>
@@ -56,7 +56,7 @@
         <h4>已入库：</h4>
         <span>{{ infoList.workCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="certificate" />
         </i>
@@ -65,7 +65,7 @@
         <span>{{ infoList.certificateCount }}</span>
       </el-card>
 
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="expert" />
         </i>
@@ -73,7 +73,7 @@
         <h4>已入库：</h4>
         <span>{{ infoList.expertCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="match" style="color: black" />
         </i>
@@ -81,7 +81,7 @@
         <h4>已入库：</h4>
         <span> {{ infoList.matchCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="requirement" />
         </i>
@@ -89,7 +89,7 @@
         <h4>已入库：</h4>
         <span> {{ infoList.requirementCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="push" />
         </i>
@@ -97,7 +97,7 @@
         <h4>已入库：</h4>
         <span> {{ infoList.pushCount }}</span>
       </el-card>
-      <el-card class="card" v-hover-shadow>
+      <el-card v-hover-shadow class="card">
         <i>
           <svg-icon icon-class="enterprise" style="color: black" />
         </i>
@@ -107,56 +107,56 @@
       </el-card>
     </div>
     <!-- echarts -->
-    <div id="container" style="height: 100%"></div>
+    <div id="container" style="height: 100%" />
   </div>
 </template>
 
 <script>
-import { getAllCount } from "@/api/kyfz/push_record";
+import { getAllCount } from '@/api/kyfz/push_record'
 export default {
-  name: "Index",
+  name: 'Index',
   data() {
     return {
       form: {
-        projectCount: null, //已入库项目数量
-        thesisCount: null, //已入库论文数量
-        workCount: null, //已入库著作数量
-        certificateCount: null, //已入库证书数量
-        expertCount: null, //已入库专家数目
-        matchCount: null, //已匹配的数目
-        pushCount: null, //已经推送的数目
-        enterpriseCount: 0, //已入库的企业数目
-        requirementCount: null, //已入库的需求数目
+        projectCount: null, // 已入库项目数量
+        thesisCount: null, // 已入库论文数量
+        workCount: null, // 已入库著作数量
+        certificateCount: null, // 已入库证书数量
+        expertCount: null, // 已入库专家数目
+        matchCount: null, // 已匹配的数目
+        pushCount: null, // 已经推送的数目
+        enterpriseCount: 0, // 已入库的企业数目
+        requirementCount: null, // 已入库的需求数目
         hasFinishRequirement: null,
         requirePercent: null,
-        hasPushMatch: null,
+        hasPushMatch: null
       },
       infoList: {},
-      count: null,
-    };
+      count: null
+    }
   },
   mounted() {
-    this.getCount();
+    this.getCount()
   },
   methods: {
     getCount() {
-      this.expertCount = 11;
+      this.expertCount = 11
       getAllCount().then((response) => {
-        this.infoList = response.data;
-        const a = response.data.hasFinishRequirement;
-        const b = response.data.requirementCount;
+        this.infoList = response.data
+        const a = response.data.hasFinishRequirement
+        const b = response.data.requirementCount
 
-        const c = response.data.hasPushMatch;
-        const d = response.data.matchCount;
+        const c = response.data.hasPushMatch
+        const d = response.data.matchCount
         if ((c / d) * 100 < 1) {
-          this.infoList.pushPercent = 1;
+          this.infoList.pushPercent = 1
         }
         // alert((a / b) * 100)
-        this.infoList.requirePercent = (a / b) * 100;
-      });
-    },
-  },
-};
+        this.infoList.requirePercent = (a / b) * 100
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -278,7 +278,7 @@ export default {
 }
 
 .card h3 {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
 }
 
@@ -291,7 +291,7 @@ export default {
 }
 
 .card span {
-  font-size: 30px;
+  font-size: 20px;
   font-weight: 700;
   color: #74c65d;
 }
@@ -310,5 +310,26 @@ export default {
   font-size: 35px;
   vertical-align: middle;
   /*可选项，使图标垂直居中*/
+}
+</style>
+
+<style scoped>
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+.card {
+  width: 150px;
+  height: 150px;
+  margin-right: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .card {
+    width: 100px;
+    height: 100px;
+  }
 }
 </style>

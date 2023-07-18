@@ -43,7 +43,6 @@ export function delExpert(expertId) {
   })
 }
 
-
 // 查询专家管理详细
 export function getExpertDetail(expertId) {
   return request({
@@ -51,7 +50,6 @@ export function getExpertDetail(expertId) {
     method: 'get'
   })
 }
-
 
 // 查询专家管理详细
 export function getExpertDetailByAccount(data) {
@@ -62,8 +60,6 @@ export function getExpertDetailByAccount(data) {
   })
 }
 
-
-
 // 修改专家管理
 export function updateMarkProject(data) {
   return request({
@@ -72,7 +68,6 @@ export function updateMarkProject(data) {
     data: data
   })
 }
-
 
 // 修改专家管理
 export function updateMarkThesis(data) {
@@ -83,7 +78,6 @@ export function updateMarkThesis(data) {
   })
 }
 
-
 // 修改专家管理
 export function updateMarkWork(data) {
   return request({
@@ -93,13 +87,20 @@ export function updateMarkWork(data) {
   })
 }
 
-
 // 修改专家管理
 export function updateMarkCertificate(data) {
   return request({
     url: '/kyfz/expert/updateMarkCertificate',
     method: 'put',
     data: data
+  })
+}
+
+// 查询专家关系图数据
+export function getEchartExpertData(expertId) {
+  return request({
+    url: '/kyfz/expert/getEchartData/' + expertId,
+    method: 'get'
   })
 }
 

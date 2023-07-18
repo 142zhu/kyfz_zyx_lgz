@@ -417,18 +417,17 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" style="float: right" @click="handleECharts()">
+            <el-button type="primary" style="float: right" @click="handleECharts(expertDetail)">
               团队关系图
             </el-button>
           </div>
         </div>
       </div>
     </el-dialog>
-    <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
-      <div id="graph-chart" style="width: 500px; height: 500px">
-        <div :id="echartsId" style="width: 500px; height: 500px" />
+    <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body width="1200px">
+      <div id="graph-chart" style="width: 1200px; height: 700px">
+        <div :id="echartsId" style="width: 1200px; height: 700px" />
       </div>
-      <eChartsGraph />
     </el-dialog>
   </div>
 </template>
@@ -438,6 +437,7 @@ import { listClassification } from '@/api/kyfz/classification'
 import {
 addExpert,
 delExpert,
+getEchartExpertData,
 getExpert,
 getExpertDetail,
 listExpert,
@@ -445,7 +445,6 @@ updateExpert
 } from '@/api/kyfz/expert'
 import * as echarts from 'echarts'
 import { departmentOptions } from './departmentOptions'
-import eChartsGraph from './eChartsGraph.vue'
 
 const getEchartsId = () => {
   return new Date().getTime()
@@ -453,9 +452,6 @@ const getEchartsId = () => {
 
 export default {
   name: 'Expert',
-  components: {
-      eChartsGraph
-  },
   inheritAttrs: false,
   data() {
     return {
@@ -466,6 +462,8 @@ export default {
       },
       filterText: '',
       deptOptions: departmentOptions,
+      // echar json数据
+      jsonData: {},
       // 行业分类数据
       options: [],
       // 遮罩层
@@ -591,79 +589,57 @@ export default {
 
     // echatrs 数据
     setOption: function() {
-      const experts = this.expertDetail.teamMembersArray
-      const nodes = []
-      const links = []
+      const myChart = echarts.init(document.getElementById(this.echartsId))
+      myChart.showLoading()
+      const graph = this.jsonData // 引入本地json数据文件
+      myChart.hideLoading()
 
-      // 构造nodes数组
-      for (let i = 0; i < experts.length; i++) {
-        nodes.push({
-          name: experts[i],
-          category: i >= 1 ? 1 : 0,
-          itemStyle: {
-            color: experts[i] !== this.expertDetail.expertName ? '#5470C6' : '#EE6666'
-          }
-        })
-      }
-
-      // 构造links数组
-      for (let j = 1; j < experts.length; j++) {
-        links.push({
-          source: experts[0],
-          target: experts[j]
-        })
-      }
-
+      graph.nodes.forEach(function(node) {
+        node.label = {
+          show: node.symbolSize > 10
+        }
+      })
       const option = {
+        // 添加你的配置
         title: {
-          text: ''
+          text: '',
+          subtext: '',
+          top: 'bottom',
+          left: 'right'
         },
-        tooltip: {
-          formatter: function(params) {
-            if (params.data.category !== 0) {
-              return '团队成员'
-            }
-            return '团队负责人'
+        tooltip: {},
+        legend: [
+          {
+            // selectedMode: 'single',
+            data: graph.categories.map(function(a) {
+              return a.name
+            })
           }
-        }, // 提示框
-        animationDurationUpdate: 1500,
+        ],
+        animationDuration: 1500,
         animationEasingUpdate: 'quinticInOut',
         series: [
           {
+            name: '专家',
             type: 'graph',
-            layout: 'force',
-            // symbolSize: 50, //倘若该属性不在link里，则其表示节点的大小；否则即为线两端标记的大小
-            symbolSize: (value, params) => {
-              switch (params.data.category) {
-                case 0:
-                  return 100
-
-                case 1:
-                  return 50
-              }
-            },
-            roam: true, // 鼠标缩放功能
+            layout: 'none',
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
             label: {
-              show: true // 是否显示标签
+              position: 'right',
+              formatter: '{b}'
             },
-            focusNodeAdjacency: true, // 鼠标移到节点上时突出显示结点以及邻节点和边
-            edgeSymbol: ['none', 'arrow'], // 关系两边的展现形式，也即图中线两端的展现形式。arrow为箭头
-            edgeSymbolSize: [4, 10],
-            draggable: true,
-            edgeLabel: {
-              fontSize: 20 // 关系（也即线）上的标签字体大小
-            },
-            force: {
-              repulsion: 200,
-              edgeLength: 120
-            },
-
-            data: nodes,
-            links: links,
             lineStyle: {
-              opacity: 0.9,
-              width: 2,
-              curveness: 0
+              color: 'source',
+              curveness: 0.3
+            },
+            emphasis: {
+              focus: 'adjacency',
+              lineStyle: {
+                width: 10
+              }
             }
           }
         ]
@@ -829,14 +805,21 @@ export default {
         }
         this.openDetail = true
       })
+      this.selsect_echart_data(row)
     },
-    handleECharts() {
+    handleECharts(row) {
       this.chartTitle = '团队成员关系图'
       this.openECharts = true
       this.$nextTick(() => {
         this.initChart()
       })
       this.myChart.resize() // 自适应大小
+    },
+    selsect_echart_data(row) {
+      const expertId = row.expertId || this.ids
+      getEchartExpertData(expertId).then((response) => {
+        this.jsonData = response.data
+      })
     }
   }
 }

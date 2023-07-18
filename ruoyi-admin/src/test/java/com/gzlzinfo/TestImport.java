@@ -58,7 +58,7 @@ public class TestImport {
         // importAward("奖项表.csv");
         // importOtherResults("其他成果表.csv");
         // importIndustryClassification("行业分类表.csv");
-        importIntellectualProperty("知识产权表.csv");
+        // importIntellectualProperty("知识产权表.csv");
     }
 
     /**
@@ -137,16 +137,9 @@ public class TestImport {
         List<String[]> list = readByCsvReader(PREFIX_PATH + fileName);
         jdbcTemplate.execute(SQL_MODE_SQL);
 
-        String createTableSql = "CREATE TABLE IF NOT EXISTS `kyfz_team` (" +
-                "`team_id` INT PRIMARY KEY AUTO_INCREMENT," +
-                "`team_members` VARCHAR(255)," +
-                "`team_account` VARCHAR(50) NOT NULL" +
-                ");";
-        jdbcTemplate.execute(createTableSql);
-
-        String sql = "insert into `kyfz_team` (`team_id`,`team_members`,`team_account`) values (?,?,?);";
+        String sql = "insert into `kyfz_team` (`team_id`,`team_members`,`team_account`,`member_scores`,`reseach_directions`) values (?,?,?,?,?);";
         for (String[] el : list) {
-            jdbcTemplate.update(sql, el[0], el[1], el[2]);
+            jdbcTemplate.update(sql, el[0], el[1], el[2], el[3], el[4]);
         }
     }
 

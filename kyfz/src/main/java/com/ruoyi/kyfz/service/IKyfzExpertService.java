@@ -1,6 +1,8 @@
 package com.ruoyi.kyfz.service;
 
 import java.util.List;
+
+import com.alibaba.fastjson2.JSONObject;
 import com.ruoyi.kyfz.domain.KyfzExpert;
 
 /**
@@ -138,5 +140,13 @@ public interface IKyfzExpertService {
      * @return 匹配管理
      */
     public KyfzExpert selectKyfzMatchMark(Long matchId);
+
+    /**
+     * 获取专家关系图数据
+     * 
+     * @param kyfzExpert 专家管理
+     * @return 结果
+     */
+    public JSONObject getEchartExpertData(Long expertId);
 
 }
