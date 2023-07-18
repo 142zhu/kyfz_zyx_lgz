@@ -58,15 +58,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
             <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
-        ORDER BY expert_account DESC
+        ORDER BY expert_id DESC
     </select>
     <select id="selectKyfzExpertByExpertId" parameterType="Long" resultMap="KyfzExpertResult">
         <include refid="selectKyfzExpertVo"/>
         where expert_id = #{expertId}
     </select>
     <insert id="insertKyfzExpert" parameterType="KyfzExpert" useGeneratedKeys="true" keyProperty="expertId">
+        <selectKey keyProperty="expertId" resultType="Long" order="BEFORE">
+            SELECT (MAX(expert_id) + 1) AS expertId FROM kyfz_expert
+        </selectKey>
         insert into kyfz_expert
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            expert_id,
             <if test="expertAccount != null">expert_account,</if>
             <if test="expertName != null">expert_name,</if>
             <if test="expertPosition != null">expert_position,</if>
@@ -84,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             expert_significance
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{expertId},
             <if test="expertAccount != null">#{expertAccount},</if>
             <if test="expertName != null">#{expertName},</if>
             <if test="expertPosition != null">#{expertPosition},</if>

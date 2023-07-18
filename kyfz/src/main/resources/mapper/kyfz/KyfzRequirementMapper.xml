@@ -156,9 +156,14 @@
         <include refid="selectKyfzRequirementVo" /> where requirement_id = #{requirementId}
     </select>
     <insert id="insertKyfzRequirement" parameterType="KyfzRequirement" useGeneratedKeys="true"
-        keyProperty="requirementId"> insert into kyfz_requirement
+        keyProperty="requirementId">
+        <selectKey keyProperty="requirementId" resultType="Long" order="BEFORE">
+            SELECT (MAX(requirement_id) + 1) AS requirementId FROM kyfz_requirement
+        </selectKey>
+        insert into kyfz_requirement
         <trim prefix="(" suffix=")"
             suffixOverrides=",">
+            requirement_id,
             <if test="projectName != null">project_name,</if>
             <if test="contractNumber != null">
         contract_number,</if>
@@ -216,6 +221,7 @@
         requirement_release_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{requirementId},
             <if test="projectName != null">#{projectName},</if>
             <if test="contractNumber != null">
         #{contractNumber},</if>

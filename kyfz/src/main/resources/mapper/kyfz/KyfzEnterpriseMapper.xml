@@ -3,7 +3,6 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.kyfz.mapper.KyfzEnterpriseMapper">
-
     <resultMap type="KyfzEnterprise" id="KyfzEnterpriseResult">
         <result property="enterpriseId" column="enterprise_id" />
         <result property="enterpriseName" column="enterprise_name" />
@@ -16,11 +15,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime" column="update_time" />
         <result property="enterpriseKeywords" column="enterprise_keywords" />
     </resultMap>
-
     <sql id="selectKyfzEnterpriseVo">
         select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, create_by, create_time, update_by, update_time, enterprise_keywords from kyfz_enterprise
     </sql>
-
     <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
         <where>
@@ -32,15 +29,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ORDER BY enterprise_id DESC
     </select>
-
     <select id="selectKyfzEnterpriseByEnterpriseId" parameterType="Long" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
         where enterprise_id = #{enterpriseId}
     </select>
-
     <insert id="insertKyfzEnterprise" parameterType="KyfzEnterprise" useGeneratedKeys="true" keyProperty="enterpriseId">
+        <selectKey keyProperty="enterpriseId" resultType="Long" order="BEFORE">
+            SELECT (MAX(enterprise_id) + 1) AS enterpriseId FROM kyfz_enterprise
+        </selectKey>
         insert into kyfz_enterprise
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            enterprise_id,
             <if test="enterpriseName != null">enterprise_name,</if>
             <if test="enterpriseCreditCode != null">enterprise_credit_code,</if>
             <if test="enterpriseDescribe != null">enterprise_describe,</if>
@@ -52,6 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseKeywords != null">enterprise_keywords,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{enterpriseId},
             <if test="enterpriseName != null">#{enterpriseName},</if>
             <if test="enterpriseCreditCode != null">#{enterpriseCreditCode},</if>
             <if test="enterpriseDescribe != null">#{enterpriseDescribe},</if>
@@ -63,7 +63,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseKeywords != null">#{enterpriseKeywords},</if>
         </trim>
     </insert>
-
     <update id="updateKyfzEnterprise" parameterType="KyfzEnterprise">
         update kyfz_enterprise
         <trim prefix="SET" suffixOverrides=",">
@@ -79,13 +78,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where enterprise_id = #{enterpriseId}
     </update>
-
     <delete id="deleteKyfzEnterpriseByEnterpriseId" parameterType="Long">
         delete from kyfz_enterprise where enterprise_id = #{enterpriseId}
     </delete>
-
     <delete id="deleteKyfzEnterpriseByEnterpriseIds" parameterType="String">
-        delete from kyfz_enterprise where enterprise_id in 
+        delete from kyfz_enterprise where enterprise_id in
         <foreach item="enterpriseId" collection="array" open="(" separator="," close=")">
             #{enterpriseId}
         </foreach>
