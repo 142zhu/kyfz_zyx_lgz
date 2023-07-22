@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.mapper;
 
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzIndustryClassification;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.kyfz.domain.KyfzIndustryClassification;
  * @author zyx
  * @date 2023-07-16
  */
-public interface KyfzIndustryClassificationMapper 
-{
+public interface KyfzIndustryClassificationMapper {
     /**
      * 查询行业分类
      * 
@@ -25,7 +25,8 @@ public interface KyfzIndustryClassificationMapper
      * @param kyfzIndustryClassification 行业分类
      * @return 行业分类集合
      */
-    public List<KyfzIndustryClassification> selectKyfzIndustryClassificationList(KyfzIndustryClassification kyfzIndustryClassification);
+    public List<KyfzIndustryClassification> selectKyfzIndustryClassificationList(
+            KyfzIndustryClassification kyfzIndustryClassification);
 
     /**
      * 新增行业分类
@@ -58,4 +59,12 @@ public interface KyfzIndustryClassificationMapper
      * @return 结果
      */
     public int deleteKyfzIndustryClassificationByCategoryIds(Long[] categoryIds);
+
+    /**
+     * 查询行业分类
+     * 
+     * @param categoryIds 行业分类主键(字符串)
+     * @return 行业分类
+     */
+    public String selectKyfzIndustryClassificationByCategoryIds(String categoryIds);
 }

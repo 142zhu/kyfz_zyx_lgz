@@ -31,6 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="awardsId" column="awards_id" />
         <result property="otherResultsId" column="other_results_id" />
         <result property="categoryId" column="category_id" />
+        <result property="categoryNames" column="category_Names" />
     </resultMap>
     <sql id="selectKyfzExpertVo">
         select expert_id, expert_account, expert_name, expert_position, expert_affiliation, primary_discipline, secondary_discipline, tertiary_discipline, research_direction, thesis_id, 

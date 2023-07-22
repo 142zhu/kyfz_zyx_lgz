@@ -6,7 +6,7 @@
       :model="queryParams"
       size="small"
       :inline="true"
-      label-width="68px"
+      label-width="80px"
     >
       <el-form-item label="需求名称" prop="projectName">
         <el-input
@@ -458,7 +458,6 @@ export default {
         researchDirection: null, // 存专家研究方向
         requirementKeywords: '', // 需求关键词
         projectNames: '', // 专家研究成果：项目（目前就做这个），论文，著作
-        expertName: null,
         expertPosition: null,
         expertAffiliation: null,
         primaryDisclipline: null,
@@ -505,7 +504,7 @@ export default {
           name: experts[i],
           category: i >= 1 ? 1 : 0,
           itemStyle: {
-            color: experts[i] != this.matchDetails.expertName ? '#5470C6' : '#EE6666'
+            color: experts[i] !== this.matchDetails.expertName ? '#5470C6' : '#EE6666'
           }
         })
       }
@@ -524,7 +523,7 @@ export default {
         },
         tooltip: {
           formatter: function(params) {
-            if (params.data.category != 0) {
+            if (params.data.category !== 0) {
               return '团队成员'
             }
             return '团队负责人'
@@ -541,10 +540,9 @@ export default {
               switch (params.data.category) {
                 case 0:
                   return 100
-                  break
+
                 case 1:
                   return 50
-                  break
               }
             },
             roam: true, // 鼠标缩放功能
@@ -650,7 +648,7 @@ export default {
     submitForm() {
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if (this.form.matchId != null) {
+          if (this.form.matchId !== null) {
             updateMatch(this.form).then((response) => {
               this.$modal.msgSuccess('修改成功')
               this.open = false
@@ -706,9 +704,9 @@ export default {
       this.matchDetails.expertName = row.expertName
 
       if (
-        this.matchDetails.expertName == '' ||
-        this.matchDetails.expertName == null ||
-        this.matchDetails.expertName == '无'
+        this.matchDetails.expertName === '' ||
+        this.matchDetails.expertName === null ||
+        this.matchDetails.expertName === '无'
       ) {
         this.SearchButton = true
         this.relationshipButton = true
@@ -725,43 +723,43 @@ export default {
         this.markCertificate = response.data.markCertificate
         this.markThesis = response.data.markThesis
 
-        if (response.data.requirementKeywords != null) {
+        if (response.data.requirementKeywords !== null) {
           this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords
             .trim()
             .split(/[,，、]/)
         } else {
           this.matchDetails.requirementKeywordsArray = '无'
         }
-        if (response.data.strArray != null) {
+        if (response.data.strArray !== null) {
           const list = response.data.strArray
-          this.matchDetails.strArray = list.filter((item) => item != '' && item !== null)
+          this.matchDetails.strArray = list.filter((item) => item !== '' && item !== null)
         } else {
           this.matchDetails.strArray = '无'
         }
-        if (response.data.teamMembers != null) {
+        if (response.data.teamMembers !== null) {
           this.matchDetails.teamMembersArray = response.data.teamMembers
             .trim()
             .split(/[,，、]/)
         } else {
           this.matchDetails.teamMembersArray = '无'
         }
-        if (response.data.strArray1 != null) {
+        if (response.data.strArray1 !== null) {
           const list = response.data.strArray1
           this.matchDetails.strArray1 = list.filter(
-            (item) => item != '' && item !== null
+            (item) => item !== '' && item !== null
           )
         } else {
           this.matchDetails.strArray1 = '无'
         }
-        if (response.data.strArray2 != null) {
+        if (response.data.strArray2 !== null) {
           const list = response.data.strArray2
           this.matchDetails.strArray2 = list.filter(
-            (item) => item != '' && item !== null
+            (item) => item !== '' && item !== null
           )
         } else {
           this.matchDetails.strArray2 = '无'
         }
-        if (response.data.strArray3 != null) {
+        if (response.data.strArray3 !== null) {
           const list = response.data.strArray3
           this.matchDetails.strArray3 = list.filter(
             (item) => item !== '' && item !== null
@@ -769,7 +767,7 @@ export default {
         } else {
           this.matchDetails.strArray3 = '无'
         }
-        if (response.data.score != null) {
+        if (response.data.score !== null) {
           this.matchDetails.value2 = response.data.score
         } else {
           this.matchDetails.value2 = null
@@ -799,7 +797,6 @@ export default {
       updatePushRecord(data1).then((response) => {
         this.$modal.msgSuccess('评分成功')
         this.openDetail = false
-        for (let i = 0; i < 1000; i++) {}
         this.openDetail = true
       })
     },
@@ -834,19 +831,19 @@ export default {
         this.certificateIds = []
         this.expertDetail = response.data
         // 人工标注的id（还没处理的）
-        if (response.data.markProjectId != null) {
+        if (response.data.markProjectId !== null) {
           this.projectIds = response.data.markProjectId
         }
 
-        if (response.data.markThesisId != null) {
+        if (response.data.markThesisId !== null) {
           this.thesisIds = response.data.markThesisId
         }
 
-        if (response.data.markWorkId != null) {
+        if (response.data.markWorkId !== null) {
           this.workIds = response.data.markWorkId
         }
 
-        if (response.data.markCertificateId != null) {
+        if (response.data.markCertificateId !== null) {
           this.certificateIds = response.data.markCertificateId
         }
       })

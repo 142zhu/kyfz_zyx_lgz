@@ -1,10 +1,10 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="68px">
+    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="100px">
       <el-form-item label="企业名" prop="enterpriseName" label-width="120px">
         <el-input v-model="queryParams.enterpriseName" placeholder="请输入企业名" clearable @keyup.enter.native="handleQuery" />
       </el-form-item>
-      <el-form-item label="企业信用代码" prop="enterpriseCreditCode" label-width="120px">
+      <el-form-item label="企业信用代码" prop="enterpriseCreditCode">
         <el-input
           v-model="queryParams.enterpriseCreditCode"
           placeholder="请输入企业信用代码"
@@ -12,7 +12,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="企业注册资本" prop="registeredCapital" label-width="120px">
+      <el-form-item label="企业注册资本" prop="registeredCapital">
         <el-input
           v-model="queryParams.registeredCapital"
           placeholder="请输入企业注册资本"
@@ -20,7 +20,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="企业关键词" prop="enterpriseKeywords" label-width="120px">
+      <el-form-item label="企业关键词" prop="enterpriseKeywords">
         <el-input
           v-model="queryParams.enterpriseKeywords"
           placeholder="请输入企业关键词"
@@ -28,34 +28,33 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <!-- 级联面板 -->
-      <el-row :gutter="5" justify="end" cols="8">
-        <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px;">
-          <span class="unit-tag">所属行业</span>
-        </el-col>
-        <el-col :span="20">
-          <div v-for="item in classificationList" :key="item.categoryId">
-            <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px;">
-              <el-dropdown>
-                <span class="el-dropdown-link">
-                  {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
-                </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId"><span class="el-dropdown-link">
-                    {{ childItem.categoryName }}
-                  </span></el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-col>
-          </div>
-        </el-col>
-      </el-row>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-
+    <!-- 级联面板 -->
+    <el-row :gutter="5" justify="end" cols="8">
+      <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px;">
+        <span class="unit-tag">所属行业</span>
+      </el-col>
+      <el-col :span="20">
+        <div v-for="item in classificationList" :key="item.categoryId">
+          <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px;">
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId"><span class="el-dropdown-link">
+                  {{ childItem.categoryName }}
+                </span></el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+        </div>
+      </el-col>
+    </el-row>
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button

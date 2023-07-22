@@ -13,6 +13,7 @@ import com.ruoyi.kyfz.domain.KyfzExpert;
 import com.ruoyi.kyfz.domain.KyfzRelationship;
 import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.mapper.KyfzExpertMapper;
+import com.ruoyi.kyfz.mapper.KyfzIndustryClassificationMapper;
 import com.ruoyi.kyfz.mapper.KyfzRelationshipMapper;
 import com.ruoyi.kyfz.mapper.KyfzTeamMapper;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
@@ -34,6 +35,9 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
     @Autowired
     private KyfzRelationshipMapper KyfzRelationshipMapper;
 
+    @Autowired
+    private KyfzIndustryClassificationMapper kyfzIndustryClassificationMapper;
+
     /**
      * 查询专家管理
      * 
@@ -53,7 +57,12 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
      */
     @Override
     public List<KyfzExpert> selectKyfzExpertList(KyfzExpert kyfzExpert) {
-        return kyfzExpertMapper.selectKyfzExpertList(kyfzExpert);
+        List<KyfzExpert> ExpertList = kyfzExpertMapper.selectKyfzExpertList(kyfzExpert);
+        for (KyfzExpert e : ExpertList) {
+            e.setCategoryNames(
+                    kyfzIndustryClassificationMapper.selectKyfzIndustryClassificationByCategoryIds(e.getCategoryId()));
+        }
+        return ExpertList;
     }
 
     /**

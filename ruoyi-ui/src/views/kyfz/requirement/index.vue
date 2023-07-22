@@ -6,7 +6,7 @@
       :model="queryParams"
       size="small"
       :inline="true"
-      label-width="68px"
+      label-width="80px"
     >
       <el-form-item label="需求名称" prop="projectName">
         <el-input

@@ -86,10 +86,21 @@ public class KyfzExpert extends BaseEntity {
     /** 专家分类(多个) */
     private String categoryId;
 
+    /** 专家分类的名称(多个) */
+    private String categoryNames;
+
     private boolean deleteBool;
 
     public String getIntellectualPropertyId() {
         return intellectualPropertyId;
+    }
+
+    public String getCategoryNames() {
+        return categoryNames;
+    }
+
+    public void setCategoryNames(String categoryNames) {
+        this.categoryNames = categoryNames;
     }
 
     public String getAwardsId() {

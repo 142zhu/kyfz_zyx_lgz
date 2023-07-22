@@ -6,9 +6,9 @@
       :model="queryParams"
       size="small"
       :inline="true"
-      label-width="68px"
+      label-width="80px"
     >
-      <el-form-item label="姓名" prop="expertName" label-width="120px">
+      <el-form-item label="姓名" prop="expertName">
         <el-input
           v-model="queryParams.expertName"
           placeholder="请输入专家姓名"
@@ -16,7 +16,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="职称" prop="expertPosition" label-width="120px">
+      <el-form-item label="职称" prop="expertPosition">
         <el-input
           v-model="queryParams.expertPosition"
           placeholder="请输入专家职称"
@@ -24,7 +24,7 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="研究方向" prop="researchDirection" label-width="120px">
+      <el-form-item label="研究方向" prop="researchDirection">
         <el-input
           v-model="queryParams.researchDirection"
           placeholder="请输入研究方向"
@@ -42,51 +42,6 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['kyfz:expert:add']"
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['kyfz:expert:edit']"
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['kyfz:expert:remove']"
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          v-hasPermi="['kyfz:expert:export']"
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
-    </el-row>
     <!-- 级联面板 -->
     <el-row :gutter="5" justify="end" cols="8">
       <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px">
@@ -137,6 +92,7 @@
                 :filter-node-method="filterNode"
                 node-key="id"
                 :default-expand-all="false"
+                :default-expanded-keys="['1']"
                 highlight-current
                 @node-click="handleNodeClick"
               />
@@ -145,6 +101,52 @@
         </el-col>
         <!--人才数据-->
         <el-col :span="18" :xs="24">
+          <!-- 四大按钮 -->
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button
+                v-hasPermi="['kyfz:expert:add']"
+                type="primary"
+                plain
+                icon="el-icon-plus"
+                size="mini"
+                @click="handleAdd"
+              >新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                v-hasPermi="['kyfz:expert:edit']"
+                type="success"
+                plain
+                icon="el-icon-edit"
+                size="mini"
+                :disabled="single"
+                @click="handleUpdate"
+              >修改</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                v-hasPermi="['kyfz:expert:remove']"
+                type="danger"
+                plain
+                icon="el-icon-delete"
+                size="mini"
+                :disabled="multiple"
+                @click="handleDelete"
+              >删除</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button
+                v-hasPermi="['kyfz:expert:export']"
+                type="warning"
+                plain
+                icon="el-icon-download"
+                size="mini"
+                @click="handleExport"
+              >导出</el-button>
+            </el-col>
+            <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
+          </el-row>
           <el-table
             v-loading="loading"
             :data="expertList"
@@ -180,6 +182,17 @@
                               scope.row.expertAffiliation.length > 15
                               ? scope.row.expertAffiliation.substring(0, 15) + "..."
                               : scope.row.expertAffiliation
+                          }}
+                        </span>
+                      </div>
+                      <div class="card-row">
+                        <span class="card-label">所属行业:</span>
+                        <span class="card-value" :title="scope.row.categoryNames">
+                          {{
+                            scope.row.categoryNames &&
+                              scope.row.categoryNames.length > 15
+                              ? scope.row.categoryNames.substring(0, 15) + "..."
+                              : scope.row.categoryNames
                           }}
                         </span>
                       </div>

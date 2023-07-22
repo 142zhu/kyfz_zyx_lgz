@@ -112,4 +112,5 @@ public class KyfzIndustryClassificationServiceImpl implements IKyfzIndustryClass
     public int deleteKyfzIndustryClassificationByCategoryId(Long categoryId) {
         return kyfzIndustryClassificationMapper.deleteKyfzIndustryClassificationByCategoryId(categoryId);
     }
+
 }
