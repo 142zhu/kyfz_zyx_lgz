@@ -799,7 +799,7 @@ export default {
     handleDetail(row) {
       // 表单内容重置
       this.reset()
-      this.loading = false
+      this.loading = true
       const expertId = row.expertId
       this.expertDetail.expertName = row.expertName
       this.expertDetail.expertPosition = row.expertPosition // 职称
@@ -816,9 +816,10 @@ export default {
         } else {
           this.expertDetail.teamMembersArray = '无'
         }
-        this.openDetail = true
       })
       this.selsect_echart_data(row)
+      this.loading = false
+      this.openDetail = true
     },
     handleECharts(row) {
       this.chartTitle = '团队成员关系图'

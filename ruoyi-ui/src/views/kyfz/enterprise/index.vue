@@ -41,12 +41,12 @@
       <el-col :span="20">
         <div v-for="item in classificationList" :key="item.categoryId">
           <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px;">
-            <el-dropdown>
+            <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link">
                 {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId"><span class="el-dropdown-link">
+                <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId" :command="childItem.categoryId"><span class="el-dropdown-link">
                   {{ childItem.categoryName }}
                 </span></el-dropdown-item>
               </el-dropdown-menu>
@@ -128,6 +128,17 @@
                   <div class="card-row">
                     <span class="card-label">企业注册资本:</span>
                     <span class="card-value">{{ scope.row.registeredCapital }}</span>
+                  </div>
+                  <div class="card-row">
+                    <span class="card-label">所属行业:</span>
+                    <span class="card-value" :title="scope.row.categoryNames">
+                      {{
+                        scope.row.categoryNames &&
+                          scope.row.categoryNames.length > 15
+                          ? scope.row.categoryNames.substring(0, 15) + "..."
+                          : scope.row.categoryNames
+                      }}
+                    </span>
                   </div>
                   <div class="card-row">
                     <span class="card-label">企业关键词:</span>
@@ -260,7 +271,8 @@ export default {
         enterpriseCreditCode: null,
         enterpriseDescribe: null,
         registeredCapital: null,
-        enterpriseKeywords: null
+        enterpriseKeywords: null,
+        categoryId: null
       },
       // 表单参数
       form: {},
@@ -273,6 +285,16 @@ export default {
     this.getListClassification()
   },
   methods: {
+    // 行业分类下拉菜单触发函数
+    handleCommand(command) {
+      this.reset_queryParams()
+      this.queryParams.categoryId = command
+      listEnterprise(this.queryParams).then((response) => {
+        this.enterpriseList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
     /** 查询行业分类列表 */
     getListClassification() {
       this.loading = true
@@ -310,6 +332,21 @@ export default {
         enterpriseKeywords: null
       }
       this.resetForm('form')
+    },
+    reset_queryParams() {
+      this.form = {
+        enterpriseId: null,
+        enterpriseName: null,
+        enterpriseCreditCode: null,
+        enterpriseDescribe: null,
+        registeredCapital: null,
+        createBy: null,
+        createTime: null,
+        updateBy: null,
+        updateTime: null,
+        enterpriseKeywords: null,
+        categoryId: null
+      }
     },
     /** 搜索按钮操作 */
     handleQuery() {

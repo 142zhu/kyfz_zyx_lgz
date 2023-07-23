@@ -14,9 +14,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy" column="update_by" />
         <result property="updateTime" column="update_time" />
         <result property="enterpriseKeywords" column="enterprise_keywords" />
+        <result property="categoryId" column="category_id" />
+        <result property="categoryNames" column="category_Names" />
     </resultMap>
     <sql id="selectKyfzEnterpriseVo">
-        select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, create_by, create_time, update_by, update_time, enterprise_keywords from kyfz_enterprise
+        select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, 
+        create_by, create_time, update_by, update_time, enterprise_keywords, category_id from kyfz_enterprise
     </sql>
     <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
@@ -26,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and enterprise_describe like concat('%', #{enterpriseDescribe}, '%')</if>
             <if test="registeredCapital != null  and registeredCapital != ''"> and registered_capital like concat('%', #{registeredCapital}, '%')</if>
             <if test="enterpriseKeywords != null  and enterpriseKeywords != ''"> and enterprise_keywords like concat('%', #{enterpriseKeywords}, '%')</if>
+            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
         ORDER BY enterprise_id DESC
     </select>

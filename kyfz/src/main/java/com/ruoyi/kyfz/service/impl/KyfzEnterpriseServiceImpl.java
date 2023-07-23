@@ -1,11 +1,14 @@
 package com.ruoyi.kyfz.service.impl;
 
 import java.util.List;
-import com.ruoyi.common.utils.DateUtils;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.kyfz.mapper.KyfzEnterpriseMapper;
+
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
+import com.ruoyi.kyfz.mapper.KyfzEnterpriseMapper;
+import com.ruoyi.kyfz.mapper.KyfzIndustryClassificationMapper;
 import com.ruoyi.kyfz.service.IKyfzEnterpriseService;
 
 /**
@@ -15,10 +18,12 @@ import com.ruoyi.kyfz.service.IKyfzEnterpriseService;
  * @date 2023-06-09
  */
 @Service
-public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService 
-{
+public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService {
     @Autowired
     private KyfzEnterpriseMapper kyfzEnterpriseMapper;
+
+    @Autowired
+    private KyfzIndustryClassificationMapper kyfzIndustryClassificationMapper;
 
     /**
      * 查询企业管理
@@ -27,8 +32,7 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 企业管理
      */
     @Override
-    public KyfzEnterprise selectKyfzEnterpriseByEnterpriseId(Long enterpriseId)
-    {
+    public KyfzEnterprise selectKyfzEnterpriseByEnterpriseId(Long enterpriseId) {
         return kyfzEnterpriseMapper.selectKyfzEnterpriseByEnterpriseId(enterpriseId);
     }
 
@@ -39,9 +43,13 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 企业管理
      */
     @Override
-    public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise)
-    {
-        return kyfzEnterpriseMapper.selectKyfzEnterpriseList(kyfzEnterprise);
+    public List<KyfzEnterprise> selectKyfzEnterpriseList(KyfzEnterprise kyfzEnterprise) {
+        List<KyfzEnterprise> kyfzEnterpriseList = kyfzEnterpriseMapper.selectKyfzEnterpriseList(kyfzEnterprise);
+        for (KyfzEnterprise e : kyfzEnterpriseList) {
+            e.setCategoryNames(
+                    kyfzIndustryClassificationMapper.selectKyfzIndustryClassificationByCategoryIds(e.getCategoryId()));
+        }
+        return kyfzEnterpriseList;
     }
 
     /**
@@ -51,8 +59,7 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 结果
      */
     @Override
-    public int insertKyfzEnterprise(KyfzEnterprise kyfzEnterprise)
-    {
+    public int insertKyfzEnterprise(KyfzEnterprise kyfzEnterprise) {
         kyfzEnterprise.setCreateTime(DateUtils.getNowDate());
         return kyfzEnterpriseMapper.insertKyfzEnterprise(kyfzEnterprise);
     }
@@ -64,8 +71,7 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 结果
      */
     @Override
-    public int updateKyfzEnterprise(KyfzEnterprise kyfzEnterprise)
-    {
+    public int updateKyfzEnterprise(KyfzEnterprise kyfzEnterprise) {
         kyfzEnterprise.setUpdateTime(DateUtils.getNowDate());
         return kyfzEnterpriseMapper.updateKyfzEnterprise(kyfzEnterprise);
     }
@@ -77,8 +83,7 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 结果
      */
     @Override
-    public int deleteKyfzEnterpriseByEnterpriseIds(Long[] enterpriseIds)
-    {
+    public int deleteKyfzEnterpriseByEnterpriseIds(Long[] enterpriseIds) {
         return kyfzEnterpriseMapper.deleteKyfzEnterpriseByEnterpriseIds(enterpriseIds);
     }
 
@@ -89,8 +94,7 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService
      * @return 结果
      */
     @Override
-    public int deleteKyfzEnterpriseByEnterpriseId(Long enterpriseId)
-    {
+    public int deleteKyfzEnterpriseByEnterpriseId(Long enterpriseId) {
         return kyfzEnterpriseMapper.deleteKyfzEnterpriseByEnterpriseId(enterpriseId);
     }
 }
