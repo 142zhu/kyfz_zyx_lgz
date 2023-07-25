@@ -43,15 +43,15 @@
       </el-form-item>
     </el-form>
     <!-- 级联面板 -->
-    <el-row :gutter="5" justify="end" cols="8">
-      <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px">
-        <span class="unit-tag">所属行业</span>
+    <el-row :gutter="5" justify="end" cols="8" style=" background-color: rgb(247, 251, 255);">
+      <el-col :span="2" offset="0" style="margin-top: 40px; margin-bottom: 40px">
+        <span class="unit-tag" style="font-weight: bold;font-size: 14px;">所属行业</span>
       </el-col>
       <el-col :span="20">
         <div v-for="item in classificationList" :key="item.categoryId">
           <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px">
             <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link" style=" cursor: pointer;color: #409EFF;">
                 {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -343,7 +343,7 @@
     </el-dialog>
 
     <!-- 详细信息弹窗 -->
-    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body class="xiangxi">
       <div class="match-detail" style="margin-top: -20px">
         <div class="match-detail-header">
           <h3 class="match-detail-title">专家详细信息</h3>
@@ -430,7 +430,7 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" style="float: right" @click="handleECharts(expertDetail)">
+            <el-button type="primary" style="position: absolute; bottom: 10px; right: 10px;" @click="handleECharts(expertDetail)">
               团队关系图
             </el-button>
           </div>
@@ -481,6 +481,7 @@ export default {
       options: [],
       // 遮罩层
       loading: true,
+      load: null,
       // 选中数组
       ids: [],
       // 非单个禁用
@@ -558,6 +559,7 @@ export default {
           this.loading = false
         })
       }
+      this.reset_queryParams()
     },
     isLastChildNode(nodeData) {
       // 获取当前节点的子节点
@@ -583,6 +585,7 @@ export default {
         this.total = response.total
         this.loading = false
       })
+      this.reset_queryParams()
     },
     /** 查询行业分类列表 */
     getListClassification() {
@@ -604,12 +607,12 @@ export default {
     setOption: function() {
       const myChart = echarts.init(document.getElementById(this.echartsId))
       myChart.showLoading()
-      const graph = this.jsonData // 引入本地json数据文件
+      const graph = this.jsonData // 引入json
       myChart.hideLoading()
 
       graph.nodes.forEach(function(node) {
         node.label = {
-          show: node.symbolSize > 10
+          show: node.symbolSize > 30
         }
       })
       const option = {
@@ -635,7 +638,7 @@ export default {
           {
             name: '专家',
             type: 'graph',
-            layout: 'none',
+            layout: 'circular',
             data: graph.nodes,
             links: graph.links,
             categories: graph.categories,
@@ -799,7 +802,12 @@ export default {
     handleDetail(row) {
       // 表单内容重置
       this.reset()
-      this.loading = true
+      this.load = this.$loading({
+        target: '.xiangxi .el-dialog',
+        text: '正在加载',
+        spinner: 'el-icon-loading'
+      })
+      this.openDetail = true
       const expertId = row.expertId
       this.expertDetail.expertName = row.expertName
       this.expertDetail.expertPosition = row.expertPosition // 职称
@@ -816,10 +824,8 @@ export default {
         } else {
           this.expertDetail.teamMembersArray = '无'
         }
+        this.selsect_echart_data(row)
       })
-      this.selsect_echart_data(row)
-      this.loading = false
-      this.openDetail = true
     },
     handleECharts(row) {
       this.chartTitle = '团队成员关系图'
@@ -833,6 +839,7 @@ export default {
       const expertId = row.expertId || this.ids
       getEchartExpertData(expertId).then((response) => {
         this.jsonData = response.data
+        this.load.close()
       })
     }
   }

@@ -45,19 +45,19 @@ public class TestImport {
 
     @Test
     public void testImport() {
-        importExpert("专家表_0722.csv");
-        importEnterprise("企业表_0722.csv");
+        // importExpert("专家表_0722.csv");
+        // importEnterprise("企业表_0722.csv");
         // importMatch("匹配表.csv");
         // importRequirements("需求表.csv");
         // importTeam("团队表.csv");
         // importWork("著作表.csv");
-        // importThesis("论文表.csv");
+        importThesis("论文表.csv");
         // importCertificate("证书表.csv");
         // importProject("项目表.csv");
         // importRelationship("关系表.csv");
         // importAward("奖项表.csv");
         // importOtherResults("其他成果表.csv");
-        importIndustryClassification("行业分类表_0722.csv");
+        // importIndustryClassification("行业分类表_0722.csv");
         // importIntellectualProperty("知识产权表.csv");
     }
 

@@ -231,8 +231,7 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
 
         // 专家账号集合
         String[] expertAccounts = Kyfzteam.getTeamAccount().split("[、,\\-;]");
-        // 专家信息集合
-        List<KyfzExpert> kyfzexperts = kyfzExpertMapper.selectKyfzExpertIdsList(expertAccounts);
+        String[] expertName = Kyfzteam.getTeamMembers().split("[、,\\-;]");
         // 专家之间关系集合
         List<KyfzRelationship> KyfzRelationships = new ArrayList<KyfzRelationship>();
         KyfzRelationship rs;
@@ -268,18 +267,18 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
             node[i] = new JSONObject(); // 初始化每个索引位置的JSONObject对象
             node_categories[i] = new JSONObject();// 初始化每个索引位置的JSONObject对象
             node[i].put("id", expertAccounts[i]);
-            node[i].put("name", kyfzexperts.get(i).getExpertName());
-            node[i].put("symbolSize", weight[i] * 400);
+            node[i].put("name", expertName[i]);
+            node[i].put("symbolSize", 30.0 + weight[i] * 250);
             radius = random.nextDouble() * (maxRadius - minRadius) + minRadius;
             angle = random.nextDouble() * 2 * Math.PI;
             randomX = centerX + radius * Math.cos(angle);
             randomY = centerY + radius * Math.sin(angle);
             node[i].put("x", randomX);
             node[i].put("y", randomY);
-            node[i].put("value", "Accounts:" + expertAccounts[i]);
+            node[i].put("value", "权重:" + weight[i]);
             node[i].put("category", i);
             nodesArray.add(node[i]);
-            node_categories[i].put("name", kyfzexperts.get(i).getExpertName());
+            node_categories[i].put("name", expertName[i]);
             nodesArray_categories.add(node_categories[i]);
         }
 

@@ -34,15 +34,15 @@
       </el-form-item>
     </el-form>
     <!-- 级联面板 -->
-    <el-row :gutter="5" justify="end" cols="8">
+    <el-row :gutter="5" justify="end" cols="8" style=" background-color: rgb(247, 251, 255);">
       <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px;">
-        <span class="unit-tag">所属行业</span>
+        <span class="unit-tag" style="font-weight: bold;font-size: 14px;">所属行业</span>
       </el-col>
       <el-col :span="20">
         <div v-for="item in classificationList" :key="item.categoryId">
           <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px;">
             <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link" style=" cursor: pointer;color: #409EFF;">
                 {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -294,6 +294,7 @@ export default {
         this.total = response.total
         this.loading = false
       })
+      this.reset_queryParams()
     },
     /** 查询行业分类列表 */
     getListClassification() {
@@ -334,16 +335,13 @@ export default {
       this.resetForm('form')
     },
     reset_queryParams() {
-      this.form = {
-        enterpriseId: null,
+      this.queryParams = {
+        pageNum: 1,
+        pageSize: 10,
         enterpriseName: null,
         enterpriseCreditCode: null,
         enterpriseDescribe: null,
         registeredCapital: null,
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
         enterpriseKeywords: null,
         categoryId: null
       }
