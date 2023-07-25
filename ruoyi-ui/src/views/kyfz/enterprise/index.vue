@@ -98,6 +98,15 @@
           @click="handleExport"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="info"
+          plain
+          icon="el-icon-refresh-left"
+          size="mini"
+          @click="resetting"
+        >重置搜索</el-button>
+      </el-col>
       <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
@@ -105,7 +114,7 @@
     <div>
       <el-table v-loading="loading" :data="enterpriseList" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column label="企业信息" align="center" class-name="small-padding fixed-width">
+        <el-table-column :label="ReminderInformation" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-card class="card-item">
               <div class="card-actions">
@@ -243,6 +252,8 @@ export default {
   name: 'Enterprise',
   data() {
     return {
+      // 选择的信息提示
+      ReminderInformation: '企业信息',
       // 数据库行业分类表格数据
       classificationList: [],
       // 遮罩层
@@ -285,12 +296,19 @@ export default {
     this.getListClassification()
   },
   methods: {
+    // 重置搜索
+    resetting() {
+      this.reset_queryParams()
+      this.ReminderInformation = '企业信息'
+      this.getList()
+    },
     // 行业分类下拉菜单触发函数
     handleCommand(command) {
       this.reset_queryParams()
       this.queryParams.categoryId = command
       listEnterprise(this.queryParams).then((response) => {
         this.enterpriseList = response.rows
+        this.ReminderInformation = '企业信息——已选择  ' + this.enterpriseList[0].categoryNames + '  行业'
         this.total = response.total
         this.loading = false
       })

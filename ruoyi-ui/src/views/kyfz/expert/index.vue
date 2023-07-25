@@ -101,7 +101,7 @@
         </el-col>
         <!--人才数据-->
         <el-col :span="18" :xs="24">
-          <!-- 四大按钮 -->
+          <!-- 五大按钮 -->
           <el-row :gutter="10" class="mb8">
             <el-col :span="1.5">
               <el-button
@@ -145,6 +145,15 @@
                 @click="handleExport"
               >导出</el-button>
             </el-col>
+            <el-col :span="1.5">
+              <el-button
+                type="info"
+                plain
+                icon="el-icon-refresh-left"
+                size="mini"
+                @click="resetting"
+              >重置搜索</el-button>
+            </el-col>
             <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
           </el-row>
           <el-table
@@ -154,7 +163,7 @@
           >
             <el-table-column type="selection" width="55" align="center" />
             <el-table-column
-              label="专家信息"
+              :label="ReminderInformation"
               align="center"
               class-name="small-padding fixed-width"
             >
@@ -468,6 +477,8 @@ export default {
   inheritAttrs: false,
   data() {
     return {
+      // 选择的信息提示
+      ReminderInformation: '专家信息',
       // 学院分类
       defaultProps: {
         children: 'children',
@@ -548,11 +559,18 @@ export default {
     this.echartsId = getEchartsId()
   },
   methods: {
+    // 重置搜索
+    resetting() {
+      this.reset_queryParams()
+      this.ReminderInformation = '专家信息'
+      this.getList()
+    },
     // 学院分类触发函数
     handleNodeClick(nodeData) {
       if (this.isLastChildNode(nodeData)) {
         this.reset_queryParams()
         this.queryParams.expertAffiliation = nodeData.label
+        this.ReminderInformation = '专家信息——已选择  ' + nodeData.label + '  单位'
         listExpert(this.queryParams).then((response) => {
           this.expertList = response.rows
           this.total = response.total
@@ -582,6 +600,7 @@ export default {
       this.queryParams.categoryId = command
       listExpert(this.queryParams).then((response) => {
         this.expertList = response.rows
+        this.ReminderInformation = '专家信息——已选择  ' + this.expertList[0].categoryNames + '  行业'
         this.total = response.total
         this.loading = false
       })
