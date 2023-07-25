@@ -881,13 +881,13 @@ export default {
 /* 综合搜索标签页 */
 .tab-container {
   margin-bottom: 100px; /* 添加下间隔 */
-  width: 1300px;
+  width: 1100px;
   height: 150px;
 }
 .pane-span {
-  font-size: 16px; /* 更改字号为20px */
-  letter-spacing: 4px; /* 增加字间距为2px */
-  width: 130px; /* 设置span宽度为130px */
+  font-size: 14px; /* 更改字号为20px */
+  letter-spacing: 2px; /* 增加字间距为2px */
+  width: 80px; /* 设置span宽度为130px */
   color: #000;
 }
 
