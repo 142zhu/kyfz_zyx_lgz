@@ -2,6 +2,7 @@ package com.ruoyi.kyfz.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -11,8 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author zyx
  * @date 2023-07-18
  */
-public class KyfzRelationship extends BaseEntity
-{
+public class KyfzRelationship extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 关系id */
@@ -20,11 +20,11 @@ public class KyfzRelationship extends BaseEntity
 
     /** 专家a的id */
     @Excel(name = "专家a的id")
-    private Long expertAId;
+    private String expertAId;
 
     /** 专家b的id */
     @Excel(name = "专家b的id")
-    private Long expertBId;
+    private String expertBId;
 
     /** 关系类型 */
     @Excel(name = "关系类型")
@@ -38,70 +38,67 @@ public class KyfzRelationship extends BaseEntity
     @Excel(name = "关系数值")
     private String relationshipValue;
 
-    public void setRelationshipId(Long relationshipId) 
-    {
+    public void setRelationshipId(Long relationshipId) {
         this.relationshipId = relationshipId;
     }
 
-    public Long getRelationshipId() 
-    {
+    public Long getRelationshipId() {
         return relationshipId;
     }
-    public void setExpertAId(Long expertAId) 
-    {
+
+    public void setExpertAId(String expertAId) {
         this.expertAId = expertAId;
     }
 
-    public Long getExpertAId() 
-    {
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getExpertAId() {
         return expertAId;
     }
-    public void setExpertBId(Long expertBId) 
-    {
+
+    public String getExpertBId() {
+        return expertBId;
+    }
+
+    public void setExpertBId(String expertBId) {
         this.expertBId = expertBId;
     }
 
-    public Long getExpertBId() 
-    {
-        return expertBId;
-    }
-    public void setRelationshipType(String relationshipType) 
-    {
+    public void setRelationshipType(String relationshipType) {
         this.relationshipType = relationshipType;
     }
 
-    public String getRelationshipType() 
-    {
+    public String getRelationshipType() {
         return relationshipType;
     }
-    public void setRelationshipDescription(String relationshipDescription) 
-    {
+
+    public void setRelationshipDescription(String relationshipDescription) {
         this.relationshipDescription = relationshipDescription;
     }
 
-    public String getRelationshipDescription() 
-    {
+    public String getRelationshipDescription() {
         return relationshipDescription;
     }
-    public void setRelationshipValue(String relationshipValue) 
-    {
+
+    public void setRelationshipValue(String relationshipValue) {
         this.relationshipValue = relationshipValue;
     }
 
-    public String getRelationshipValue() 
-    {
+    public String getRelationshipValue() {
         return relationshipValue;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("relationshipId", getRelationshipId())
-            .append("expertAId", getExpertAId())
-            .append("expertBId", getExpertBId())
-            .append("relationshipType", getRelationshipType())
-            .append("relationshipDescription", getRelationshipDescription())
-            .append("relationshipValue", getRelationshipValue())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("relationshipId", getRelationshipId())
+                .append("expertAId", getExpertAId())
+                .append("expertBId", getExpertBId())
+                .append("relationshipType", getRelationshipType())
+                .append("relationshipDescription", getRelationshipDescription())
+                .append("relationshipValue", getRelationshipValue())
+                .toString();
     }
 }

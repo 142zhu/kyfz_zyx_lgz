@@ -51,10 +51,10 @@ public class TestImport {
         // importRequirements("需求表.csv");
         // importTeam("团队表.csv");
         // importWork("著作表.csv");
-        importThesis("论文表.csv");
+        // importThesis("论文表.csv");
         // importCertificate("证书表.csv");
         // importProject("项目表.csv");
-        // importRelationship("关系表.csv");
+        importRelationship("关系表.csv");
         // importAward("奖项表.csv");
         // importOtherResults("其他成果表.csv");
         // importIndustryClassification("行业分类表_0722.csv");

@@ -568,8 +568,8 @@ export default {
     // 学院分类触发函数
     handleNodeClick(nodeData) {
       if (this.isLastChildNode(nodeData)) {
-        this.reset_queryParams()
         this.queryParams.expertAffiliation = nodeData.label
+        this.queryParams.categoryId = null
         this.ReminderInformation = '专家信息——已选择  ' + nodeData.label + '  单位'
         listExpert(this.queryParams).then((response) => {
           this.expertList = response.rows
@@ -577,7 +577,7 @@ export default {
           this.loading = false
         })
       }
-      this.reset_queryParams()
+      this.queryParams.expertAffiliation = null
     },
     isLastChildNode(nodeData) {
       // 获取当前节点的子节点
@@ -596,15 +596,14 @@ export default {
     },
     // 行业分类下拉菜单触发函数
     handleCommand(command) {
-      this.reset_queryParams()
       this.queryParams.categoryId = command
+      this.queryParams.expertAffiliation = null
       listExpert(this.queryParams).then((response) => {
         this.expertList = response.rows
         this.ReminderInformation = '专家信息——已选择  ' + this.expertList[0].categoryNames + '  行业'
         this.total = response.total
         this.loading = false
       })
-      this.reset_queryParams()
     },
     /** 查询行业分类列表 */
     getListClassification() {
@@ -613,6 +612,7 @@ export default {
         this.classificationList = response.rows
       })
       this.loading = false
+      this.reset_queryParams()
     },
 
     // echarts
@@ -744,6 +744,8 @@ export default {
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1
+      this.queryParams.categoryId = null
+      this.queryParams.expertAffiliation = null
       this.getList()
     },
     /** 重置按钮操作 */
