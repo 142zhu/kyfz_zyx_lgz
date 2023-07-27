@@ -42,3 +42,11 @@ export function delEnterprise(enterpriseId) {
     method: 'delete'
   })
 }
+
+// 根据企业名查询名下所有需求
+export function getEnterpriseRequirement(enterpriseName) {
+  return request({
+    url: '/kyfz/enterprise/getEnterpriseRequirement/' + enterpriseName,
+    method: 'get'
+  })
+}

@@ -76,7 +76,7 @@ public interface KyfzRequirementMapper {
      */
     public int updateKyfzRequirementStatusById(Long requirementId);
 
-     /**
+    /**
      * 查询暂时的需求管理列表
      * 
      * @param kyfzRequirement 需求管理
@@ -115,5 +115,11 @@ public interface KyfzRequirementMapper {
      * @return 需求管理
      */
     public KyfzRequirement selectKyfzRequirementByRequirementId_staging(Long requirementId);
-    
+
+    /**
+     * 根据企业名查询名下所有需求
+     * 
+     */
+    public List<KyfzRequirement> getEnterpriseRequirementInfo(String client);
+
 }

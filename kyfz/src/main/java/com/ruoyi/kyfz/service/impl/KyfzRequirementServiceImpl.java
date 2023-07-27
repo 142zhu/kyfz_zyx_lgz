@@ -171,7 +171,6 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
         return kyfzRequirementMapper.deleteKyfzRequirementByRequirementIds_staging(requirementIds);
     }
 
-
     /**
      * 查询暂时的需求管理
      * 
@@ -181,5 +180,14 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     @Override
     public KyfzRequirement selectKyfzRequirementByRequirementId_staging(Long requirementId) {
         return kyfzRequirementMapper.selectKyfzRequirementByRequirementId_staging(requirementId);
+    }
+
+    /**
+     * 根据企业名查询名下所有需求
+     * 
+     */
+    @Override
+    public List<KyfzRequirement> getEnterpriseRequirementInfo(String enterpriseName) {
+        return kyfzRequirementMapper.getEnterpriseRequirementInfo(enterpriseName);
     }
 }

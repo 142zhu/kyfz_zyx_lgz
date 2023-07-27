@@ -65,10 +65,8 @@
         p.requirement_description, p.requirement_release_time, kyfz_enterprise.enterprise_name,
         kyfz_enterprise.enterprise_describe, kyfz_enterprise.registered_capital,
         kyfz_enterprise.enterprise_Keywords from kyfz_requirement p LEFT JOIN kyfz_enterprise ON
-        p.enterprise_number = kyfz_enterprise.enterprise_id left join sys_user u on
-        p.user_id=u.user_id left join sys_dept d on d.dept_id=u.dept_id </sql>
-    <select id="selectKyfzRequirementList" parameterType="KyfzRequirement"
-        resultMap="KyfzRequirementResult">
+        p.client = kyfz_enterprise.enterprise_name left join sys_user u on p.user_id=u.user_id left join sys_dept d on d.dept_id=u.dept_id </sql>
+    <select id="selectKyfzRequirementList" parameterType="KyfzRequirement" resultMap="KyfzRequirementResult">
         <include refid="selectKyfzRequirementVo" />
         <where>
             <if test="projectName != null  and projectName != ''"> and project_name like concat('%',
@@ -79,90 +77,65 @@
         client = #{client}</if>
             <if test="projectLeader != null  and projectLeader != ''"> and
         project_leader = #{projectLeader}</if>
-            <if
-                test="projectLeaderJobNumber != null  and projectLeaderJobNumber != ''"> and
+            <if test="projectLeaderJobNumber != null  and projectLeaderJobNumber != ''"> and
         project_leader_job_number = #{projectLeaderJobNumber}</if>
-            <if
-                test="projectMembers != null  and projectMembers != ''"> and project_members =
+            <if test="projectMembers != null  and projectMembers != ''"> and project_members =
         #{projectMembers}</if>
             <if test="supportUnit != null  and supportUnit != ''"> and
         support_unit = #{supportUnit}</if>
-            <if
-                test="supportUnitNumber != null  and supportUnitNumber != ''"> and
+            <if test="supportUnitNumber != null  and supportUnitNumber != ''"> and
         support_unit_number = #{supportUnitNumber}</if>
-            <if
-                test="projectCategory != null  and projectCategory != ''"> and project_category like
+            <if test="projectCategory != null  and projectCategory != ''"> and project_category like
         concat('%', #{projectCategory}, '%')</if>
-            <if
-                test="projectType != null  and projectType != ''"> and project_type like concat('%',
+            <if test="projectType != null  and projectType != ''"> and project_type like concat('%',
         #{projectType}, '%')</if>
-            <if
-                test="projectClassification != null  and projectClassification != ''"> and
+            <if test="projectClassification != null  and projectClassification != ''"> and
         project_classification = #{projectClassification}</if>
-            <if
-                test="projectNature != null  and projectNature != ''"> and project_nature =
+            <if test="projectNature != null  and projectNature != ''"> and project_nature =
         #{projectNature}</if>
-            <if
-                test="serviceNationalEconomy != null  and serviceNationalEconomy != ''"> and
+            <if test="serviceNationalEconomy != null  and serviceNationalEconomy != ''"> and
         service_national_economy = #{serviceNationalEconomy}</if>
-            <if
-                test="nationalEconomySubIndustry != null  and nationalEconomySubIndustry != ''"> and
+            <if test="nationalEconomySubIndustry != null  and nationalEconomySubIndustry != ''"> and
         national_economy_sub_industry = #{nationalEconomySubIndustry}</if>
-            <if
-                test="socioEconomicObjective != null  and socioEconomicObjective != ''"> and
+            <if test="socioEconomicObjective != null  and socioEconomicObjective != ''"> and
         socio_economic_objective = #{socioEconomicObjective}</if>
-            <if
-                test="startProjectTime != null "> and start_project_time = #{startProjectTime}</if>
-            <if
-                test="endProjectTime != null "> and end_project_time = #{endProjectTime}</if>
-            <if
-                test="totalBudget != null  and totalBudget != ''"> and total_budget = #{totalBudget}</if>
-            <if
-                test="contractType != null  and contractType != ''"> and contract_type =
+            <if test="startProjectTime != null "> and start_project_time = #{startProjectTime}</if>
+            <if test="endProjectTime != null "> and end_project_time = #{endProjectTime}</if>
+            <if test="totalBudget != null  and totalBudget != ''"> and total_budget = #{totalBudget}</if>
+            <if test="contractType != null  and contractType != ''"> and contract_type =
         #{contractType}</if>
             <if test="firstDiscipline != null  and firstDiscipline != ''"> and
         first_discipline = #{firstDiscipline}</if>
-            <if
-                test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and
+            <if test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and
         secondary_discipline = #{secondaryDiscipline}</if>
-            <if
-                test="projectLeaderUnit != null  and projectLeaderUnit != ''"> and
+            <if test="projectLeaderUnit != null  and projectLeaderUnit != ''"> and
         project_leader_unit = #{projectLeaderUnit}</if>
-            <if
-                test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
         concat('%', #{enterpriseName}, '%')</if>
-            <if
-                test="campusMemberAccount != null  and campusMemberAccount != ''"> and
+            <if test="campusMemberAccount != null  and campusMemberAccount != ''"> and
         campus_member_account = #{campusMemberAccount}</if>
-            <if
-                test="requirementStatus != null  and requirementStatus != ''"> and
+            <if test="requirementStatus != null  and requirementStatus != ''"> and
         requirement_status like concat('%', #{requirementStatus}, '%')</if>
-            <if
-                test="creatBy != null  and creatBy != ''"> and creat_by = #{creatBy}</if>
-            <if
-                test="requirementKeywords != null  and requirementKeywords != ''"> and
+            <if test="creatBy != null  and creatBy != ''"> and creat_by = #{creatBy}</if>
+            <if test="requirementKeywords != null  and requirementKeywords != ''"> and
         requirement_keywords = #{requirementKeywords}</if>
-            <if
-                test="requirementDescription != null  and requirementDescription != ''"> and
+            <if test="requirementDescription != null  and requirementDescription != ''"> and
         requirement_description = #{requirementDescription}</if>
-            <if
-                test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
+            <if test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
         '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if> ${params.dataScope}
         </where>
         ORDER BY requirement_id DESC
     </select>
-    <select id="selectKyfzRequirementByRequirementId" parameterType="Long"
-        resultMap="KyfzRequirementResult">
-        <include refid="selectKyfzRequirementVo" /> where requirement_id = #{requirementId}
+    <select id="selectKyfzRequirementByRequirementId" parameterType="Long" resultMap="KyfzRequirementResult">
+        <include refid="selectKyfzRequirementVo" />
+ where requirement_id = #{requirementId}
     </select>
-    <insert id="insertKyfzRequirement" parameterType="KyfzRequirement" useGeneratedKeys="true"
-        keyProperty="requirementId">
+    <insert id="insertKyfzRequirement" parameterType="KyfzRequirement" useGeneratedKeys="true" keyProperty="requirementId">
         <selectKey keyProperty="requirementId" resultType="Long" order="BEFORE">
             SELECT (MAX(requirement_id) + 1) AS requirementId FROM kyfz_requirement
         </selectKey>
         insert into kyfz_requirement
-        <trim prefix="(" suffix=")"
-            suffixOverrides=",">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             requirement_id,
             <if test="projectName != null">project_name,</if>
             <if test="contractNumber != null">
@@ -171,53 +144,36 @@
             <if test="projectLeader != null">
         project_leader,</if>
             <if test="projectLeaderJobNumber != null">project_leader_job_number,</if>
-            <if
-                test="projectMembers != null">project_members,</if>
+            <if test="projectMembers != null">project_members,</if>
             <if test="supportUnit != null">
         support_unit,</if>
             <if test="supportUnitNumber != null">support_unit_number,</if>
-            <if
-                test="projectCategory != null">project_category,</if>
+            <if test="projectCategory != null">project_category,</if>
             <if test="projectType != null">
         project_type,</if>
             <if test="projectClassification != null">project_classification,</if>
-            <if
-                test="projectNature != null">project_nature,</if>
-            <if
-                test="serviceNationalEconomy != null">service_national_economy,</if>
-            <if
-                test="nationalEconomySubIndustry != null">national_economy_sub_industry,</if>
-            <if
-                test="socioEconomicObjective != null">socio_economic_objective,</if>
-            <if
-                test="startProjectTime != null">start_project_time,</if>
-            <if
-                test="endProjectTime != null">end_project_time,</if>
+            <if test="projectNature != null">project_nature,</if>
+            <if test="serviceNationalEconomy != null">service_national_economy,</if>
+            <if test="nationalEconomySubIndustry != null">national_economy_sub_industry,</if>
+            <if test="socioEconomicObjective != null">socio_economic_objective,</if>
+            <if test="startProjectTime != null">start_project_time,</if>
+            <if test="endProjectTime != null">end_project_time,</if>
             <if test="totalBudget != null">
         total_budget,</if>
             <if test="contractType != null">contract_type,</if>
-            <if
-                test="firstDiscipline != null">first_discipline,</if>
-            <if
-                test="secondaryDiscipline != null">secondary_discipline,</if>
-            <if
-                test="projectLeaderUnit != null">project_leader_unit,</if>
-            <if
-                test="enterpriseNumber != null">enterprise_number,</if>
-            <if
-                test="campusMemberAccount != null">campus_member_account,</if>
-            <if
-                test="requirementStatus != null">requirement_status,</if>
+            <if test="firstDiscipline != null">first_discipline,</if>
+            <if test="secondaryDiscipline != null">secondary_discipline,</if>
+            <if test="projectLeaderUnit != null">project_leader_unit,</if>
+            <if test="enterpriseNumber != null">enterprise_number,</if>
+            <if test="campusMemberAccount != null">campus_member_account,</if>
+            <if test="requirementStatus != null">requirement_status,</if>
             <if test="creatBy != null">
         creat_by,</if> create_time,
             <if test="updateBy != null">update_by,</if>
-            <if
-                test="userId != null">user_id,</if>
+            <if test="userId != null">user_id,</if>
             <if test="updateTime != null">update_time,</if>
-            <if
-                test="requirementKeywords != null"> requirement_keywords,</if>
-            <if
-                test="requirementDescription != null">requirement_description,</if>
+            <if test="requirementKeywords != null"> requirement_keywords,</if>
+            <if test="requirementDescription != null">requirement_description,</if>
         requirement_release_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -226,68 +182,45 @@
             <if test="contractNumber != null">
         #{contractNumber},</if>
             <if test="client != null">#{client},</if>
-            <if
-                test="projectLeader != null">#{projectLeader},</if>
-            <if
-                test="projectLeaderJobNumber != null">#{projectLeaderJobNumber},</if>
-            <if
-                test="projectMembers != null">#{projectMembers},</if>
+            <if test="projectLeader != null">#{projectLeader},</if>
+            <if test="projectLeaderJobNumber != null">#{projectLeaderJobNumber},</if>
+            <if test="projectMembers != null">#{projectMembers},</if>
             <if test="supportUnit != null">
         #{supportUnit},</if>
             <if test="supportUnitNumber != null">#{supportUnitNumber},</if>
-            <if
-                test="projectCategory != null">#{projectCategory},</if>
-            <if
-                test="projectType != null">#{projectType},</if>
-            <if
-                test="projectClassification != null">#{projectClassification},</if>
-            <if
-                test="projectNature != null">#{projectNature},</if>
-            <if
-                test="serviceNationalEconomy != null">#{serviceNationalEconomy},</if>
-            <if
-                test="nationalEconomySubIndustry != null">#{nationalEconomySubIndustry},</if>
-            <if
-                test="socioEconomicObjective != null">#{socioEconomicObjective},</if>
-            <if
-                test="startProjectTime != null">#{startProjectTime},</if>
-            <if
-                test="endProjectTime != null">#{endProjectTime},</if>
+            <if test="projectCategory != null">#{projectCategory},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="projectClassification != null">#{projectClassification},</if>
+            <if test="projectNature != null">#{projectNature},</if>
+            <if test="serviceNationalEconomy != null">#{serviceNationalEconomy},</if>
+            <if test="nationalEconomySubIndustry != null">#{nationalEconomySubIndustry},</if>
+            <if test="socioEconomicObjective != null">#{socioEconomicObjective},</if>
+            <if test="startProjectTime != null">#{startProjectTime},</if>
+            <if test="endProjectTime != null">#{endProjectTime},</if>
             <if test="totalBudget != null">
         #{totalBudget},</if>
             <if test="contractType != null">#{contractType},</if>
-            <if
-                test="firstDiscipline != null">#{firstDiscipline},</if>
-            <if
-                test="secondaryDiscipline != null">#{secondaryDiscipline},</if>
-            <if
-                test="projectLeaderUnit != null">#{projectLeaderUnit},</if>
-            <if
-                test="enterpriseNumber != null">#{enterpriseNumber},</if>
-            <if
-                test="campusMemberAccount != null">#{campusMemberAccount},</if>
-            <if
-                test="requirementStatus != null">#{requirementStatus},</if>
-            <if
-                test="creatBy != null">#{creatBy},</if> sysdate(),
+            <if test="firstDiscipline != null">#{firstDiscipline},</if>
+            <if test="secondaryDiscipline != null">#{secondaryDiscipline},</if>
+            <if test="projectLeaderUnit != null">#{projectLeaderUnit},</if>
+            <if test="enterpriseNumber != null">#{enterpriseNumber},</if>
+            <if test="campusMemberAccount != null">#{campusMemberAccount},</if>
+            <if test="requirementStatus != null">#{requirementStatus},</if>
+            <if test="creatBy != null">#{creatBy},</if> sysdate(),
             <if test="updateBy != null">
         #{updateBy},</if>
             <if test="userId != null"> #{userId},</if>
             <if test="updateTime != null">
         #{updateTime},</if>
             <if test="requirementKeywords != null">#{requirementKeywords},</if>
-            <if
-                test="requirementDescription != null">#{requirementDescription},</if> sysdate()
+            <if test="requirementDescription != null">#{requirementDescription},</if> sysdate()
         </trim>
     </insert>
     <update id="updateKyfzRequirement" parameterType="KyfzRequirement"> update kyfz_requirement
-        <trim
-            prefix="SET" suffixOverrides=",">
+        <trim prefix="SET" suffixOverrides=",">
             <if test="projectName != null">project_name = #{projectName},</if>
-            <if
-                test="contractNumber != null">contract_number = #{contractNumber},</if>
-            <if
-                test="client != null">client = #{client},</if>
+            <if test="contractNumber != null">contract_number = #{contractNumber},</if>
+            <if test="client != null">client = #{client},</if>
             <if test="projectLeader != null">project_leader
         = #{projectLeader},</if>
             <if test="projectLeaderJobNumber != null">project_leader_job_number
@@ -295,14 +228,10 @@
             <if test="projectMembers != null">project_members =
         #{projectMembers},</if>
             <if test="supportUnit != null">support_unit = #{supportUnit},</if>
-            <if
-                test="supportUnitNumber != null">support_unit_number = #{supportUnitNumber},</if>
-            <if
-                test="projectCategory != null">project_category = #{projectCategory},</if>
-            <if
-                test="projectType != null">project_type = #{projectType},</if>
-            <if
-                test="projectClassification != null">project_classification =
+            <if test="supportUnitNumber != null">support_unit_number = #{supportUnitNumber},</if>
+            <if test="projectCategory != null">project_category = #{projectCategory},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="projectClassification != null">project_classification =
         #{projectClassification},</if>
             <if test="projectNature != null">project_nature =
         #{projectNature},</if>
@@ -317,31 +246,20 @@
             <if test="endProjectTime != null">end_project_time =
         #{endProjectTime},</if>
             <if test="totalBudget != null">total_budget = #{totalBudget},</if>
-            <if
-                test="contractType != null">contract_type = #{contractType},</if>
-            <if
-                test="firstDiscipline != null">first_discipline = #{firstDiscipline},</if>
-            <if
-                test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
-            <if
-                test="projectLeaderUnit != null">project_leader_unit = #{projectLeaderUnit},</if>
-            <if
-                test="enterpriseNumber != null">enterprise_number = #{enterpriseNumber},</if>
-            <if
-                test="campusMemberAccount != null">campus_member_account = #{campusMemberAccount},</if>
-            <if
-                test="requirementStatus != null">requirement_status = #{requirementStatus},</if>
-            <if
-                test="creatBy != null">creat_by = #{creatBy},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="firstDiscipline != null">first_discipline = #{firstDiscipline},</if>
+            <if test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
+            <if test="projectLeaderUnit != null">project_leader_unit = #{projectLeaderUnit},</if>
+            <if test="enterpriseNumber != null">enterprise_number = #{enterpriseNumber},</if>
+            <if test="campusMemberAccount != null">campus_member_account = #{campusMemberAccount},</if>
+            <if test="requirementStatus != null">requirement_status = #{requirementStatus},</if>
+            <if test="creatBy != null">creat_by = #{creatBy},</if>
             <if test="createTime != null">create_time
         = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if
-                test="updateTime != null">update_time = #{updateTime},</if>
-            <if
-                test="requirementKeywords != null">requirement_keywords = #{requirementKeywords},</if>
-            <if
-                test="requirementDescription != null">requirement_description =
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="requirementKeywords != null">requirement_keywords = #{requirementKeywords},</if>
+            <if test="requirementDescription != null">requirement_description =
         #{requirementDescription},</if>
             <if test="requirementReleaseTime != null">requirement_release_time
         = #{requirementReleaseTime},</if>
@@ -351,42 +269,34 @@
         kyfz_requirement where requirement_id = #{requirementId} </delete>
     <delete id="deleteKyfzRequirementByRequirementIds" parameterType="String"> delete from
         kyfz_requirement where requirement_id in
-        <foreach item="requirementId" collection="array"
-            open="(" separator="," close=")"> #{requirementId} </foreach>
+        <foreach item="requirementId" collection="array" open="(" separator="," close=")"> #{requirementId} </foreach>
     </delete>
     <!-- 查找企业列表 -->
-    <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise"
-        resultMap="KyfzEnterpriseResult"> select enterprise_id, enterprise_name,
+    <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult"> select enterprise_id, enterprise_name,
         enterprise_credit_code, enterprise_describe, registered_capital, create_by, create_time,
         update_by, update_time from kyfz_enterprise
         <where>
             <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
         concat('%', #{enterpriseName}, '%')</if>
-            <if
-                test="enterpriseCreditCode != null  and enterpriseCreditCode != ''"> and
+            <if test="enterpriseCreditCode != null  and enterpriseCreditCode != ''"> and
         enterprise_credit_code = #{enterpriseCreditCode}</if>
-            <if
-                test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and
+            <if test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and
         enterprise_describe = #{enterpriseDescribe}</if>
-            <if
-                test="registeredCapital != null  and registeredCapital != ''"> and
+            <if test="registeredCapital != null  and registeredCapital != ''"> and
         registered_capital = #{registeredCapital}</if>
-            <if
-                test="enterpriseKeywords != null  and enterpriseKeywords != ''"> and
+            <if test="enterpriseKeywords != null  and enterpriseKeywords != ''"> and
         enterprise_keywords = #{enterpriseKeywords}</if>
         </where>
     </select>
     <!-- 更新匹配状态 -->
     <update id="updateKyfzRequirementStatusById" parameterType="Long"> update kyfz_requirement
-        <trim
-            prefix="SET" suffixOverrides=",">
+        <trim prefix="SET" suffixOverrides=",">
             <if test="requirementStatus != null">requirement_status = '已匹配',</if>
         </trim>
         where requirement_id = #{requirementId}
     </update>
     <!-- 查询暂时的需求 -->
-    <select id="selectKyfzRequirementList_staging" parameterType="KyfzRequirement"
-        resultMap="KyfzRequirementResult"> select p.requirement_id, p.project_name,
+    <select id="selectKyfzRequirementList_staging" parameterType="KyfzRequirement" resultMap="KyfzRequirementResult"> select p.requirement_id, p.project_name,
         p.contract_number, p.client, p.project_leader, p.project_leader_job_number,
         p.project_members, p.support_unit, p.support_unit_number, p.project_category,
         p.project_type, p.project_classification, p.project_nature, p.service_national_economy,
@@ -409,85 +319,59 @@
         client = #{client}</if>
             <if test="projectLeader != null  and projectLeader != ''"> and
         project_leader = #{projectLeader}</if>
-            <if
-                test="projectLeaderJobNumber != null  and projectLeaderJobNumber != ''"> and
+            <if test="projectLeaderJobNumber != null  and projectLeaderJobNumber != ''"> and
         project_leader_job_number = #{projectLeaderJobNumber}</if>
-            <if
-                test="projectMembers != null  and projectMembers != ''"> and project_members =
+            <if test="projectMembers != null  and projectMembers != ''"> and project_members =
         #{projectMembers}</if>
             <if test="supportUnit != null  and supportUnit != ''"> and
         support_unit = #{supportUnit}</if>
-            <if
-                test="supportUnitNumber != null  and supportUnitNumber != ''"> and
+            <if test="supportUnitNumber != null  and supportUnitNumber != ''"> and
         support_unit_number = #{supportUnitNumber}</if>
-            <if
-                test="projectCategory != null  and projectCategory != ''"> and project_category like
+            <if test="projectCategory != null  and projectCategory != ''"> and project_category like
         concat('%', #{projectCategory}, '%')</if>
-            <if
-                test="projectType != null  and projectType != ''"> and project_type like concat('%',
+            <if test="projectType != null  and projectType != ''"> and project_type like concat('%',
         #{projectType}, '%')</if>
-            <if
-                test="projectClassification != null  and projectClassification != ''"> and
+            <if test="projectClassification != null  and projectClassification != ''"> and
         project_classification = #{projectClassification}</if>
-            <if
-                test="projectNature != null  and projectNature != ''"> and project_nature =
+            <if test="projectNature != null  and projectNature != ''"> and project_nature =
         #{projectNature}</if>
-            <if
-                test="serviceNationalEconomy != null  and serviceNationalEconomy != ''"> and
+            <if test="serviceNationalEconomy != null  and serviceNationalEconomy != ''"> and
         service_national_economy = #{serviceNationalEconomy}</if>
-            <if
-                test="nationalEconomySubIndustry != null  and nationalEconomySubIndustry != ''"> and
+            <if test="nationalEconomySubIndustry != null  and nationalEconomySubIndustry != ''"> and
         national_economy_sub_industry = #{nationalEconomySubIndustry}</if>
-            <if
-                test="socioEconomicObjective != null  and socioEconomicObjective != ''"> and
+            <if test="socioEconomicObjective != null  and socioEconomicObjective != ''"> and
         socio_economic_objective = #{socioEconomicObjective}</if>
-            <if
-                test="startProjectTime != null "> and start_project_time = #{startProjectTime}</if>
-            <if
-                test="endProjectTime != null "> and end_project_time = #{endProjectTime}</if>
-            <if
-                test="totalBudget != null  and totalBudget != ''"> and total_budget = #{totalBudget}</if>
-            <if
-                test="contractType != null  and contractType != ''"> and contract_type =
+            <if test="startProjectTime != null "> and start_project_time = #{startProjectTime}</if>
+            <if test="endProjectTime != null "> and end_project_time = #{endProjectTime}</if>
+            <if test="totalBudget != null  and totalBudget != ''"> and total_budget = #{totalBudget}</if>
+            <if test="contractType != null  and contractType != ''"> and contract_type =
         #{contractType}</if>
             <if test="firstDiscipline != null  and firstDiscipline != ''"> and
         first_discipline = #{firstDiscipline}</if>
-            <if
-                test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and
+            <if test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and
         secondary_discipline = #{secondaryDiscipline}</if>
-            <if
-                test="projectLeaderUnit != null  and projectLeaderUnit != ''"> and
+            <if test="projectLeaderUnit != null  and projectLeaderUnit != ''"> and
         project_leader_unit = #{projectLeaderUnit}</if>
-            <if
-                test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
         concat('%', #{enterpriseName}, '%')</if>
-            <if
-                test="campusMemberAccount != null  and campusMemberAccount != ''"> and
+            <if test="campusMemberAccount != null  and campusMemberAccount != ''"> and
         campus_member_account = #{campusMemberAccount}</if>
-            <if
-                test="requirementStatus != null  and requirementStatus != ''"> and
+            <if test="requirementStatus != null  and requirementStatus != ''"> and
         requirement_status like concat('%', #{requirementStatus}, '%')</if>
-            <if
-                test="creatBy != null  and creatBy != ''"> and creat_by = #{creatBy}</if>
-            <if
-                test="requirementKeywords != null  and requirementKeywords != ''"> and
+            <if test="creatBy != null  and creatBy != ''"> and creat_by = #{creatBy}</if>
+            <if test="requirementKeywords != null  and requirementKeywords != ''"> and
         requirement_keywords = #{requirementKeywords}</if>
-            <if
-                test="requirementDescription != null  and requirementDescription != ''"> and
+            <if test="requirementDescription != null  and requirementDescription != ''"> and
         requirement_description = #{requirementDescription}</if>
-            <if
-                test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
+            <if test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
         '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if>
-            <if
-                test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
+            <if test="taskId != null  and taskId != ''"> and task_id = #{taskId}</if>
         ${params.dataScope}
         </where> ORDER BY requirement_id DESC
     </select>
     <!-- 新增暂时的需求 -->
-    <insert id="insertKyfzRequirement_staging" parameterType="KyfzRequirement"
-        useGeneratedKeys="true" keyProperty="requirementId"> insert into kyfz_staging_requirement
-        <trim
-            prefix="(" suffix=")" suffixOverrides=",">
+    <insert id="insertKyfzRequirement_staging" parameterType="KyfzRequirement" useGeneratedKeys="true" keyProperty="requirementId"> insert into kyfz_staging_requirement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="projectName != null">project_name,</if>
             <if test="contractNumber != null">
         contract_number,</if>
@@ -495,116 +379,76 @@
             <if test="projectLeader != null">
         project_leader,</if>
             <if test="projectLeaderJobNumber != null">project_leader_job_number,</if>
-            <if
-                test="projectMembers != null">project_members,</if>
+            <if test="projectMembers != null">project_members,</if>
             <if test="supportUnit != null">
         support_unit,</if>
             <if test="supportUnitNumber != null">support_unit_number,</if>
-            <if
-                test="projectCategory != null">project_category,</if>
+            <if test="projectCategory != null">project_category,</if>
             <if test="projectType != null">
         project_type,</if>
             <if test="projectClassification != null">project_classification,</if>
-            <if
-                test="projectNature != null">project_nature,</if>
-            <if
-                test="serviceNationalEconomy != null">service_national_economy,</if>
-            <if
-                test="nationalEconomySubIndustry != null">national_economy_sub_industry,</if>
-            <if
-                test="socioEconomicObjective != null">socio_economic_objective,</if>
-            <if
-                test="startProjectTime != null">start_project_time,</if>
-            <if
-                test="endProjectTime != null">end_project_time,</if>
+            <if test="projectNature != null">project_nature,</if>
+            <if test="serviceNationalEconomy != null">service_national_economy,</if>
+            <if test="nationalEconomySubIndustry != null">national_economy_sub_industry,</if>
+            <if test="socioEconomicObjective != null">socio_economic_objective,</if>
+            <if test="startProjectTime != null">start_project_time,</if>
+            <if test="endProjectTime != null">end_project_time,</if>
             <if test="totalBudget != null">
         total_budget,</if>
             <if test="contractType != null">contract_type,</if>
-            <if
-                test="firstDiscipline != null">first_discipline,</if>
-            <if
-                test="secondaryDiscipline != null">secondary_discipline,</if>
-            <if
-                test="projectLeaderUnit != null">project_leader_unit,</if>
-            <if
-                test="enterpriseNumber != null">enterprise_number,</if>
-            <if
-                test="campusMemberAccount != null">campus_member_account,</if>
-            <if
-                test="requirementStatus != null">requirement_status,</if>
+            <if test="firstDiscipline != null">first_discipline,</if>
+            <if test="secondaryDiscipline != null">secondary_discipline,</if>
+            <if test="projectLeaderUnit != null">project_leader_unit,</if>
+            <if test="enterpriseNumber != null">enterprise_number,</if>
+            <if test="campusMemberAccount != null">campus_member_account,</if>
+            <if test="requirementStatus != null">requirement_status,</if>
             <if test="creatBy != null">
         creat_by,</if> create_time,
             <if test="updateBy != null">update_by,</if>
-            <if
-                test="userId != null">user_id,</if>
+            <if test="userId != null">user_id,</if>
             <if test="updateTime != null">update_time,</if>
-            <if
-                test="requirementKeywords != null"> requirement_keywords,</if>
-            <if
-                test="requirementDescription != null">requirement_description,</if>
-            <if
-                test="taskId != null">task_id,</if> requirement_release_time
+            <if test="requirementKeywords != null"> requirement_keywords,</if>
+            <if test="requirementDescription != null">requirement_description,</if>
+            <if test="taskId != null">task_id,</if> requirement_release_time
         </trim>
-        <trim
-            prefix="values (" suffix=")" suffixOverrides=",">
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectName != null">#{projectName},</if>
             <if test="contractNumber != null">
         #{contractNumber},</if>
             <if test="client != null">#{client},</if>
-            <if
-                test="projectLeader != null">#{projectLeader},</if>
-            <if
-                test="projectLeaderJobNumber != null">#{projectLeaderJobNumber},</if>
-            <if
-                test="projectMembers != null">#{projectMembers},</if>
+            <if test="projectLeader != null">#{projectLeader},</if>
+            <if test="projectLeaderJobNumber != null">#{projectLeaderJobNumber},</if>
+            <if test="projectMembers != null">#{projectMembers},</if>
             <if test="supportUnit != null">
         #{supportUnit},</if>
             <if test="supportUnitNumber != null">#{supportUnitNumber},</if>
-            <if
-                test="projectCategory != null">#{projectCategory},</if>
-            <if
-                test="projectType != null">#{projectType},</if>
-            <if
-                test="projectClassification != null">#{projectClassification},</if>
-            <if
-                test="projectNature != null">#{projectNature},</if>
-            <if
-                test="serviceNationalEconomy != null">#{serviceNationalEconomy},</if>
-            <if
-                test="nationalEconomySubIndustry != null">#{nationalEconomySubIndustry},</if>
-            <if
-                test="socioEconomicObjective != null">#{socioEconomicObjective},</if>
-            <if
-                test="startProjectTime != null">#{startProjectTime},</if>
-            <if
-                test="endProjectTime != null">#{endProjectTime},</if>
+            <if test="projectCategory != null">#{projectCategory},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="projectClassification != null">#{projectClassification},</if>
+            <if test="projectNature != null">#{projectNature},</if>
+            <if test="serviceNationalEconomy != null">#{serviceNationalEconomy},</if>
+            <if test="nationalEconomySubIndustry != null">#{nationalEconomySubIndustry},</if>
+            <if test="socioEconomicObjective != null">#{socioEconomicObjective},</if>
+            <if test="startProjectTime != null">#{startProjectTime},</if>
+            <if test="endProjectTime != null">#{endProjectTime},</if>
             <if test="totalBudget != null">
         #{totalBudget},</if>
             <if test="contractType != null">#{contractType},</if>
-            <if
-                test="firstDiscipline != null">#{firstDiscipline},</if>
-            <if
-                test="secondaryDiscipline != null">#{secondaryDiscipline},</if>
-            <if
-                test="projectLeaderUnit != null">#{projectLeaderUnit},</if>
-            <if
-                test="enterpriseNumber != null">#{enterpriseNumber},</if>
-            <if
-                test="campusMemberAccount != null">#{campusMemberAccount},</if>
-            <if
-                test="requirementStatus != null">#{requirementStatus},</if>
-            <if
-                test="creatBy != null">#{creatBy},</if> sysdate(),
+            <if test="firstDiscipline != null">#{firstDiscipline},</if>
+            <if test="secondaryDiscipline != null">#{secondaryDiscipline},</if>
+            <if test="projectLeaderUnit != null">#{projectLeaderUnit},</if>
+            <if test="enterpriseNumber != null">#{enterpriseNumber},</if>
+            <if test="campusMemberAccount != null">#{campusMemberAccount},</if>
+            <if test="requirementStatus != null">#{requirementStatus},</if>
+            <if test="creatBy != null">#{creatBy},</if> sysdate(),
             <if test="updateBy != null">
         #{updateBy},</if>
             <if test="userId != null"> #{userId},</if>
             <if test="updateTime != null">
         #{updateTime},</if>
             <if test="requirementKeywords != null">#{requirementKeywords},</if>
-            <if
-                test="requirementDescription != null">#{requirementDescription},</if>
-            <if
-                test="taskId != null">#{taskId},</if> sysdate()
+            <if test="requirementDescription != null">#{requirementDescription},</if>
+            <if test="taskId != null">#{taskId},</if> sysdate()
         </trim>
     </insert>
     <!-- 修改暂时的需求 -->
@@ -612,10 +456,8 @@
         kyfz_staging_requirement
         <trim prefix="SET" suffixOverrides=",">
             <if test="projectName != null">project_name = #{projectName},</if>
-            <if
-                test="contractNumber != null">contract_number = #{contractNumber},</if>
-            <if
-                test="client != null">client = #{client},</if>
+            <if test="contractNumber != null">contract_number = #{contractNumber},</if>
+            <if test="client != null">client = #{client},</if>
             <if test="projectLeader != null">project_leader
         = #{projectLeader},</if>
             <if test="projectLeaderJobNumber != null">project_leader_job_number
@@ -623,14 +465,10 @@
             <if test="projectMembers != null">project_members =
         #{projectMembers},</if>
             <if test="supportUnit != null">support_unit = #{supportUnit},</if>
-            <if
-                test="supportUnitNumber != null">support_unit_number = #{supportUnitNumber},</if>
-            <if
-                test="projectCategory != null">project_category = #{projectCategory},</if>
-            <if
-                test="projectType != null">project_type = #{projectType},</if>
-            <if
-                test="projectClassification != null">project_classification =
+            <if test="supportUnitNumber != null">support_unit_number = #{supportUnitNumber},</if>
+            <if test="projectCategory != null">project_category = #{projectCategory},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="projectClassification != null">project_classification =
         #{projectClassification},</if>
             <if test="projectNature != null">project_nature =
         #{projectNature},</if>
@@ -645,31 +483,20 @@
             <if test="endProjectTime != null">end_project_time =
         #{endProjectTime},</if>
             <if test="totalBudget != null">total_budget = #{totalBudget},</if>
-            <if
-                test="contractType != null">contract_type = #{contractType},</if>
-            <if
-                test="firstDiscipline != null">first_discipline = #{firstDiscipline},</if>
-            <if
-                test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
-            <if
-                test="projectLeaderUnit != null">project_leader_unit = #{projectLeaderUnit},</if>
-            <if
-                test="enterpriseNumber != null">enterprise_number = #{enterpriseNumber},</if>
-            <if
-                test="campusMemberAccount != null">campus_member_account = #{campusMemberAccount},</if>
-            <if
-                test="requirementStatus != null">requirement_status = #{requirementStatus},</if>
-            <if
-                test="creatBy != null">creat_by = #{creatBy},</if>
+            <if test="contractType != null">contract_type = #{contractType},</if>
+            <if test="firstDiscipline != null">first_discipline = #{firstDiscipline},</if>
+            <if test="secondaryDiscipline != null">secondary_discipline = #{secondaryDiscipline},</if>
+            <if test="projectLeaderUnit != null">project_leader_unit = #{projectLeaderUnit},</if>
+            <if test="enterpriseNumber != null">enterprise_number = #{enterpriseNumber},</if>
+            <if test="campusMemberAccount != null">campus_member_account = #{campusMemberAccount},</if>
+            <if test="requirementStatus != null">requirement_status = #{requirementStatus},</if>
+            <if test="creatBy != null">creat_by = #{creatBy},</if>
             <if test="createTime != null">create_time
         = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if
-                test="updateTime != null">update_time = #{updateTime},</if>
-            <if
-                test="requirementKeywords != null">requirement_keywords = #{requirementKeywords},</if>
-            <if
-                test="requirementDescription != null">requirement_description =
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="requirementKeywords != null">requirement_keywords = #{requirementKeywords},</if>
+            <if test="requirementDescription != null">requirement_description =
         #{requirementDescription},</if>
             <if test="requirementReleaseTime != null">requirement_release_time
         = #{requirementReleaseTime},</if>
@@ -678,12 +505,10 @@
     <!-- 批量删除暂时的需求 -->
     <delete id="deleteKyfzRequirementByRequirementIds_staging" parameterType="String"> delete from
         kyfz_staging_requirement where requirement_id in
-        <foreach item="requirementId"
-            collection="array" open="(" separator="," close=")"> #{requirementId} </foreach>
+        <foreach item="requirementId" collection="array" open="(" separator="," close=")"> #{requirementId} </foreach>
     </delete>
     <!-- 查询具体的暂时的需求 -->
-    <select id="selectKyfzRequirementByRequirementId_staging" parameterType="Long"
-        resultMap="KyfzRequirementResult">
+    <select id="selectKyfzRequirementByRequirementId_staging" parameterType="Long" resultMap="KyfzRequirementResult">
         select p.requirement_id, p.project_name,
         p.contract_number, p.client, p.project_leader, p.project_leader_job_number,
         p.project_members, p.support_unit, p.support_unit_number, p.project_category,
@@ -698,5 +523,9 @@
         kyfz_staging_requirement p LEFT JOIN kyfz_enterprise ON p.enterprise_number =
         kyfz_enterprise.enterprise_id left join sys_user u on p.user_id=u.user_id left join sys_dept
         d on d.dept_id=u.dept_id where requirement_id = #{requirementId}
+    </select>
+    <!-- 根据企业名查询名下所有需求 -->
+    <select id="getEnterpriseRequirementInfo" parameterType="String" resultMap="KyfzRequirementResult">
+        select * from kyfz_requirement where client = #{client}
     </select>
 </mapper>

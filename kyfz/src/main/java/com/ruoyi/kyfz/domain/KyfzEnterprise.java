@@ -44,6 +44,10 @@ public class KyfzEnterprise extends BaseEntity {
     /** 企业分类的名称(多个) */
     private String categoryNames;
 
+    /** 企业需求 */
+    @Excel(name = "企业需求")
+    private KyfzRequirement kyfzRequirement;
+
     public static long getSerialversionuid() {
         return serialVersionUID;
     }

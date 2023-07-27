@@ -16,9 +16,9 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="公司名称" prop="enterpriseName">
+      <el-form-item label="公司名称" prop="client">
         <el-select
-          v-model="queryParams.enterpriseName"
+          v-model="queryParams.client"
           filterable
           clearable
           placeholder="请选择公司名称"
@@ -106,7 +106,7 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="需求名称" align="center" prop="projectName" />
       <el-table-column label="需求状态" align="center" prop="requirementStatus" />
-      <el-table-column label="公司名称" align="center" prop="enterpriseName" />
+      <el-table-column label="公司名称" align="center" prop="client" />
       <el-table-column
         label="发布时间"
         align="center"
@@ -234,9 +234,9 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="公司名称" prop="enterpriseName">
+        <el-form-item label="公司名称" prop="client">
           <el-select
-            v-model="form.enterpriseName"
+            v-model="form.client"
             filterable
             clearable
             placeholder=""
@@ -338,7 +338,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="公司名称" prop="enterpriseName">
+        <el-form-item label="公司名称" prop="client">
           <el-select
             v-model="form.client"
             filterable
@@ -530,10 +530,15 @@ export default {
     getList() {
       this.loading = true
       listRequirement(this.queryParams).then((response) => {
+        if (response.rows.length !== 0) {
         this.requirementList = response.rows
         this.queryParams.requirementId = response.rows[0].requirementId
         this.total = response.total
         this.loading = false
+        } else {
+          this.requirementList = null
+          this.loading = false
+        }
       })
     },
     // 取消按钮
@@ -584,6 +589,7 @@ export default {
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
+      this.queryParams.client = null
     },
 
     // 搜索框配匹配按钮，新建项目并匹配

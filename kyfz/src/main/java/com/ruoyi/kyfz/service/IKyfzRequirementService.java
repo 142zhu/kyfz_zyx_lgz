@@ -116,4 +116,10 @@ public interface IKyfzRequirementService {
      */
     public KyfzRequirement selectKyfzRequirementByRequirementId_staging(Long requirementId);
 
+    /**
+     * 根据企业名查询名下所有需求
+     * 
+     */
+    public List<KyfzRequirement> getEnterpriseRequirementInfo(String enterpriseName);
+
 }

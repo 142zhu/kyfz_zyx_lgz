@@ -1,8 +1,20 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="100px">
+    <el-form
+      v-show="showSearch"
+      ref="queryForm"
+      :model="queryParams"
+      size="small"
+      :inline="true"
+      label-width="100px"
+    >
       <el-form-item label="企业名" prop="enterpriseName" label-width="120px">
-        <el-input v-model="queryParams.enterpriseName" placeholder="请输入企业名" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.enterpriseName"
+          placeholder="请输入企业名"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="企业信用代码" prop="enterpriseCreditCode">
         <el-input
@@ -29,24 +41,38 @@
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+        >搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
     <!-- 级联面板 -->
-    <el-row :gutter="5" justify="end" cols="8" style=" background-color: rgb(247, 251, 255);">
-      <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px;">
-        <span class="unit-tag" style="font-weight: bold;font-size: 14px;">所属行业</span>
+    <el-row
+      :gutter="5"
+      justify="end"
+      cols="8"
+      style="background-color: rgb(247, 251, 255)"
+    >
+      <el-col :span="2" offset="1" style="margin-top: 40px; margin-bottom: 40px">
+        <span class="unit-tag" style="font-weight: bold; font-size: 14px">所属行业</span>
       </el-col>
       <el-col :span="20">
         <div v-for="item in classificationList" :key="item.categoryId">
-          <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px;">
+          <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px">
             <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link" style=" cursor: pointer;color: #409EFF;">
+              <span class="el-dropdown-link" style="cursor: pointer; color: #409eff">
                 {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-for="childItem in item.children" :key="childItem.categoryId" :command="childItem.categoryId"><span class="el-dropdown-link">
+                <el-dropdown-item
+                  v-for="childItem in item.children"
+                  :key="childItem.categoryId"
+                  :command="childItem.categoryId"
+                ><span class="el-dropdown-link">
                   {{ childItem.categoryName }}
                 </span></el-dropdown-item>
               </el-dropdown-menu>
@@ -112,9 +138,17 @@
 
     <!-- 卡片实现 -->
     <div>
-      <el-table v-loading="loading" :data="enterpriseList" @selection-change="handleSelectionChange">
+      <el-table
+        v-loading="loading"
+        :data="enterpriseList"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column :label="ReminderInformation" align="center" class-name="small-padding fixed-width">
+        <el-table-column
+          :label="ReminderInformation"
+          align="center"
+          class-name="small-padding fixed-width"
+        >
           <template slot-scope="scope">
             <el-card class="card-item">
               <div class="card-actions">
@@ -130,8 +164,12 @@
                   <div class="card-row">
                     <span class="card-label">企业描述:</span>
                     <span class="card-value" :title="scope.row.enterpriseDescribe">
-                      {{ scope.row.enterpriseDescribe && scope.row.enterpriseDescribe.length > 13 ?
-                        scope.row.enterpriseDescribe.substring(0, 13) + '...' : scope.row.enterpriseDescribe }}
+                      {{
+                        scope.row.enterpriseDescribe &&
+                          scope.row.enterpriseDescribe.length > 13
+                          ? scope.row.enterpriseDescribe.substring(0, 13) + "..."
+                          : scope.row.enterpriseDescribe
+                      }}
                     </span>
                   </div>
                   <div class="card-row">
@@ -142,8 +180,7 @@
                     <span class="card-label">所属行业:</span>
                     <span class="card-value" :title="scope.row.categoryNames">
                       {{
-                        scope.row.categoryNames &&
-                          scope.row.categoryNames.length > 15
+                        scope.row.categoryNames && scope.row.categoryNames.length > 15
                           ? scope.row.categoryNames.substring(0, 15) + "..."
                           : scope.row.categoryNames
                       }}
@@ -156,6 +193,14 @@
                 </div>
                 <div class="card-actions-right">
                   <div class="buttons-container">
+                    <el-button
+                      size="mini"
+                      type="text"
+                      icon="el-icon-edit"
+                      @click="handleDetail(scope.row)"
+                    >
+                      详情
+                    </el-button>
                     <el-button
                       v-hasPermi="['kyfz:enterprise:edit']"
                       size="mini"
@@ -209,10 +254,22 @@
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="企业名" prop="enterpriseName">
-          <el-input v-model="form.enterpriseName" placeholder="请输入企业名" style="width: 600px" />
+          <el-input
+            v-model="form.enterpriseName"
+            placeholder="请输入企业名"
+            style="width: 600px"
+          />
         </el-form-item>
-        <el-form-item label="企业信用代码" prop="enterpriseCreditCode" label-width="250px">
-          <el-input v-model="form.enterpriseCreditCode" placeholder="请输入企业信用代码" style="width: 600px" />
+        <el-form-item
+          label="企业信用代码"
+          prop="enterpriseCreditCode"
+          label-width="250px"
+        >
+          <el-input
+            v-model="form.enterpriseCreditCode"
+            placeholder="请输入企业信用代码"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="企业描述" prop="enterpriseDescribe" label-width="250px">
           <el-input
@@ -224,15 +281,87 @@
           />
         </el-form-item>
         <el-form-item label="企业注册资本" prop="registeredCapital" label-width="250px">
-          <el-input v-model="form.registeredCapital" placeholder="请输入企业注册资本" style="width: 600px" />
+          <el-input
+            v-model="form.registeredCapital"
+            placeholder="请输入企业注册资本"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="企业关键词" prop="enterpriseKeywords" label-width="250px">
-          <el-input v-model="form.enterpriseKeywords" placeholder="请输入企业关键词" style="width: 600px" />
+          <el-input
+            v-model="form.enterpriseKeywords"
+            placeholder="请输入企业关键词"
+            style="width: 600px"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <!-- 企业详情 -->
+    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body>
+      <el-table :data="[enterpriseDetail]" class="match-detail-table">
+        <el-table-column label="企业名" align="center" prop="enterpriseName" />
+        <el-table-column
+          label="企业信用代码"
+          align="center"
+          prop="enterpriseCreditCode"
+        />
+        <el-table-column label="企业注册资本" align="center" prop="registeredCapital" />
+      </el-table>
+      <div class="match-detail-result">
+        <h4>企业信息</h4>
+        <div class="match-detail-result-info">
+          <div>
+            <h5>企业描述</h5>
+            <span> {{ enterpriseDetail.enterpriseDescribe }}</span>
+            <el-skeleton :rows="6" animated />
+          </div>
+          <div>
+            <h5>相关需求</h5>
+            <div class="match-detail-decorate">
+              <el-tooltip
+                v-for="item in requirementlist"
+                :key="item"
+                placement="top"
+                class="match-detail-item project"
+                :content="
+                  '需求状态：' +
+                    item.requirementStatus +
+                    '，总预算：' +
+                    item.totalBudget +
+                    '万元'
+                "
+              >
+                <span>{{ item.projectName }} </span>
+              </el-tooltip>
+            </div>
+          </div>
+          <div>
+            <h5>企业亮点</h5>
+            <el-tag
+              v-for="item in enterpriseKeyWordList"
+              :key="item"
+              type="success"
+              effect="dark"
+              size="medium"
+              style="margin-left: 10px; margin-right: 10px;"
+            >
+              {{ item }}
+            </el-tag>
+          </div>
+          <div>
+            <h5>已有合作基础</h5>
+            <el-skeleton :rows="3" animated />
+          </div>
+          <div>
+            <h5>技术评估</h5>
+            <el-skeleton :rows="3" animated />
+          </div>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -244,6 +373,7 @@ import {
 addEnterprise,
 delEnterprise,
 getEnterprise,
+getEnterpriseRequirement,
 listEnterprise,
 updateEnterprise
 } from '@/api/kyfz/enterprise'
@@ -270,10 +400,16 @@ export default {
       total: 0,
       // 企业管理表格数据
       enterpriseList: [],
+      enterpriseDetail: [],
+      // 企业名下的需求
+      requirementlist: [],
+      // 企业关键词列表
+      enterpriseKeyWordList: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
       open: false,
+      openDetail: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -296,6 +432,19 @@ export default {
     this.getListClassification()
   },
   methods: {
+    // 企业详情
+    handleDetail(row) {
+      getEnterprise(row.enterpriseId).then((response) => {
+        this.enterpriseDetail = response.data
+        this.enterpriseKeyWordList = response.data.enterpriseKeywords
+          .trim()
+          .split(/[,，、|]/)
+        getEnterpriseRequirement(response.data.enterpriseName).then((response2) => {
+          this.requirementlist = response2.data
+        })
+      })
+      this.openDetail = true
+    },
     // 重置搜索
     resetting() {
       this.reset_queryParams()
@@ -308,7 +457,8 @@ export default {
       this.queryParams.categoryId = command
       listEnterprise(this.queryParams).then((response) => {
         this.enterpriseList = response.rows
-        this.ReminderInformation = '企业信息——已选择  ' + this.enterpriseList[0].categoryNames + '  行业'
+        this.ReminderInformation =
+          '企业信息——已选择  ' + this.enterpriseList[0].categoryNames + '  行业'
         this.total = response.total
         this.loading = false
       })
@@ -428,7 +578,7 @@ export default {
           this.getList()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => { })
+        .catch(() => {})
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -511,5 +661,63 @@ export default {
 .card-value {
   font-family: Arial, sans-serif;
   color: #666;
+}
+</style>
+
+<style scoped>
+/* 企业详细信息 */
+.match-detail-keywords h4,
+.match-detail-result h4,
+.match-detail-team h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.match-detail-keywords-info,
+.match-detail-result-info,
+.match-detail-team-info {
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  background-color: #f5f7fa;
+}
+
+.match-detail-result-info > div {
+  margin-bottom: 10px;
+}
+
+.match-detail-decorate {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-detail-decorate .match-detail-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.match-detail-decorate .match-detail-item:first-child {
+  margin-left: 0;
+}
+
+.match-detail-decorate .match-detail-item::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.match-detail-decorate .match-detail-item.project::before {
+  background-color: #3fb27f;
 }
 </style>
