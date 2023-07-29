@@ -318,10 +318,9 @@
           <div>
             <h5>企业描述</h5>
             <span> {{ enterpriseDetail.enterpriseDescribe }}</span>
-            <el-skeleton :rows="6" animated />
           </div>
           <div>
-            <h5>相关需求</h5>
+            <h5>已有合作基础</h5>
             <div class="match-detail-decorate">
               <el-tooltip
                 v-for="item in requirementlist"
@@ -329,7 +328,7 @@
                 placement="top"
                 class="match-detail-item project"
                 :content="
-                  '需求状态：' +
+                  '状态：' +
                     item.requirementStatus +
                     '，总预算：' +
                     item.totalBudget +
@@ -352,10 +351,6 @@
             >
               {{ item }}
             </el-tag>
-          </div>
-          <div>
-            <h5>已有合作基础</h5>
-            <el-skeleton :rows="3" animated />
           </div>
           <div>
             <h5>技术评估</h5>

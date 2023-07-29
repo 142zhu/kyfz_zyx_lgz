@@ -300,4 +300,20 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
 
         return jsonObject;
     }
+
+    /**
+     * 检索搜索专家
+     * 
+     * @param kyfzExpert 专家管理
+     * @return 专家管理
+     */
+    @Override
+    public List<KyfzExpert> searchExperts(KyfzExpert kyfzExpert) {
+        List<KyfzExpert> ExpertList = kyfzExpertMapper.searchExperts(kyfzExpert);
+        for (KyfzExpert e : ExpertList) {
+            e.setCategoryNames(
+                    kyfzIndustryClassificationMapper.selectKyfzIndustryClassificationByCategoryIds(e.getCategoryId()));
+        }
+        return ExpertList;
+    }
 }

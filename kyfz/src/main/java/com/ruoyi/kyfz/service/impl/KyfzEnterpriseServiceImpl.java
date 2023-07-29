@@ -97,4 +97,20 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService {
     public int deleteKyfzEnterpriseByEnterpriseId(Long enterpriseId) {
         return kyfzEnterpriseMapper.deleteKyfzEnterpriseByEnterpriseId(enterpriseId);
     }
+
+    /**
+     * 检索模块查询企业管理列表
+     * 
+     * @param kyfzEnterprise 企业管理
+     * @return 企业管理
+     */
+    @Override
+    public List<KyfzEnterprise> searchEnterprises(KyfzEnterprise kyfzEnterprise) {
+        List<KyfzEnterprise> kyfzEnterpriseList = kyfzEnterpriseMapper.searchEnterprises(kyfzEnterprise);
+        for (KyfzEnterprise e : kyfzEnterpriseList) {
+            e.setCategoryNames(
+                    kyfzIndustryClassificationMapper.selectKyfzIndustryClassificationByCategoryIds(e.getCategoryId()));
+        }
+        return kyfzEnterpriseList;
+    }
 }

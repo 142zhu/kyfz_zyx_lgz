@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.service;
 
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzTeam;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.kyfz.domain.KyfzTeam;
  * @author zyx
  * @date 2023-07-18
  */
-public interface IKyfzTeamService 
-{
+public interface IKyfzTeamService {
     /**
      * 查询专家团队
      * 
@@ -58,4 +58,12 @@ public interface IKyfzTeamService
      * @return 结果
      */
     public int deleteKyfzTeamByTeamId(Long teamId);
+
+    /**
+     * 检索模块查专家团队列表
+     * 
+     * @param kyfzTeam 专家团队
+     * @return 专家团队集合
+     */
+    public List<KyfzTeam> searchTeams(KyfzTeam kyfzTeam);
 }

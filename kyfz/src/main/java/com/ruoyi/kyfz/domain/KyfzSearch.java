@@ -17,6 +17,32 @@ public class KyfzSearch extends BaseEntity {
     /** 检索id */
     private Long searchId;
 
+    /** 检索关键词 */
+    private String keyWord;
+
+    /** 检索标志 */
+    private String mark;
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getKeyWord() {
+        return keyWord;
+    }
+
+    public String getMark() {
+        return mark;
+    }
+
+    public void setKeyWord(String keyWord) {
+        this.keyWord = keyWord;
+    }
+
+    public void setMark(String mark) {
+        this.mark = mark;
+    }
+
     public void setSearchId(Long searchId) {
         this.searchId = searchId;
     }

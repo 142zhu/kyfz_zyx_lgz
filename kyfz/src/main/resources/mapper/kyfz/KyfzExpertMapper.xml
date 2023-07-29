@@ -286,4 +286,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{expertAccount}
         </foreach>
     </select>
+    <!-- 检索模块搜索 -->
+    <select id="searchExperts" parameterType="KyfzExpert" resultMap="KyfzExpertResult">
+        <include refid="selectKyfzExpertVo"/>
+        <where>
+            <if test="expertName != null  and expertName != ''"> or expert_account like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or expert_name like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or expert_position like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or expert_affiliation like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or primary_discipline like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or secondary_discipline like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or tertiary_discipline like concat('%', #{expertName}, '%')</if>
+            <if test="expertName != null  and expertName != ''"> or research_direction like concat('%', #{expertName}, '%')</if>
+            <if test="thesisId != null  and thesisId != ''"> and thesis_id = #{thesisId}</if>
+            <if test="projectId != null  and projectId != ''"> and project_id = #{projectId}</if>
+            <if test="intellectualPropertyId != null  and intellectualPropertyId != ''"> and intellectual_property_id = #{intellectualPropertyId}</if>
+            <if test="awardsId != null  and awardsId != ''"> and awards_id = #{awardsId}</if>
+            <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
+            <if test="expertName != null  and expertName != ''"> or expert_teams like concat('%', #{expertName}, '%')</if>
+            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
+        </where>
+        ORDER BY expert_id DESC
+    </select>
 </mapper>

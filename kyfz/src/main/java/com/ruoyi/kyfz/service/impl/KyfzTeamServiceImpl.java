@@ -1,10 +1,12 @@
 package com.ruoyi.kyfz.service.impl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.kyfz.mapper.KyfzTeamMapper;
+
 import com.ruoyi.kyfz.domain.KyfzTeam;
+import com.ruoyi.kyfz.mapper.KyfzTeamMapper;
 import com.ruoyi.kyfz.service.IKyfzTeamService;
 
 /**
@@ -14,8 +16,7 @@ import com.ruoyi.kyfz.service.IKyfzTeamService;
  * @date 2023-07-18
  */
 @Service
-public class KyfzTeamServiceImpl implements IKyfzTeamService 
-{
+public class KyfzTeamServiceImpl implements IKyfzTeamService {
     @Autowired
     private KyfzTeamMapper kyfzTeamMapper;
 
@@ -26,8 +27,7 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 专家团队
      */
     @Override
-    public KyfzTeam selectKyfzTeamByTeamId(Long teamId)
-    {
+    public KyfzTeam selectKyfzTeamByTeamId(Long teamId) {
         return kyfzTeamMapper.selectKyfzTeamByTeamId(teamId);
     }
 
@@ -38,8 +38,7 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 专家团队
      */
     @Override
-    public List<KyfzTeam> selectKyfzTeamList(KyfzTeam kyfzTeam)
-    {
+    public List<KyfzTeam> selectKyfzTeamList(KyfzTeam kyfzTeam) {
         return kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
     }
 
@@ -50,8 +49,7 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 结果
      */
     @Override
-    public int insertKyfzTeam(KyfzTeam kyfzTeam)
-    {
+    public int insertKyfzTeam(KyfzTeam kyfzTeam) {
         return kyfzTeamMapper.insertKyfzTeam(kyfzTeam);
     }
 
@@ -62,8 +60,7 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 结果
      */
     @Override
-    public int updateKyfzTeam(KyfzTeam kyfzTeam)
-    {
+    public int updateKyfzTeam(KyfzTeam kyfzTeam) {
         return kyfzTeamMapper.updateKyfzTeam(kyfzTeam);
     }
 
@@ -74,8 +71,7 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 结果
      */
     @Override
-    public int deleteKyfzTeamByTeamIds(Long[] teamIds)
-    {
+    public int deleteKyfzTeamByTeamIds(Long[] teamIds) {
         return kyfzTeamMapper.deleteKyfzTeamByTeamIds(teamIds);
     }
 
@@ -86,8 +82,18 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService
      * @return 结果
      */
     @Override
-    public int deleteKyfzTeamByTeamId(Long teamId)
-    {
+    public int deleteKyfzTeamByTeamId(Long teamId) {
         return kyfzTeamMapper.deleteKyfzTeamByTeamId(teamId);
+    }
+
+    /**
+     * 检索模块查专家团队列表
+     * 
+     * @param kyfzTeam 专家团队
+     * @return 专家团队
+     */
+    @Override
+    public List<KyfzTeam> searchTeams(KyfzTeam kyfzTeam) {
+        return kyfzTeamMapper.searchTeams(kyfzTeam);
     }
 }

@@ -46,7 +46,7 @@ public class TestImport {
     @Test
     public void testImport() {
         // importExpert("专家表_0722.csv");
-        // importEnterprise("企业表_0722.csv");
+        importEnterprise("企业表0729.csv");
         // importMatch("匹配表.csv");
         // importRequirements("需求表.csv");
         // importTeam("团队表.csv");
@@ -54,7 +54,7 @@ public class TestImport {
         // importThesis("论文表.csv");
         // importCertificate("证书表.csv");
         // importProject("项目表.csv");
-        importRelationship("关系表.csv");
+        // importRelationship("关系表.csv");
         // importAward("奖项表.csv");
         // importOtherResults("其他成果表.csv");
         // importIndustryClassification("行业分类表_0722.csv");
@@ -88,11 +88,11 @@ public class TestImport {
     private void importEnterprise(String fileName) {
         List<String[]> list = readByCsvReader(PREFIX_PATH + fileName);
         jdbcTemplate.execute(SQL_MODE_SQL);
-        String sql = "insert into `kyfz_enterprise` (`enterprise_id`, `enterprise_name`, `enterprise_credit_code`, `registered_capital`, "
+        String sql = "insert into `kyfz_enterprise` (`enterprise_id`, `enterprise_name`, `enterprise_credit_code`,`enterprise_describe`,`registered_capital`, "
                 +
-                "`category_id`,`enterprise_keywords` ) values (?,?,?,?,?,?);";
+                "`enterprise_keywords`,`category_id` ) values (?,?,?,?,?,?,?);";
         for (String[] el : list) {
-            jdbcTemplate.update(sql, el[0], el[1], el[2], el[3], el[4], el[5]);
+            jdbcTemplate.update(sql, el[0], el[1], el[2], el[3], el[4], el[5], el[6]);
             // KyfzEnterprise enterprise = new KyfzEnterprise();
             // enterprise.setEnterpriseId(Long.parseLong(el[0]));
             // enterprise.setEnterpriseName(el[1]);

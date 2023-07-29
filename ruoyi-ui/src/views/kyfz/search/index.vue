@@ -4,34 +4,41 @@
       <div class="button-container">
         <el-button-group>
           <el-button
-            :type="content === '综合搜索' ? 'primary' : 'default'"
+            :type="activeTab === '综合搜索' ? 'primary' : 'default'"
+            style="width: 90px"
             @click="showContent('综合搜索')"
           >综合搜索</el-button>
           <el-button
-            :type="content === '搜人才' ? 'primary' : 'default'"
+            :type="activeTab === '搜人才' ? 'primary' : 'default'"
+            style="width: 90px"
             @click="showContent('搜人才')"
           >搜人才</el-button>
           <el-button
-            :type="content === '搜团队' ? 'primary' : 'default'"
+            :type="activeTab === '搜团队' ? 'primary' : 'default'"
+            style="width: 90px"
             @click="showContent('搜团队')"
           >搜团队</el-button>
           <el-button
-            :type="content === '搜企业' ? 'primary' : 'default'"
+            :type="activeTab === '搜企业' ? 'primary' : 'default'"
+            s
+            style="width: 90px"
             @click="showContent('搜企业')"
           >搜企业</el-button>
           <el-button
-            :type="content === '搜成果' ? 'primary' : 'default'"
+            :type="activeTab === '搜成果' ? 'primary' : 'default'"
+            style="width: 90px"
             @click="showContent('搜成果')"
           >搜成果</el-button>
         </el-button-group>
       </div>
       <el-input
-        v-model="inputData"
+        v-model="search_queryParams.keyWord"
         placeholder="请输入内容"
         class="input-with-select"
-        style="width: 482px"
+        style="width: 448px"
       >
-        <el-button slot="append" icon="el-icon-search" />
+
+        <el-button slot="append" type="primary" icon="el-icon-search" @click="searchAll">搜索</el-button>
       </el-input>
     </div>
     <div style="margin-top: 40px">
@@ -90,7 +97,7 @@
             </el-tabs>
           </div>
           <div v-show="activeTab2 === '选择行业后数据显示'">
-            <el-table v-loading="loading" style="width: 1300px" :data="expertList">
+            <el-table v-loading="loading" style="width: 1000px" :data="expertList">
               <el-table-column
                 label="相关信息"
                 align="center"
@@ -146,7 +153,9 @@
                         </div>
                         <div class="card-row">
                           <span class="card-label">专家团队:</span>
-                          <span class="card-value">{{ scope.row.teamMembers }}</span>
+                          <span class="card-value" style="width: 800px">{{
+                            scope.row.teamMembers
+                          }}</span>
                         </div>
                       </div>
                     </div>
@@ -157,9 +166,9 @@
             <pagination
               v-show="total >= 0"
               :total="total"
-              :page.sync="queryParams.pageNum"
-              :limit.sync="queryParams.pageSize"
-              @pagination="getexpertList"
+              :page.sync="search_queryParams.pageNum"
+              :limit.sync="search_queryParams.pageSize"
+              @pagination="searchAll"
             />
           </div>
         </div>
@@ -167,8 +176,7 @@
           <el-table
             v-loading="loading"
             :data="expertList"
-            style="width: 1300px"
-            @selection-change="handleSelectionChange"
+            style="width: 1000px"
           >
             <el-table-column
               label="人才信息"
@@ -222,13 +230,19 @@
               </template>
             </el-table-column>
           </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="search_queryParams.pageNum"
+            :limit.sync="search_queryParams.pageSize"
+            @pagination="searchAll"
+          />
         </div>
         <div v-show="activeTab === '搜团队'">
           <el-card
-            v-for="o in 6"
-            :key="o"
-            class="box-card"
-            :class="o % 2 === 0 ? 'light-blue' : 'blue'"
+            v-for="item in teamList"
+            :key="item.teamId"
+            class="box-card blue"
             style="margin-top: 20px"
           >
             <el-descriptions
@@ -242,12 +256,12 @@
                 label="团队成员"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >张三、李四、王五、赵六</el-descriptions-item>
+              >{{ item.teamMembers }}</el-descriptions-item>
               <el-descriptions-item
                 label="研究方向"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >人工智能、计算机视觉</el-descriptions-item>
+              >{{ item.reseachDirections }}</el-descriptions-item>
               <el-descriptions-item
                 label="累计专利"
                 :span="2"
@@ -263,10 +277,10 @@
                 <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
               </el-descriptions-item>
               <el-descriptions-item
-                label="负责人及联系方式"
+                label="成员账号"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >张三（060-123456）</el-descriptions-item>
+              >{{ item.teamAccount }}</el-descriptions-item>
               <el-descriptions-item
                 label="累计成果"
                 label-class-name="my-label"
@@ -275,12 +289,19 @@
                 188 件</el-descriptions-item>
             </el-descriptions>
           </el-card>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="search_queryParams.pageNum"
+            :limit.sync="search_queryParams.pageSize"
+            @pagination="searchAll"
+          />
         </div>
         <div v-show="activeTab === '搜企业'">
           <el-table
             v-loading="loading"
             :data="enterpriseList"
-            style="width: 1300px"
+            style="width: 1000px"
             @selection-change="handleSelectionChange"
           >
             <el-table-column
@@ -332,29 +353,18 @@
                         <span class="card-value">{{ scope.row.enterpriseKeywords }}</span>
                       </div>
                     </div>
-                    <div class="card-actions-right">
-                      <div class="buttons-container">
-                        <el-button
-                          v-hasPermi="['kyfz:enterprise:edit']"
-                          size="mini"
-                          type="text"
-                          icon="el-icon-edit"
-                          @click="handleUpdate(scope.row)"
-                        >修改</el-button>
-                        <el-button
-                          v-hasPermi="['kyfz:enterprise:remove']"
-                          size="mini"
-                          type="text"
-                          icon="el-icon-delete"
-                          @click="handleDelete(scope.row)"
-                        >删除</el-button>
-                      </div>
-                    </div>
                   </div>
                 </el-card>
               </template>
             </el-table-column>
           </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="search_queryParams.pageNum"
+            :limit.sync="search_queryParams.pageSize"
+            @pagination="searchAll"
+          />
         </div>
         <div v-show="activeTab === '搜成果'">搜成果的内容</div>
       </div>
@@ -368,20 +378,22 @@ import { listEnterprise } from '@/api/kyfz/enterprise'
 import { listExpert } from '@/api/kyfz/expert'
 import {
 addSearch,
+clickSearch,
 delSearch,
 getSearch,
 listSearch,
 updateSearch
 } from '@/api/kyfz/search'
+import { listTeam } from '@/api/kyfz/team'
 
 export default {
   name: 'Search',
   data() {
     return {
-      // 搜索框数据
-      inputData: '',
       // 企业管理表格数据
       enterpriseList: [],
+      // 团队列表数据
+      teamList: [],
       // 专家管理表格数据
       expertList: [],
       expertDetail: [],
@@ -408,6 +420,13 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 搜索框输入查询参数
+      search_queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        keyWord: null,
+        mark: '综合搜索'
+      },
       // 企业查询参数
       enterprise_queryParams: {
         pageNum: 1,
@@ -418,6 +437,16 @@ export default {
         registeredCapital: null,
         enterpriseKeywords: null,
         categoryId: null
+      },
+      // 团队查询参数
+      team_queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        teamId: null,
+        teamMembers: null,
+        teamAccount: null,
+        memberScores: null,
+        reseachDirections: null
       },
       // 查询参数
       queryParams: {
@@ -466,11 +495,45 @@ export default {
     this.getListClassification()
     this.getexpertList()
     this.getEnterpriseList()
+    this.getTeam()
   },
   mounted() {
     this.setMenuPosition()
   },
   methods: {
+    // 搜索输入框点击函数
+    searchAll() {
+      clickSearch(this.search_queryParams).then((response) => {
+        this.loading = true
+        if (this.search_queryParams.mark === '综合搜索') {
+          this.expertList = response.rows
+          this.total = response.total
+          this.activeTab2 = '选择行业后数据显示'
+          this.loading = false
+        } else if (this.search_queryParams.mark === '搜人才') {
+          this.expertList = response.rows
+          this.total = response.total
+          this.loading = false
+        } else if (this.search_queryParams.mark === '搜团队') {
+          this.teamList = response.rows
+          this.total = response.total
+          this.loading = false
+        } else if (this.search_queryParams.mark === '搜企业') {
+          this.enterpriseList = response.rows
+          this.total = response.total
+          this.loading = false
+        }
+      })
+    },
+    // 团队信息
+    getTeam() {
+      this.loading = true
+      listTeam(this.team_queryParams).then((response) => {
+        this.teamList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
     // 企业信息
     /** 查询企业管理列表 */
     getEnterpriseList() {
@@ -483,14 +546,6 @@ export default {
     },
     // 专家信息
     /** 查询专家管理列表 */
-    getExpertList() {
-      this.loading = true
-      listExpert(this.queryParams).then((response) => {
-        this.expertList = response.rows
-        this.total = response.total
-        this.loading = false
-      })
-    },
     // 专家搜索换页
     getexpertList() {
       this.loading = true
@@ -540,6 +595,7 @@ export default {
     // 点击按钮切换界面
     showContent(tabName) {
       this.activeTab = tabName
+      this.search_queryParams.mark = tabName
       if (this.activeTab === '综合搜索') {
         this.activeTab2 = '行业标签'
       }
@@ -761,10 +817,6 @@ export default {
 
 <style>
 .blue {
-  background-color: rgb(41, 64, 106);
-}
-
-.light-blue {
   background-color: rgb(41, 64, 106);
 }
 

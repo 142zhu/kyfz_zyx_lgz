@@ -1,6 +1,7 @@
 package com.ruoyi.kyfz.service;
 
 import java.util.List;
+
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 
 /**
@@ -9,8 +10,7 @@ import com.ruoyi.kyfz.domain.KyfzEnterprise;
  * @author ruoyi
  * @date 2023-06-09
  */
-public interface IKyfzEnterpriseService 
-{
+public interface IKyfzEnterpriseService {
     /**
      * 查询企业管理
      * 
@@ -58,4 +58,12 @@ public interface IKyfzEnterpriseService
      * @return 结果
      */
     public int deleteKyfzEnterpriseByEnterpriseId(Long enterpriseId);
+
+    /**
+     * 检索模块查询企业管理列表
+     * 
+     * @param kyfzEnterprise 企业管理
+     * @return 企业管理集合
+     */
+    public List<KyfzEnterprise> searchEnterprises(KyfzEnterprise kyfzEnterprise);
 }

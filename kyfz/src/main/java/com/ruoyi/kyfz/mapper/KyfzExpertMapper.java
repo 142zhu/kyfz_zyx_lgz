@@ -147,4 +147,12 @@ public interface KyfzExpertMapper {
      * @return 专家管理集合
      */
     public List<KyfzExpert> selectKyfzExpertIdsList(String[] expertAccounts);
+
+    /**
+     * 检索搜索专家
+     * 
+     * @param kyfzExpert 专家管理
+     * @return 专家管理集合
+     */
+    public List<KyfzExpert> searchExperts(KyfzExpert kyfzExpert);
 }

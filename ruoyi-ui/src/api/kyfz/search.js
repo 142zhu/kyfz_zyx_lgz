@@ -42,3 +42,12 @@ export function delSearch(searchId) {
     method: 'delete'
   })
 }
+
+// 搜索输入框
+export function clickSearch(query) {
+  return request({
+    url: '/kyfz/search/list/clickSearch',
+    method: 'get',
+    params: query
+  })
+}
