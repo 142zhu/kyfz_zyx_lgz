@@ -37,7 +37,6 @@
         class="input-with-select"
         style="width: 448px"
       >
-
         <el-button slot="append" type="primary" icon="el-icon-search" @click="searchAll">搜索</el-button>
       </el-input>
     </div>
@@ -166,9 +165,9 @@
             <pagination
               v-show="total >= 0"
               :total="total"
-              :page.sync="search_queryParams.pageNum"
-              :limit.sync="search_queryParams.pageSize"
-              @pagination="searchAll"
+              :page.sync="panebuttonClick_queryParams.pageNum"
+              :limit.sync="panebuttonClick_queryParams.pageSize"
+              @pagination="panebuttonClick_listExpert"
             />
           </div>
         </div>
@@ -420,6 +419,27 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      // 行业标签的查询参数
+      panebuttonClick_queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        expertAccount: null,
+        expertName: null,
+        expertPosition: null,
+        expertAffiliation: null,
+        primaryDiscipline: null,
+        secondaryDiscipline: null,
+        tertiaryDiscipline: null,
+        researchDirection: null,
+        thesisId: null,
+        projectId: null,
+        intellectualPropertyId: null,
+        awardsId: null,
+        requirementId: null,
+        expertTeams: null,
+        expertSignificance: null,
+        categoryId: null
+      },
       // 搜索框输入查询参数
       search_queryParams: {
         pageNum: 1,
@@ -557,10 +577,17 @@ export default {
     },
     // 行业分类下拉菜单触发函数
     panebuttonClick(command) {
-      this.reset_queryParams()
-      this.queryParams.categoryId = command
+      this.panebuttonClick_queryParams.categoryId = command
       this.activeTab2 = '选择行业后数据显示'
-      listExpert(this.queryParams).then((response) => {
+      listExpert(this.panebuttonClick_queryParams).then((response) => {
+        this.expertList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
+    // 行业标签换页
+    panebuttonClick_listExpert() {
+      listExpert(this.panebuttonClick_queryParams).then((response) => {
         this.expertList = response.rows
         this.total = response.total
         this.loading = false
