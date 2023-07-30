@@ -31,12 +31,8 @@
           >搜成果</el-button>
         </el-button-group>
       </div>
-      <el-input
-        v-model="search_queryParams.keyWord"
-        placeholder="请输入内容"
-        class="input-with-select"
-        style="width: 448px"
-      >
+      <el-input v-model="search_queryParams.keyWord" placeholder="请输入内容" class="input-with-select" style="width: 448px">
+
         <el-button slot="append" type="primary" icon="el-icon-search" @click="searchAll">搜索</el-button>
       </el-input>
     </div>
@@ -44,12 +40,7 @@
       <div id="content">
         <div v-show="activeTab === '综合搜索'">
           <div v-show="activeTab2 === '行业标签'">
-            <el-tabs
-              ref="myTabs"
-              v-model="el_tab_pane1"
-              type="border-card"
-              class="tab-container"
-            >
+            <el-tabs ref="myTabs" v-model="el_tab_pane1" type="border-card" class="tab-container">
               <el-tab-pane
                 v-for="item in firstTenCategories"
                 :key="item.categoryId"
@@ -57,10 +48,7 @@
                 :label="item.categoryName"
                 :name="item.categoryId"
               >
-                <span
-                  slot="label"
-                  class="pane-span"
-                ><i class="el-icon-date" />{{ item.categoryName }}</span>
+                <span slot="label" class="pane-span"><i class="el-icon-date" />{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -79,10 +67,7 @@
                 :label="item.categoryName"
                 :name="item.categoryId"
               >
-                <span
-                  slot="label"
-                  class="pane-span"
-                ><i class="el-icon-date" />{{ item.categoryName }}</span>
+                <span slot="label" class="pane-span"><i class="el-icon-date" />{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -97,20 +82,39 @@
           </div>
           <div v-show="activeTab2 === '选择行业后数据显示'">
             <el-table v-loading="loading" style="width: 1000px" :data="expertList">
-              <el-table-column
-                label="相关信息"
-                align="center"
-                class-name="small-padding fixed-width"
-              >
+              <el-table-column label="相关信息" align="center" class-name="small-padding fixed-width">
                 <template slot-scope="scope">
                   <el-card class="card-item">
-                    <div class="card-actions">
+                    <el-col :span="4">
+                      <el-descriptions>
+                        <div class="card-expertName">
+                          <!-- <span>
+                          {{ scope.row.expertName }}
+                        </span> -->
+                        </div>
+                        <el-descriptions-item>
+                          <div class="card-expertName">
+                            {{ scope.row.expertName }}
+                          </div>
+                        </el-descriptions-item>
+                      </el-descriptions>
+                    </el-col>
+                    <el-col :span="20">
+                      <el-descriptions>
+                        <el-descriptions-item label="专家名称" :span="1">{{ scope.row.expertName }}</el-descriptions-item>
+                        <el-descriptions-item label="专家账号">{{ scope.row.expertAccount }}</el-descriptions-item>
+                        <el-descriptions-item label="专家职称">{{ scope.row.expertPosition }}</el-descriptions-item>
+                        <el-descriptions-item label="所在单位">{{ scope.row.expertAffiliation }}</el-descriptions-item>
+                        <el-descriptions-item label="所属行业">{{ scope.row.categoryNames }}</el-descriptions-item>
+                        <el-descriptions-item label="研究方向">{{ scope.row.researchDirection }}</el-descriptions-item>
+                        <el-descriptions-item label="专家团队">{{ scope.row.teamMembers }}</el-descriptions-item>
+                      </el-descriptions>
+                    </el-col>
+
+                    <!-- <div class="card-actions">
                       <div class="card-content">
                         <div class="card-row">
-                          <el-avatar
-                            shape="square"
-                            :size="100"
-                          ><span style="font-size: larger; color: white">{{
+                          <el-avatar shape="square" :size="100"><span style="font-size: larger; color: white">{{
                             scope.row.expertName
                           }}</span></el-avatar>
                         </div>
@@ -127,9 +131,9 @@
                           <span class="card-value" :title="scope.row.expertAffiliation">
                             {{
                               scope.row.expertAffiliation &&
-                                scope.row.expertAffiliation.length > 15
-                                ? scope.row.expertAffiliation.substring(0, 15) + "..."
-                                : scope.row.expertAffiliation
+                              scope.row.expertAffiliation.length > 15
+                              ? scope.row.expertAffiliation.substring(0, 15) + "..."
+                              : scope.row.expertAffiliation
                             }}
                           </span>
                         </div>
@@ -138,9 +142,9 @@
                           <span class="card-value" :title="scope.row.categoryNames">
                             {{
                               scope.row.categoryNames &&
-                                scope.row.categoryNames.length > 15
-                                ? scope.row.categoryNames.substring(0, 15) + "..."
-                                : scope.row.categoryNames
+                              scope.row.categoryNames.length > 15
+                              ? scope.row.categoryNames.substring(0, 15) + "..."
+                              : scope.row.categoryNames
                             }}
                           </span>
                         </div>
@@ -157,7 +161,7 @@
                           }}</span>
                         </div>
                       </div>
-                    </div>
+                    </div> -->
                   </el-card>
                 </template>
               </el-table-column>
@@ -172,19 +176,36 @@
           </div>
         </div>
         <div v-show="activeTab === '搜人才'">
-          <el-table
-            v-loading="loading"
-            :data="expertList"
-            style="width: 1000px"
-          >
-            <el-table-column
-              label="人才信息"
-              align="center"
-              class-name="small-padding fixed-width"
-            >
+          <el-table v-loading="loading" :data="expertList" style="width: 1000px">
+            <el-table-column label="人才信息" align="center" class-name="small-padding fixed-width">
               <template slot-scope="scope">
                 <el-card class="card-item">
-                  <div class="card-actions">
+                  <el-col :span="4">
+                    <el-descriptions>
+                      <div class="card-expertName">
+                        <!-- <span>
+                          {{ scope.row.expertName }}
+                        </span> -->
+                      </div>
+                      <el-descriptions-item>
+                        <div class="card-expertName">
+                          {{ scope.row.expertName }}
+                        </div>
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </el-col>
+                  <el-col :span="20">
+                    <el-descriptions>
+                      <el-descriptions-item label="专家名称">{{ scope.row.expertName }}</el-descriptions-item>
+                      <el-descriptions-item label="专家账号">{{ scope.row.expertAccount }}</el-descriptions-item>
+                      <el-descriptions-item label="专家职称">{{ scope.row.expertPosition }}</el-descriptions-item>
+                      <el-descriptions-item label="所在单位">{{ scope.row.expertAffiliation }}</el-descriptions-item>
+                      <el-descriptions-item label="所属行业">{{ scope.row.categoryNames }}</el-descriptions-item>
+                      <el-descriptions-item label="研究方向">{{ scope.row.researchDirection }}</el-descriptions-item>
+                      <el-descriptions-item label="专家团队">{{ scope.row.teamMembers }}</el-descriptions-item>
+                    </el-descriptions>
+                  </el-col>
+                  <!-- <div class="card-actions">
                     <div class="card-content">
                       <div class="card-row">
                         <span class="card-label">专家姓名:</span>
@@ -203,9 +224,9 @@
                         <span class="card-value" :title="scope.row.expertAffiliation">
                           {{
                             scope.row.expertAffiliation &&
-                              scope.row.expertAffiliation.length > 15
-                              ? scope.row.expertAffiliation.substring(0, 15) + "..."
-                              : scope.row.expertAffiliation
+                            scope.row.expertAffiliation.length > 15
+                            ? scope.row.expertAffiliation.substring(0, 15) + "..."
+                            : scope.row.expertAffiliation
                           }}
                         </span>
                       </div>
@@ -214,8 +235,8 @@
                         <span class="card-value" :title="scope.row.categoryNames">
                           {{
                             scope.row.categoryNames && scope.row.categoryNames.length > 15
-                              ? scope.row.categoryNames.substring(0, 15) + "..."
-                              : scope.row.categoryNames
+                            ? scope.row.categoryNames.substring(0, 15) + "..."
+                            : scope.row.categoryNames
                           }}
                         </span>
                       </div>
@@ -224,7 +245,7 @@
                         <span class="card-value">{{ scope.row.researchDirection }}</span>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </el-card>
               </template>
             </el-table-column>
@@ -238,53 +259,25 @@
           />
         </div>
         <div v-show="activeTab === '搜团队'">
-          <el-card
-            v-for="item in teamList"
-            :key="item.teamId"
-            class="box-card blue"
-            style="margin-top: 20px"
-          >
-            <el-descriptions
-              class="margin-top"
-              title="团队信息"
-              :column="3"
-              direction="vertical"
-              style="color: white"
-            >
-              <el-descriptions-item
-                label="团队成员"
-                label-class-name="my-label"
-                content-class-name="my-content"
-              >{{ item.teamMembers }}</el-descriptions-item>
-              <el-descriptions-item
-                label="研究方向"
-                label-class-name="my-label"
-                content-class-name="my-content"
-              >{{ item.reseachDirections }}</el-descriptions-item>
+          <el-card v-for="item in teamList" :key="item.teamId" class="box-card blue" style="margin-top: 20px">
+            <el-descriptions class="margin-top" title="团队信息" :column="3" direction="vertical" style="color: white">
+              <el-descriptions-item label="团队成员" label-class-name="my-label" content-class-name="my-content">{{
+                item.teamMembers }}</el-descriptions-item>
+              <el-descriptions-item label="研究方向" label-class-name="my-label" content-class-name="my-content">{{
+                item.reseachDirections }}</el-descriptions-item>
               <el-descriptions-item
                 label="累计专利"
                 :span="2"
                 label-class-name="my-label"
                 content-class-name="my-content"
               >1000 个</el-descriptions-item>
-              <el-descriptions-item
-                label="备注"
-                label-class-name="my-label"
-                content-class-name="my-content"
-              >
+              <el-descriptions-item label="备注" label-class-name="my-label" content-class-name="my-content">
                 <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
                 <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
               </el-descriptions-item>
-              <el-descriptions-item
-                label="成员账号"
-                label-class-name="my-label"
-                content-class-name="my-content"
-              >{{ item.teamAccount }}</el-descriptions-item>
-              <el-descriptions-item
-                label="累计成果"
-                label-class-name="my-label"
-                content-class-name="my-content"
-              >
+              <el-descriptions-item label="成员账号" label-class-name="my-label" content-class-name="my-content">{{
+                item.teamAccount }}</el-descriptions-item>
+              <el-descriptions-item label="累计成果" label-class-name="my-label" content-class-name="my-content">
                 188 件</el-descriptions-item>
             </el-descriptions>
           </el-card>
@@ -303,11 +296,7 @@
             style="width: 1000px"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column
-              label="企业信息"
-              align="center"
-              class-name="small-padding fixed-width"
-            >
+            <el-table-column label="企业信息" align="center" class-name="small-padding fixed-width">
               <template slot-scope="scope">
                 <el-card class="card-item">
                   <div class="card-actions">
@@ -712,7 +701,7 @@ export default {
           this.getList()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => {})
+        .catch(() => { })
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -931,9 +920,13 @@ export default {
 }
 
 .card-value {
-  overflow: hidden;
+  /* overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap; */
+  overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
 }
 
 .card-item {
@@ -950,28 +943,48 @@ export default {
   color: #333;
 }
 
-.card-value {
+.card-expertName {
+  display: flex;
+  /* 使用 flex 布局 */
+  align-items: center;
+  /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  height: 80px;
+  width: 80px;
+  color: #385c9c;
+  background-color: #e8f4ff;
+}
+
+/* .card-value {
   font-family: Arial, sans-serif;
   color: #666;
-}
+} */
 </style>
 
 <style scoped>
 /* 综合搜索标签页 */
 .tab-container {
-  margin-bottom: 100px; /* 添加下间隔 */
+  margin-bottom: 100px;
+  /* 添加下间隔 */
   width: 1100px;
   height: 150px;
 }
+
 .pane-span {
-  font-size: 14px; /* 更改字号为20px */
-  letter-spacing: 2px; /* 增加字间距为2px */
-  width: 80px; /* 设置span宽度为130px */
+  font-size: 14px;
+  /* 更改字号为20px */
+  letter-spacing: 2px;
+  /* 增加字间距为2px */
+  width: 80px;
+  /* 设置span宽度为130px */
   color: #000;
 }
 
 .pane-button {
-  margin-right: 10px; /* 增大按钮右侧的间距为10px */
-  font-size: 16px; /* 增大按钮字体为16px */
+  margin-right: 10px;
+  /* 增大按钮右侧的间距为10px */
+  font-size: 16px;
+  /* 增大按钮字体为16px */
 }
 </style>

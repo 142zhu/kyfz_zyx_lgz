@@ -275,3 +275,11 @@
 	position: relative;
 	float: right;
 }
+
+.el-descriptions-item__container .el-descriptions-item__content {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;    // 设置显示几行
+	-webkit-box-orient: vertical;
+}
