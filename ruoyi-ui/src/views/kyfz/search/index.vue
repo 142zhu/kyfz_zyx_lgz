@@ -87,11 +87,7 @@
                   <el-card class="card-item">
                     <el-col :span="4">
                       <el-descriptions>
-                        <div class="card-expertName">
-                          <!-- <span>
-                          {{ scope.row.expertName }}
-                        </span> -->
-                        </div>
+                        <div class="card-expertName" />
                         <el-descriptions-item>
                           <div class="card-expertName">
                             {{ scope.row.expertName }}
@@ -110,58 +106,6 @@
                         <el-descriptions-item label="专家团队">{{ scope.row.teamMembers }}</el-descriptions-item>
                       </el-descriptions>
                     </el-col>
-
-                    <!-- <div class="card-actions">
-                      <div class="card-content">
-                        <div class="card-row">
-                          <el-avatar shape="square" :size="100"><span style="font-size: larger; color: white">{{
-                            scope.row.expertName
-                          }}</span></el-avatar>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">专家账号:</span>
-                          <span class="card-value">{{ scope.row.expertAccount }}</span>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">专家职称:</span>
-                          <span class="card-value">{{ scope.row.expertPosition }}</span>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">所属单位:</span>
-                          <span class="card-value" :title="scope.row.expertAffiliation">
-                            {{
-                              scope.row.expertAffiliation &&
-                              scope.row.expertAffiliation.length > 15
-                              ? scope.row.expertAffiliation.substring(0, 15) + "..."
-                              : scope.row.expertAffiliation
-                            }}
-                          </span>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">所属行业:</span>
-                          <span class="card-value" :title="scope.row.categoryNames">
-                            {{
-                              scope.row.categoryNames &&
-                              scope.row.categoryNames.length > 15
-                              ? scope.row.categoryNames.substring(0, 15) + "..."
-                              : scope.row.categoryNames
-                            }}
-                          </span>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">研究方向:</span>
-                          <span class="card-value">{{
-                            scope.row.researchDirection
-                          }}</span>
-                        </div>
-                        <div class="card-row">
-                          <span class="card-label">专家团队:</span>
-                          <span class="card-value" style="width: 800px">{{
-                            scope.row.teamMembers
-                          }}</span>
-                        </div>
-                      </div>
-                    </div> -->
                   </el-card>
                 </template>
               </el-table-column>
@@ -171,83 +115,35 @@
               :total="total"
               :page.sync="panebuttonClick_queryParams.pageNum"
               :limit.sync="panebuttonClick_queryParams.pageSize"
-              @pagination="panebuttonClick_listExpert"
+              @pagination="Comprehensive_search_page_change"
             />
           </div>
         </div>
         <div v-show="activeTab === '搜人才'">
-          <el-table v-loading="loading" :data="expertList" style="width: 1000px">
+          <el-table v-loading="loading" :data="expertList" style="width: 1020px">
             <el-table-column label="人才信息" align="center" class-name="small-padding fixed-width">
-              <template slot-scope="scope">
-                <el-card class="card-item">
-                  <el-col :span="4">
-                    <el-descriptions>
-                      <div class="card-expertName">
-                        <!-- <span>
-                          {{ scope.row.expertName }}
-                        </span> -->
-                      </div>
-                      <el-descriptions-item>
-                        <div class="card-expertName">
-                          {{ scope.row.expertName }}
-                        </div>
-                      </el-descriptions-item>
-                    </el-descriptions>
-                  </el-col>
-                  <el-col :span="20">
-                    <el-descriptions>
-                      <el-descriptions-item label="专家名称">{{ scope.row.expertName }}</el-descriptions-item>
-                      <el-descriptions-item label="专家账号">{{ scope.row.expertAccount }}</el-descriptions-item>
-                      <el-descriptions-item label="专家职称">{{ scope.row.expertPosition }}</el-descriptions-item>
-                      <el-descriptions-item label="所在单位">{{ scope.row.expertAffiliation }}</el-descriptions-item>
-                      <el-descriptions-item label="所属行业">{{ scope.row.categoryNames }}</el-descriptions-item>
-                      <el-descriptions-item label="研究方向">{{ scope.row.researchDirection }}</el-descriptions-item>
-                      <el-descriptions-item label="专家团队">{{ scope.row.teamMembers }}</el-descriptions-item>
-                    </el-descriptions>
-                  </el-col>
-                  <!-- <div class="card-actions">
-                    <div class="card-content">
-                      <div class="card-row">
-                        <span class="card-label">专家姓名:</span>
-                        <span class="card-value">{{ scope.row.expertName }}</span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">专家账号:</span>
-                        <span class="card-value">{{ scope.row.expertAccount }}</span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">专家职称:</span>
-                        <span class="card-value">{{ scope.row.expertPosition }}</span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">所属单位:</span>
-                        <span class="card-value" :title="scope.row.expertAffiliation">
-                          {{
-                            scope.row.expertAffiliation &&
-                            scope.row.expertAffiliation.length > 15
-                            ? scope.row.expertAffiliation.substring(0, 15) + "..."
-                            : scope.row.expertAffiliation
-                          }}
-                        </span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">所属行业:</span>
-                        <span class="card-value" :title="scope.row.categoryNames">
-                          {{
-                            scope.row.categoryNames && scope.row.categoryNames.length > 15
-                            ? scope.row.categoryNames.substring(0, 15) + "..."
-                            : scope.row.categoryNames
-                          }}
-                        </span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">研究方向:</span>
-                        <span class="card-value">{{ scope.row.researchDirection }}</span>
-                      </div>
+              <div slot-scope="scope" class="expert-card">
+                <div class="card-name">
+                  <div class="rounded" />
+                  <div class="name">{{ scope.row.expertName }}</div>
+                </div>
+                <div class="frame-1">
+                  <div class="frame-2">
+                    <div class="frame-3">
+                      <div class="affiliation">所在单位：{{ scope.row.expertAffiliation }}</div>
+                      <div class="industry">所属行业：{{ scope.row.categoryNames }}</div>
+                      <div class="position">职称：{{ scope.row.expertPosition }}</div>
+                      <div class="position">账号：{{ scope.row.expertAccount }}</div>
                     </div>
-                  </div> -->
-                </el-card>
-              </template>
+                    <div class="research-direction">
+                      <div class="research-direction-text">{{ scope.row.researchDirection }}</div>
+                    </div>
+                  </div>
+                  <div class="team">
+                    <div class="expert-teams">{{ scope.row.teamMembers }}</div>
+                  </div>
+                </div>
+              </div>
             </el-table-column>
           </el-table>
           <pagination
@@ -261,8 +157,7 @@
         <div v-show="activeTab === '搜团队'">
           <el-card v-for="item in teamList" :key="item.teamId" class="box-card blue" style="margin-top: 20px">
             <el-descriptions class="margin-top" title="团队信息" :column="3" direction="vertical" style="color: white">
-              <el-descriptions-item label="团队成员" label-class-name="my-label" content-class-name="my-content">{{
-                item.teamMembers }}</el-descriptions-item>
+              <el-descriptions-item label="团队成员" label-class-name="my-label" content-class-name="my-content">{{ item.teamMembers.slice(0, 18) }}{{ item.teamMembers.length > 18 ? '...' : '' }}</el-descriptions-item>
               <el-descriptions-item label="研究方向" label-class-name="my-label" content-class-name="my-content">{{
                 item.reseachDirections }}</el-descriptions-item>
               <el-descriptions-item
@@ -271,12 +166,19 @@
                 label-class-name="my-label"
                 content-class-name="my-content"
               >1000 个</el-descriptions-item>
+              <el-descriptions-item label="操作" label-class-name="my-label" content-class-name="my-content">
+                <el-popover
+                  placement="right"
+                  width="400"
+                  trigger="click"
+                  :content="item.teamMembers"
+                >
+                  <el-button slot="reference">查看全部成员</el-button>
+                </el-popover> </el-descriptions-item>
               <el-descriptions-item label="备注" label-class-name="my-label" content-class-name="my-content">
                 <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
                 <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
               </el-descriptions-item>
-              <el-descriptions-item label="成员账号" label-class-name="my-label" content-class-name="my-content">{{
-                item.teamAccount }}</el-descriptions-item>
               <el-descriptions-item label="累计成果" label-class-name="my-label" content-class-name="my-content">
                 188 件</el-descriptions-item>
             </el-descriptions>
@@ -293,57 +195,38 @@
           <el-table
             v-loading="loading"
             :data="enterpriseList"
-            style="width: 1000px"
+            style="width: 780px"
             @selection-change="handleSelectionChange"
           >
             <el-table-column label="企业信息" align="center" class-name="small-padding fixed-width">
-              <template slot-scope="scope">
-                <el-card class="card-item">
-                  <div class="card-actions">
-                    <div class="card-content">
-                      <div class="card-row">
-                        <span class="card-label">企业名:</span>
-                        <span class="card-value">{{ scope.row.enterpriseName }}</span>
+              <div slot-scope="scope" class="enterprise-card">
+                <div class="enterprise-1">
+                  <div class="enterprise-2">
+                    <div class="enterprise-3">
+                      <div class="enterprise-name">{{ scope.row.enterpriseName }}</div>
+
+                      <div class="enterprise-4">
+                        <div class="industry2">{{ scope.row.categoryNames }}</div>
                       </div>
-                      <div class="card-row">
-                        <span class="card-label">企业信用代码:</span>
-                        <span class="card-value">{{
-                          scope.row.enterpriseCreditCode
-                        }}</span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">企业描述:</span>
-                        <span class="card-value" :title="scope.row.enterpriseDescribe">
-                          {{
-                            scope.row.enterpriseDescribe &&
-                              scope.row.enterpriseDescribe.length > 13
-                              ? scope.row.enterpriseDescribe.substring(0, 13) + "..."
-                              : scope.row.enterpriseDescribe
-                          }}
-                        </span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">企业注册资本:</span>
-                        <span class="card-value">{{ scope.row.registeredCapital }}</span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">所属行业:</span>
-                        <span class="card-value" :title="scope.row.categoryNames">
-                          {{
-                            scope.row.categoryNames && scope.row.categoryNames.length > 15
-                              ? scope.row.categoryNames.substring(0, 15) + "..."
-                              : scope.row.categoryNames
-                          }}
-                        </span>
-                      </div>
-                      <div class="card-row">
-                        <span class="card-label">企业关键词:</span>
-                        <span class="card-value">{{ scope.row.enterpriseKeywords }}</span>
-                      </div>
+
+                      <div class="position-1">{{ scope.row.registeredCapital }}</div>
+
+                      <div class="position-2">{{ scope.row.enterpriseKeywords }}</div>
+                    </div>
+
+                    <div class="research-direction2">
+                      <div class="research-direction-text2">{{ scope.row.enterpriseDescribe.slice(0, 118) }}{{ scope.row.enterpriseDescribe.length > 118 ? '......' : '' }}                      <el-popover
+                        placement="right"
+                        width="400"
+                        trigger="click"
+                        :content="scope.row.enterpriseDescribe"
+                      >
+                        <el-button slot="reference" type="text">查看全部</el-button>
+                      </el-popover></div>
                     </div>
                   </div>
-                </el-card>
-              </template>
+                </div>
+              </div>
             </el-table-column>
           </el-table>
           <pagination
@@ -378,6 +261,8 @@ export default {
   name: 'Search',
   data() {
     return {
+      // 综合搜索两种换页的标记
+      Comprehensive_mark: null,
       // 企业管理表格数据
       enterpriseList: [],
       // 团队列表数据
@@ -510,8 +395,17 @@ export default {
     this.setMenuPosition()
   },
   methods: {
+    // 综合搜索两种换页的函数
+    Comprehensive_search_page_change() {
+      if (this.Comprehensive_mark === '输入框搜索') {
+        this.searchAll()
+      } else if (this.Comprehensive_mark === '行业标签搜索') {
+        this.panebuttonClick_listExpert()
+      }
+    },
     // 搜索输入框点击函数
     searchAll() {
+      this.Comprehensive_mark = '输入框搜索'
       clickSearch(this.search_queryParams).then((response) => {
         this.loading = true
         if (this.search_queryParams.mark === '综合搜索') {
@@ -566,6 +460,7 @@ export default {
     },
     // 行业分类下拉菜单触发函数
     panebuttonClick(command) {
+      this.Comprehensive_mark = '行业标签搜索'
       this.panebuttonClick_queryParams.categoryId = command
       this.activeTab2 = '选择行业后数据显示'
       listExpert(this.panebuttonClick_queryParams).then((response) => {
@@ -748,16 +643,6 @@ export default {
   /* 调整垂直位置 */
 }
 
-.el-button-group {
-  width: 100%;
-  /* 设置按钮组宽度为100% */
-}
-
-.el-button-group .el-button {
-  flex: 1;
-  /* 设置按钮的宽度自适应 */
-}
-
 .button-container {
   display: flex;
   align-items: center;
@@ -773,62 +658,6 @@ export default {
   border-radius: 15px;
 }
 
-.el-collapse {
-  width: 1200px;
-}
-
-.el-collapse-item__header {
-  color: black;
-}
-
-.el-collapse-item__arrow {
-  float: left;
-  margin-left: 5px;
-  margin-right: 15px;
-}
-
-.el-collapse {
-  border: 0;
-}
-
-.deploy-setting .el-collapse-item__header {
-  border-bottom: 1px solid #2c8df4;
-}
-
-.deploy-setting .el-collapse-item__wrap {
-  border-bottom: 0px;
-}
-
-/* 综合搜索 */
-.time {
-  font-size: 13px;
-  color: #999;
-}
-
-.bottom {
-  margin-top: 13px;
-  line-height: 12px;
-}
-
-.button {
-  padding: 0;
-  float: right;
-}
-
-.image {
-  width: 100%;
-  display: block;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both;
-}
 </style>
 
 <style>
@@ -851,36 +680,6 @@ export default {
 </style>
 
 <style scoped>
-.dropdown-wrapper .image-wrapper {
-  margin-bottom: 10px;
-}
-
-.custom-dropdown .el-dropdown-menu {
-  background-color: white;
-}
-
-.horizontal-menu {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.horizontal-menu .el-dropdown-item {
-  flex-basis: 100%;
-}
-
-.menu-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 100px;
-}
-
-.my-menu {
-  left: 300px !important;
-  width: 950px;
-}
-</style>
-
-<style scoped>
 /* 卡片定制 */
 .button-container {
   display: flex;
@@ -892,16 +691,6 @@ export default {
   display: flex;
   justify-content: flex-end;
   margin-top: 16px;
-}
-
-.card-content-left {
-  flex: 1;
-}
-
-.card-content-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
 }
 
 .card-content {
@@ -920,9 +709,6 @@ export default {
 }
 
 .card-value {
-  /* overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap; */
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -955,11 +741,6 @@ export default {
   color: #385c9c;
   background-color: #e8f4ff;
 }
-
-/* .card-value {
-  font-family: Arial, sans-serif;
-  color: #666;
-} */
 </style>
 
 <style scoped>
@@ -987,4 +768,310 @@ export default {
   font-size: 16px;
   /* 增大按钮字体为16px */
 }
+</style>
+
+<style scoped>
+/* 专家信息卡片 */
+.expert-card,
+.expert-card * {
+  box-sizing: border-box;
+}
+.expert-card {
+  background: linear-gradient(
+    91.14deg,
+    rgba(255, 253, 253, 1) 0%,
+    rgba(255, 255, 255, 0.74) 100%
+  );
+  border-radius: 11px;
+  border-style: solid;
+  border-color: #e0e6ed;
+  border-width: 2px;
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: row;
+  gap: 86px;
+  align-items: center;
+  justify-content: center;
+  width: 1000px;
+  height: 140px;
+  position: relative;
+  box-shadow: 0px 7px 14px 0px rgba(211, 218, 226, 1);
+  overflow: hidden;
+}
+.card-name {
+  flex-shrink: 0;
+  width: 94px;
+  height: 95px;
+  position: relative;
+}
+.rounded {
+  background: rgba(232, 244, 255, 0.8);
+  border-radius: 200px;
+  border-style: solid;
+  border-color: #e8f4ff;
+  border-width: 1px;
+  width: 94px;
+  height: 95px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+.name {
+  color: #385c9c;
+  text-align: center;
+  font: 600 20px/160% "Open Sans", sans-serif;
+  position: absolute;
+  left: calc(50% - 56px);
+  top: calc(50% - 59px);
+  width: 113px;
+  height: 119px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.frame-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  width: 583px;
+  position: relative;
+}
+.frame-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.frame-3 {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  width: 583px;
+  position: relative;
+}
+.affiliation {
+  color: #3b3f5c;
+  text-align: left;
+  font: 700 14px/160% "Open Sans", sans-serif;
+  position: relative;
+  width: 273px;
+}
+.industry {
+  color: #3b3f5c;
+  text-align: left;
+  font: 700 14px/160% "Open Sans", sans-serif;
+  position: relative;
+  width: 273px;
+}
+.position {
+  color: #000000;
+  text-align: left;
+  font: 400 14px/160% "Open Sans", sans-serif;
+  opacity: 0.5;
+  position: relative;
+  width: 273px;
+}
+.research-direction {
+  background: #edf6ff;
+  border-radius: 3px;
+  padding: 0px 16px 0px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 583px;
+  height: 21px;
+  position: relative;
+  overflow: hidden;
+}
+.research-direction-text {
+  color: #000000;
+  text-align: center;
+  font: 400 14px/160% "Acme", sans-serif;
+  position: relative;
+  width: 573px;
+}
+.team {
+  background: #ecf6ff;
+  border-radius: 4px;
+  padding: 0px 16px 0px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 583px;
+  height: 22px;
+  position: relative;
+  overflow: hidden;
+}
+.expert-teams {
+  color: #000000;
+  text-align: center;
+  font: 400 14px/160% "Open Sans", sans-serif;
+  position: relative;
+  width: 583px;
+  height: 22px;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team .expert-teams {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+</style>
+
+<style scoped>
+/* 企业卡片 */
+.enterprise-card,
+.enterprise-card * {
+  box-sizing: border-box;
+}
+.enterprise-card {
+  background: linear-gradient(
+    91.14deg,
+    rgba(255, 253, 253, 1) 0%,
+    rgba(255, 255, 255, 0.74) 100%
+  );
+  border-radius: 11px;
+  border-style: solid;
+  border-color: #e0e6ed;
+  border-width: 2px;
+  padding: 40px 32px 32px 61px;
+  width: 746px;
+  height: 235px;
+  position: relative;
+  box-shadow: 0px 7px 14px 0px rgba(211, 218, 226, 1);
+  overflow: hidden;
+}
+.enterprise-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 687px;
+  height: 179px;
+  position: absolute;
+  left: 46px;
+  top: 32px;
+}
+.enterprise-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+.enterprise-3 {
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  width: 583px;
+  height: 103px;
+  position: relative;
+}
+.enterprise-name {
+  color: #3b3f5c;
+  text-align: left;
+  font: 700 16px/160% "Open Sans", sans-serif;
+  position: relative;
+  width: 583px;
+  height: 29px;
+}
+.enterprise-4 {
+  border-radius: 6px;
+  flex-shrink: 0;
+  width: 320px;
+  height: 32px;
+  position: relative;
+}
+.industry2 {
+  color: #3b3f5c;
+  text-align: center;
+  font: 600 14px/160% "Open Sans", sans-serif;
+  position: absolute;
+  left: 0px;
+  top: -1px;
+  width: 320px;
+  height: 33px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.position-1 {
+  color: #000000;
+  text-align: center;
+  font: 600 14px/160% "Open Sans", sans-serif;
+  opacity: 0.800000011920929;
+  position: relative;
+  width: 247px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.position-2 {
+  color: rgba(255, 0, 0, 0.8);
+  text-align: left;
+  font: 400 14px/160% "Open Sans", sans-serif;
+  opacity: 0.800000011920929;
+  position: relative;
+  width: 583px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.research-direction2 {
+  background: #edf6ff;
+  border-radius: 9px;
+  padding: 0px 16px 0px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 583px;
+  height: 73px;
+  position: relative;
+  overflow: hidden;
+}
+.research-direction-text2 {
+  color: #000000;
+  text-align: left;
+  font: 400 14px/160% "Acme", sans-serif;
+  position: relative;
+  width: 573px;
+  height: 63px;
+}
+
 </style>

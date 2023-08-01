@@ -46,7 +46,7 @@ public class TestImport {
     @Test
     public void testImport() {
         // importExpert("专家表_0722.csv");
-        importEnterprise("企业表0729.csv");
+        importEnterprise("企业表0731.csv");
         // importMatch("匹配表.csv");
         // importRequirements("需求表.csv");
         // importTeam("团队表.csv");
