@@ -104,3 +104,12 @@ export function getEchartExpertData(expertId) {
   })
 }
 
+// 查询专家关系图数据
+export function getEchartExpertData2(data) {
+  return request({
+    url: '/kyfz/expert/getEchartData_2',
+    method: 'post',
+    data: data
+  })
+}
+

@@ -31,16 +31,30 @@
           >搜成果</el-button>
         </el-button-group>
       </div>
-      <el-input v-model="search_queryParams.keyWord" placeholder="请输入内容" class="input-with-select" style="width: 448px">
-
-        <el-button slot="append" type="primary" icon="el-icon-search" @click="searchAll">搜索</el-button>
+      <el-input
+        v-model="search_queryParams.keyWord"
+        placeholder="请输入内容"
+        class="input-with-select"
+        style="width: 448px"
+      >
+        <el-button
+          slot="append"
+          type="primary"
+          icon="el-icon-search"
+          @click="searchAll"
+        >搜索</el-button>
       </el-input>
     </div>
     <div style="margin-top: 40px">
       <div id="content">
         <div v-show="activeTab === '综合搜索'">
           <div v-show="activeTab2 === '行业标签'">
-            <el-tabs ref="myTabs" v-model="el_tab_pane1" type="border-card" class="tab-container">
+            <el-tabs
+              ref="myTabs"
+              v-model="el_tab_pane1"
+              type="border-card"
+              class="tab-container"
+            >
               <el-tab-pane
                 v-for="item in firstTenCategories"
                 :key="item.categoryId"
@@ -48,7 +62,10 @@
                 :label="item.categoryName"
                 :name="item.categoryId"
               >
-                <span slot="label" class="pane-span"><i class="el-icon-date" />{{ item.categoryName }}</span>
+                <span
+                  slot="label"
+                  class="pane-span"
+                ><i class="el-icon-date" />{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -67,7 +84,10 @@
                 :label="item.categoryName"
                 :name="item.categoryId"
               >
-                <span slot="label" class="pane-span"><i class="el-icon-date" />{{ item.categoryName }}</span>
+                <span
+                  slot="label"
+                  class="pane-span"
+                ><i class="el-icon-date" />{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -82,7 +102,11 @@
           </div>
           <div v-show="activeTab2 === '选择行业后数据显示'">
             <el-table v-loading="loading" style="width: 1000px" :data="expertList">
-              <el-table-column label="相关信息" align="center" class-name="small-padding fixed-width">
+              <el-table-column
+                label="相关信息"
+                align="center"
+                class-name="small-padding fixed-width"
+              >
                 <template slot-scope="scope">
                   <el-card class="card-item">
                     <el-col :span="4">
@@ -97,13 +121,27 @@
                     </el-col>
                     <el-col :span="20">
                       <el-descriptions>
-                        <el-descriptions-item label="专家名称" :span="1">{{ scope.row.expertName }}</el-descriptions-item>
-                        <el-descriptions-item label="专家账号">{{ scope.row.expertAccount }}</el-descriptions-item>
-                        <el-descriptions-item label="专家职称">{{ scope.row.expertPosition }}</el-descriptions-item>
-                        <el-descriptions-item label="所在单位">{{ scope.row.expertAffiliation }}</el-descriptions-item>
-                        <el-descriptions-item label="所属行业">{{ scope.row.categoryNames }}</el-descriptions-item>
-                        <el-descriptions-item label="研究方向">{{ scope.row.researchDirection }}</el-descriptions-item>
-                        <el-descriptions-item label="专家团队">{{ scope.row.teamMembers }}</el-descriptions-item>
+                        <el-descriptions-item label="专家名称" :span="1">{{
+                          scope.row.expertName
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家账号">{{
+                          scope.row.expertAccount
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家职称">{{
+                          scope.row.expertPosition
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="所在单位">{{
+                          scope.row.expertAffiliation
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="所属行业">{{
+                          scope.row.categoryNames
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="研究方向">{{
+                          scope.row.researchDirection
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家团队">{{
+                          scope.row.teamMembers
+                        }}</el-descriptions-item>
                       </el-descriptions>
                     </el-col>
                   </el-card>
@@ -121,26 +159,38 @@
         </div>
         <div v-show="activeTab === '搜人才'">
           <el-table v-loading="loading" :data="expertList" style="width: 1020px">
-            <el-table-column label="人才信息" align="center" class-name="small-padding fixed-width">
+            <el-table-column
+              label="人才信息"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
               <div slot-scope="scope" class="expert-card">
                 <div class="card-name">
                   <div class="rounded" />
-                  <div class="name">{{ scope.row.expertName }}</div>
+                  <div class="name">
+                    {{ scope.row.expertName }}
+                  </div>
                 </div>
                 <div class="frame-1">
                   <div class="frame-2">
                     <div class="frame-3">
-                      <div class="affiliation">所在单位：{{ scope.row.expertAffiliation }}</div>
+                      <div class="affiliation">
+                        所在单位：{{ scope.row.expertAffiliation }}
+                      </div>
                       <div class="industry">所属行业：{{ scope.row.categoryNames }}</div>
                       <div class="position">职称：{{ scope.row.expertPosition }}</div>
                       <div class="position">账号：{{ scope.row.expertAccount }}</div>
                     </div>
                     <div class="research-direction">
-                      <div class="research-direction-text">{{ scope.row.researchDirection }}</div>
+                      <div class="research-direction-text">
+                        {{ scope.row.researchDirection }}
+                      </div>
                     </div>
                   </div>
                   <div class="team">
-                    <div class="expert-teams">{{ scope.row.teamMembers }}</div>
+                    <div class="expert-teams">
+                      {{ scope.row.teamMembers }}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -155,31 +205,67 @@
           />
         </div>
         <div v-show="activeTab === '搜团队'">
-          <el-card v-for="item in teamList" :key="item.teamId" class="box-card blue" style="margin-top: 20px">
-            <el-descriptions class="margin-top" title="团队信息" :column="3" direction="vertical" style="color: white">
-              <el-descriptions-item label="团队成员" label-class-name="my-label" content-class-name="my-content">{{ item.teamMembers.slice(0, 18) }}{{ item.teamMembers.length > 18 ? '...' : '' }}</el-descriptions-item>
-              <el-descriptions-item label="研究方向" label-class-name="my-label" content-class-name="my-content">{{
-                item.reseachDirections }}</el-descriptions-item>
+          <el-card
+            v-for="item in teamList"
+            :key="item.teamId"
+            class="box-card blue"
+            style="margin-top: 20px"
+          >
+            <el-descriptions
+              class="margin-top"
+              title="团队信息"
+              :column="3"
+              direction="vertical"
+              style="color: white"
+            >
+              <el-descriptions-item
+                label="团队成员"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >
+                <template v-if="item.teamMembers.length > 18">
+                  {{ item.teamMembers.slice(0, 18) }}
+                  ...
+                  <el-popover
+                    placement="right"
+                    width="400"
+                    trigger="click"
+                    :content="item.teamMembers"
+                  >
+                    <el-button slot="reference" type="text">查看全部</el-button>
+                  </el-popover>
+                </template>
+                <template v-else>
+                  {{ item.teamMembers }}
+                </template></el-descriptions-item>
+              <el-descriptions-item
+                label="研究方向"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >{{ item.reseachDirections }}</el-descriptions-item>
               <el-descriptions-item
                 label="累计专利"
                 :span="2"
                 label-class-name="my-label"
                 content-class-name="my-content"
               >1000 个</el-descriptions-item>
-              <el-descriptions-item label="操作" label-class-name="my-label" content-class-name="my-content">
-                <el-popover
-                  placement="right"
-                  width="400"
-                  trigger="click"
-                  :content="item.teamMembers"
-                >
-                  <el-button slot="reference">查看全部成员</el-button>
-                </el-popover> </el-descriptions-item>
-              <el-descriptions-item label="备注" label-class-name="my-label" content-class-name="my-content">
-                <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
-                <el-tag size="small" style="color: rgb(0, 38, 255)">xxxx</el-tag>
+              <el-descriptions-item
+                label="操作"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >
+                <el-button @click="handleECharts(item)">成员关系图</el-button>
               </el-descriptions-item>
-              <el-descriptions-item label="累计成果" label-class-name="my-label" content-class-name="my-content">
+              <el-descriptions-item
+                label="备注"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              />
+              <el-descriptions-item
+                label="累计成果"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >
                 188 件</el-descriptions-item>
             </el-descriptions>
           </el-card>
@@ -198,31 +284,41 @@
             style="width: 780px"
             @selection-change="handleSelectionChange"
           >
-            <el-table-column label="企业信息" align="center" class-name="small-padding fixed-width">
+            <el-table-column
+              label="企业信息"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
               <div slot-scope="scope" class="enterprise-card">
                 <div class="enterprise-1">
                   <div class="enterprise-2">
                     <div class="enterprise-3">
-                      <div class="enterprise-name">{{ scope.row.enterpriseName }}</div>
-
-                      <div class="enterprise-4">
-                        <div class="industry2">{{ scope.row.categoryNames }}</div>
+                      <div class="enterprise-name">
+                        {{ scope.row.enterpriseName }}
                       </div>
-
-                      <div class="position-1">{{ scope.row.registeredCapital }}</div>
-
-                      <div class="position-2">{{ scope.row.enterpriseKeywords }}</div>
+                      <div class="enterprise-4">
+                        <div class="industry2">行业：{{ scope.row.categoryNames }}</div>
+                      </div>
+                      <div class="position-1">
+                        注册资金：{{ scope.row.registeredCapital }}
+                      </div>
+                      <div class="position-2">
+                        {{ scope.row.enterpriseKeywords }}
+                      </div>
                     </div>
-
                     <div class="research-direction2">
-                      <div class="research-direction-text2">{{ scope.row.enterpriseDescribe.slice(0, 118) }}{{ scope.row.enterpriseDescribe.length > 118 ? '......' : '' }}                      <el-popover
-                        placement="right"
-                        width="400"
-                        trigger="click"
-                        :content="scope.row.enterpriseDescribe"
-                      >
-                        <el-button slot="reference" type="text">查看全部</el-button>
-                      </el-popover></div>
+                      <div class="research-direction-text2" style="text-indent: 2em">
+                        {{ scope.row.enterpriseDescribe.slice(0, 118)
+                        }}{{ scope.row.enterpriseDescribe.length > 118 ? "......" : "" }}
+                        <el-popover
+                          placement="right"
+                          width="400"
+                          trigger="click"
+                          :content="scope.row.enterpriseDescribe"
+                        >
+                          <el-button slot="reference" type="text">查看全部</el-button>
+                        </el-popover>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -240,13 +336,25 @@
         <div v-show="activeTab === '搜成果'">搜成果的内容</div>
       </div>
     </div>
+    <!-- echart团队关系图 -->
+    <el-dialog
+      :title="chartTitle"
+      :visible.sync="openECharts"
+      append-to-body
+      width="1200px"
+      class="echart"
+    >
+      <div id="graph-chart" style="width: 1200px; height: 700px">
+        <div :id="echartsId" style="width: 1200px; height: 700px" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listClassification } from '@/api/kyfz/classification'
 import { listEnterprise } from '@/api/kyfz/enterprise'
-import { listExpert } from '@/api/kyfz/expert'
+import { getEchartExpertData2, listExpert } from '@/api/kyfz/expert'
 import {
 addSearch,
 clickSearch,
@@ -256,11 +364,18 @@ listSearch,
 updateSearch
 } from '@/api/kyfz/search'
 import { listTeam } from '@/api/kyfz/team'
+import * as echarts from 'echarts'
+
+const getEchartsId = () => {
+  return new Date().getTime()
+}
 
 export default {
   name: 'Search',
   data() {
     return {
+      // echar json数据
+      jsonData: {},
       // 综合搜索两种换页的标记
       Comprehensive_mark: null,
       // 企业管理表格数据
@@ -342,6 +457,7 @@ export default {
         memberScores: null,
         reseachDirections: null
       },
+      openECharts: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -372,7 +488,9 @@ export default {
       defaultProps: {
         children: 'children',
         label: 'label'
-      }
+      },
+      echartsId: null,
+      chartTitle: null
     }
   },
   // 标签页行业分页分行显示
@@ -390,11 +508,100 @@ export default {
     this.getexpertList()
     this.getEnterpriseList()
     this.getTeam()
+    this.echartsId = getEchartsId()
   },
   mounted() {
     this.setMenuPosition()
   },
   methods: {
+    // echart
+    handleECharts(row) {
+      this.chartTitle = '团队成员关系图'
+      this.openECharts = true
+      this.load = this.$loading({
+        target: '.echart .el-dialog',
+        text: '正在加载',
+        spinner: 'el-icon-loading'
+      })
+      this.selsect_echart_data(row)
+      this.$nextTick(() => {
+        this.initChart()
+      })
+      this.myChart.resize() // 自适应大小
+    },
+    initChart: function() {
+      const myChart = echarts.init(document.getElementById(this.echartsId))
+      myChart.setOption(this.setOption())
+      myChart.resize() // 自适应大小
+    },
+    // echatrs 数据
+    selsect_echart_data(row) {
+      getEchartExpertData2(row).then((response) => {
+        this.jsonData = response.data
+        this.$nextTick(() => {
+          this.initChart()
+        })
+        this.load.close()
+      })
+    },
+    setOption: function() {
+      const myChart = echarts.init(document.getElementById(this.echartsId))
+      myChart.showLoading()
+      const graph = this.jsonData // 引入json
+      myChart.hideLoading()
+
+      graph.nodes.forEach(function(node) {
+        node.label = {
+          show: node.symbolSize > 30
+        }
+      })
+      const option = {
+        // 添加你的配置
+        title: {
+          text: '',
+          subtext: '',
+          top: 'bottom',
+          left: 'right'
+        },
+        tooltip: {},
+        legend: [
+          {
+            // selectedMode: 'single',
+            data: graph.categories.map(function(a) {
+              return a.name
+            })
+          }
+        ],
+        animationDuration: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series: [
+          {
+            name: '专家',
+            type: 'graph',
+            layout: 'circular',
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
+            label: {
+              position: 'right',
+              formatter: '{b}'
+            },
+            lineStyle: {
+              color: 'source',
+              curveness: 0.3
+            },
+            emphasis: {
+              focus: 'adjacency',
+              lineStyle: {
+                width: 10
+              }
+            }
+          }
+        ]
+      }
+      return option
+    },
     // 综合搜索两种换页的函数
     Comprehensive_search_page_change() {
       if (this.Comprehensive_mark === '输入框搜索') {
@@ -596,7 +803,7 @@ export default {
           this.getList()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => { })
+        .catch(() => {})
     },
     /** 导出按钮操作 */
     handleExport() {
@@ -657,7 +864,6 @@ export default {
 .box-card {
   border-radius: 15px;
 }
-
 </style>
 
 <style>
@@ -776,6 +982,7 @@ export default {
 .expert-card * {
   box-sizing: border-box;
 }
+
 .expert-card {
   background: linear-gradient(
     91.14deg,
@@ -798,12 +1005,14 @@ export default {
   box-shadow: 0px 7px 14px 0px rgba(211, 218, 226, 1);
   overflow: hidden;
 }
+
 .card-name {
   flex-shrink: 0;
   width: 94px;
   height: 95px;
   position: relative;
 }
+
 .rounded {
   background: rgba(232, 244, 255, 0.8);
   border-radius: 200px;
@@ -817,6 +1026,7 @@ export default {
   top: 0px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
+
 .name {
   color: #385c9c;
   text-align: center;
@@ -830,6 +1040,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .frame-1 {
   display: flex;
   flex-direction: column;
@@ -840,6 +1051,7 @@ export default {
   width: 583px;
   position: relative;
 }
+
 .frame-2 {
   display: flex;
   flex-direction: column;
@@ -850,6 +1062,7 @@ export default {
   flex-shrink: 0;
   position: relative;
 }
+
 .frame-3 {
   display: flex;
   flex-direction: row;
@@ -861,6 +1074,7 @@ export default {
   width: 583px;
   position: relative;
 }
+
 .affiliation {
   color: #3b3f5c;
   text-align: left;
@@ -868,6 +1082,7 @@ export default {
   position: relative;
   width: 273px;
 }
+
 .industry {
   color: #3b3f5c;
   text-align: left;
@@ -875,6 +1090,7 @@ export default {
   position: relative;
   width: 273px;
 }
+
 .position {
   color: #000000;
   text-align: left;
@@ -883,6 +1099,7 @@ export default {
   position: relative;
   width: 273px;
 }
+
 .research-direction {
   background: #edf6ff;
   border-radius: 3px;
@@ -898,6 +1115,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .research-direction-text {
   color: #000000;
   text-align: center;
@@ -905,6 +1123,7 @@ export default {
   position: relative;
   width: 573px;
 }
+
 .team {
   background: #ecf6ff;
   border-radius: 4px;
@@ -920,6 +1139,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
+
 .expert-teams {
   color: #000000;
   text-align: center;
@@ -947,6 +1167,7 @@ export default {
 .enterprise-card * {
   box-sizing: border-box;
 }
+
 .enterprise-card {
   background: linear-gradient(
     91.14deg,
@@ -964,6 +1185,7 @@ export default {
   box-shadow: 0px 7px 14px 0px rgba(211, 218, 226, 1);
   overflow: hidden;
 }
+
 .enterprise-1 {
   display: flex;
   flex-direction: column;
@@ -976,6 +1198,7 @@ export default {
   left: 46px;
   top: 32px;
 }
+
 .enterprise-2 {
   display: flex;
   flex-direction: column;
@@ -986,6 +1209,7 @@ export default {
   flex-shrink: 0;
   position: relative;
 }
+
 .enterprise-3 {
   display: flex;
   flex-direction: row;
@@ -998,6 +1222,7 @@ export default {
   height: 103px;
   position: relative;
 }
+
 .enterprise-name {
   color: #3b3f5c;
   text-align: left;
@@ -1006,6 +1231,7 @@ export default {
   width: 583px;
   height: 29px;
 }
+
 .enterprise-4 {
   border-radius: 6px;
   flex-shrink: 0;
@@ -1013,6 +1239,7 @@ export default {
   height: 32px;
   position: relative;
 }
+
 .industry2 {
   color: #3b3f5c;
   text-align: center;
@@ -1026,6 +1253,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .position-1 {
   color: #000000;
   text-align: center;
@@ -1038,6 +1266,7 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .position-2 {
   color: rgba(255, 0, 0, 0.8);
   text-align: left;
@@ -1050,6 +1279,7 @@ export default {
   align-items: center;
   justify-content: flex-start;
 }
+
 .research-direction2 {
   background: #edf6ff;
   border-radius: 9px;
@@ -1061,17 +1291,17 @@ export default {
   justify-content: center;
   flex-shrink: 0;
   width: 583px;
-  height: 73px;
+  height: 76px;
   position: relative;
   overflow: hidden;
 }
+
 .research-direction-text2 {
   color: #000000;
   text-align: left;
   font: 400 14px/160% "Acme", sans-serif;
   position: relative;
   width: 573px;
-  height: 63px;
+  height: 73px;
 }
-
 </style>

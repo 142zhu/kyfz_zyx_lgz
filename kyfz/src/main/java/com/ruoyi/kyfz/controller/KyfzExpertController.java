@@ -25,6 +25,7 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzCertificate;
 import com.ruoyi.kyfz.domain.KyfzExpert;
 import com.ruoyi.kyfz.domain.KyfzProject;
+import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.domain.KyfzThesis;
 import com.ruoyi.kyfz.domain.KyfzWork;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
@@ -351,6 +352,14 @@ public class KyfzExpertController extends BaseController {
     @GetMapping(value = "/getEchartData/{expertId}")
     public AjaxResult getEchartExpertData(@PathVariable("expertId") Long expertId) {
         return success(kyfzExpertService.getEchartExpertData(expertId));
+    }
+
+    /**
+     * 获取专家关系图数据
+     */
+    @PostMapping(value = "/getEchartData_2")
+    public AjaxResult getEchartExpertData2(@RequestBody KyfzTeam kyfzTeam) {
+        return success(kyfzExpertService.getEchartExpertData2(kyfzTeam.getTeamId()));
     }
 
 }

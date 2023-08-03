@@ -150,6 +150,14 @@ public interface IKyfzExpertService {
     public JSONObject getEchartExpertData(Long expertId);
 
     /**
+     * 获取专家关系图数据
+     * 
+     * @param kyfzExpert 专家管理
+     * @return 结果
+     */
+    public JSONObject getEchartExpertData2(Long teamId);
+
+    /**
      * 检索搜索专家
      * 
      * @param kyfzExpert 专家管理

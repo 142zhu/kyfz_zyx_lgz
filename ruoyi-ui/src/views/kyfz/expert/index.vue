@@ -43,15 +43,20 @@
       </el-form-item>
     </el-form>
     <!-- 级联面板 -->
-    <el-row :gutter="5" justify="end" cols="8" style=" background-color: rgb(247, 251, 255);">
+    <el-row
+      :gutter="5"
+      justify="end"
+      cols="8"
+      style="background-color: rgb(247, 251, 255)"
+    >
       <el-col :span="2" offset="0" style="margin-top: 40px; margin-bottom: 40px">
-        <span class="unit-tag" style="font-weight: bold;font-size: 14px;">所属行业</span>
+        <span class="unit-tag" style="font-weight: bold; font-size: 14px">所属行业</span>
       </el-col>
       <el-col :span="20">
         <div v-for="item in classificationList" :key="item.categoryId">
           <el-col :span="3" style="margin-top: 20px; margin-bottom: 20px">
             <el-dropdown @command="handleCommand">
-              <span class="el-dropdown-link" style=" cursor: pointer;color: #409EFF;">
+              <span class="el-dropdown-link" style="cursor: pointer; color: #409eff">
                 {{ item.categoryName }}<i class="el-icon-arrow-down el-icon--right" />
               </span>
               <el-dropdown-menu slot="dropdown">
@@ -198,8 +203,7 @@
                         <span class="card-label">所属行业:</span>
                         <span class="card-value" :title="scope.row.categoryNames">
                           {{
-                            scope.row.categoryNames &&
-                              scope.row.categoryNames.length > 15
+                            scope.row.categoryNames && scope.row.categoryNames.length > 15
                               ? scope.row.categoryNames.substring(0, 15) + "..."
                               : scope.row.categoryNames
                           }}
@@ -255,24 +259,6 @@
         </el-col>
       </el-row>
     </div>
-    <!-- 普通表格显示 -->
-    <!-- <el-table v-loading="loading" :data="expertList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="专家账号" align="center" prop="expertAccount" />
-      <el-table-column label="专家姓名" align="center" prop="expertName" />
-      <el-table-column label="专家职称" align="center" prop="expertPosition" />
-      <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
-      <el-table-column label="研究方向" align="center" prop="researchDirection" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleDetail(scope.row)">详情</el-button>
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:expert:edit']">修改</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:expert:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
 
     <!-- 添加或修改专家管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="1000px" append-to-body>
@@ -352,7 +338,13 @@
     </el-dialog>
 
     <!-- 详细信息弹窗 -->
-    <el-dialog :title="title" :visible.sync="openDetail" width="1000px" append-to-body class="xiangxi">
+    <el-dialog
+      :title="title"
+      :visible.sync="openDetail"
+      width="1000px"
+      append-to-body
+      class="xiangxi"
+    >
       <div class="match-detail" style="margin-top: -20px">
         <div class="match-detail-header">
           <h3 class="match-detail-title">专家详细信息</h3>
@@ -439,14 +431,23 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
-            <el-button type="primary" style="position: absolute; bottom: 10px; right: 10px;" @click="handleECharts(expertDetail)">
+            <el-button
+              type="primary"
+              style="position: absolute; bottom: 10px; right: 10px"
+              @click="handleECharts(expertDetail)"
+            >
               团队关系图
             </el-button>
           </div>
         </div>
       </div>
     </el-dialog>
-    <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body width="1200px">
+    <el-dialog
+      :title="chartTitle"
+      :visible.sync="openECharts"
+      append-to-body
+      width="1200px"
+    >
       <div id="graph-chart" style="width: 1200px; height: 700px">
         <div :id="echartsId" style="width: 1200px; height: 700px" />
       </div>
@@ -600,7 +601,8 @@ export default {
       this.queryParams.expertAffiliation = null
       listExpert(this.queryParams).then((response) => {
         this.expertList = response.rows
-        this.ReminderInformation = '专家信息——已选择  ' + this.expertList[0].categoryNames + '  行业'
+        this.ReminderInformation =
+          '专家信息——已选择  ' + this.expertList[0].categoryNames + '  行业'
         this.total = response.total
         this.loading = false
       })
