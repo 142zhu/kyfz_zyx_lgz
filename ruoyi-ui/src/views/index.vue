@@ -5,7 +5,6 @@
         <div style="display: inline-block; margin-right: 40px">
           <h3 style="font-size: 30px">已对接的需求</h3>
           <span>{{ infoList.hasFinishRequirement }}</span>
-          <!-- <span style="font-size:25px">20000</span> -->
         </div>
         <el-progress
           type="circle"
@@ -152,7 +151,7 @@ export default {
           this.infoList.pushPercent = 1
         }
         // alert((a / b) * 100)
-        this.infoList.requirePercent = (a / b) * 100
+        this.infoList.requirePercent = ((a / b) * 100).toFixed(2)
       })
     }
   }
