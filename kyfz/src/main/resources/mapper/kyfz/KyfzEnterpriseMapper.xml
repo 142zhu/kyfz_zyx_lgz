@@ -16,10 +16,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="enterpriseKeywords" column="enterprise_keywords" />
         <result property="categoryId" column="category_id" />
         <result property="categoryNames" column="category_Names" />
+        <result property="technicalAssessment" column="technical_assessment" />
     </resultMap>
     <sql id="selectKyfzEnterpriseVo">
-        select enterprise_id, enterprise_name, enterprise_credit_code, enterprise_describe, registered_capital, 
-        create_by, create_time, update_by, update_time, enterprise_keywords, category_id from kyfz_enterprise
+        SELECT
+	        e.*,
+	        subquery.sum 
+        FROM
+	        kyfz_enterprise AS e
+	        LEFT JOIN ( SELECT client, COUNT( client ) AS sum FROM kyfz_requirement GROUP BY client ) AS subquery ON e.enterprise_name = subquery.client
     </sql>
     <select id="selectKyfzEnterpriseList" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
@@ -31,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseKeywords != null  and enterpriseKeywords != ''"> and enterprise_keywords like concat('%', #{enterpriseKeywords}, '%')</if>
             <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
-        ORDER BY enterprise_id DESC
+        ORDER BY subquery.sum DESC
     </select>
     <select id="selectKyfzEnterpriseByEnterpriseId" parameterType="Long" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
@@ -53,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="enterpriseKeywords != null">enterprise_keywords,</if>
+            <if test="technicalAssessment != null">technical_assessment,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             #{enterpriseId},
@@ -65,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="enterpriseKeywords != null">#{enterpriseKeywords},</if>
+            <if test="technicalAssessment != null">#{technicalAssessment},</if>
         </trim>
     </insert>
     <update id="updateKyfzEnterprise" parameterType="KyfzEnterprise">
@@ -79,6 +86,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="enterpriseKeywords != null">enterprise_keywords = #{enterpriseKeywords},</if>
+            <if test="technicalAssessment != null">technical_assessment = #{technicalAssessment},</if>
         </trim>
         where enterprise_id = #{enterpriseId}
     </update>
@@ -102,6 +110,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_keywords like like concat('%', #{enterpriseName}, '%')</if>
             <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
-        ORDER BY enterprise_id DESC
+        ORDER BY subquery.sum DESC
     </select>
 </mapper>

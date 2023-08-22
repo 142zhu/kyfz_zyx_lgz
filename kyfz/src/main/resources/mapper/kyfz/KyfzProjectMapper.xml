@@ -1,20 +1,163 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.kyfz.mapper.KyfzProjectMapper">
-
     <resultMap type="KyfzProject" id="KyfzProjectResult">
-        <result property="projectId" column="project_id" />
-        <result property="projectName" column="project_name" />
-        <result property="dataSource" column="data_source" />
-        <result property="startFunds" column="start_funds" />
-
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="projectType"    column="project_type"    />
+        <result property="projectCategory"    column="project_category"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="projectStatus"    column="project_status"    />
+        <result property="projectLevel"    column="project_level"    />
+        <result property="approvalNumber"    column="approval_number"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="startFunds"    column="start_funds"    />
+        <result property="accountFunds"    column="account_funds"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="signUnit"    column="sign_unit"    />
+        <result property="otherSignUnit"    column="other_sign_unit"    />
+        <result property="dept"    column="dept"    />
+        <result property="remark"    column="remark"    />
+        <result property="memberInfo"    column="member_info"    />
+        <result property="dataSource"    column="data_source"    />
+        <result property="schoolMemberAccount"    column="school_member_account"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
     </resultMap>
-
-    <sql id="selectKyfzEnterpriseVo"> select project_id, project_name, data_source, start_funds from
-        kyfz_project </sql>
-
-    <select id="selectKyfzProjectList" parameterType="Long[]" resultMap="KyfzProjectResult"> select
-        project_id, project_name, data_source, start_funds from kyfz_project WHERE project_id IN <foreach
-            item="projectId" collection="array" open="(" separator="," close=")"> #{projectId} </foreach>
+    <sql id="selectKyfzProjectVo">
+        select project_id, project_name, project_type, project_category, start_date, project_status, project_level, approval_number, end_date, start_funds, account_funds, start_time, end_time, sign_unit, other_sign_unit, dept, remark, member_info, data_source, school_member_account, create_by, create_time, update_by, update_time from kyfz_project
+    </sql>
+    <select id="selectKyfzProjectList" parameterType="KyfzProject" resultMap="KyfzProjectResult">
+        <include refid="selectKyfzProjectVo"/>
+        <where>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%', #{projectName}, '%')</if>
+            <if test="projectType != null  and projectType != ''"> and project_type = #{projectType}</if>
+            <if test="projectCategory != null  and projectCategory != ''"> and project_category = #{projectCategory}</if>
+            <if test="startDate != null "> and start_date = #{startDate}</if>
+            <if test="projectStatus != null  and projectStatus != ''"> and project_status = #{projectStatus}</if>
+            <if test="projectLevel != null  and projectLevel != ''"> and project_level = #{projectLevel}</if>
+            <if test="approvalNumber != null  and approvalNumber != ''"> and approval_number = #{approvalNumber}</if>
+            <if test="endDate != null "> and end_date = #{endDate}</if>
+            <if test="startFunds != null  and startFunds != ''"> and start_funds = #{startFunds}</if>
+            <if test="accountFunds != null  and accountFunds != ''"> and account_funds = #{accountFunds}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="signUnit != null  and signUnit != ''"> and sign_unit = #{signUnit}</if>
+            <if test="otherSignUnit != null  and otherSignUnit != ''"> and other_sign_unit = #{otherSignUnit}</if>
+            <if test="dept != null  and dept != ''"> and dept = #{dept}</if>
+            <if test="memberInfo != null  and memberInfo != ''"> and member_info = #{memberInfo}</if>
+            <if test="dataSource != null  and dataSource != ''"> and data_source = #{dataSource}</if>
+            <if test="schoolMemberAccount != null  and schoolMemberAccount != ''"> and school_member_account = #{schoolMemberAccount}</if>
+        </where>
+    </select>
+    <select id="selectKyfzProjectByProjectId" parameterType="Long" resultMap="KyfzProjectResult">
+        <include refid="selectKyfzProjectVo"/>
+        where project_id = #{projectId}
+    </select>
+    <insert id="insertKyfzProject" parameterType="KyfzProject">
+        insert into kyfz_project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="projectName != null">project_name,</if>
+            <if test="projectType != null">project_type,</if>
+            <if test="projectCategory != null">project_category,</if>
+            <if test="startDate != null">start_date,</if>
+            <if test="projectStatus != null">project_status,</if>
+            <if test="projectLevel != null">project_level,</if>
+            <if test="approvalNumber != null">approval_number,</if>
+            <if test="endDate != null">end_date,</if>
+            <if test="startFunds != null">start_funds,</if>
+            <if test="accountFunds != null">account_funds,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="signUnit != null">sign_unit,</if>
+            <if test="otherSignUnit != null">other_sign_unit,</if>
+            <if test="dept != null">dept,</if>
+            <if test="remark != null">remark,</if>
+            <if test="memberInfo != null">member_info,</if>
+            <if test="dataSource != null">data_source,</if>
+            <if test="schoolMemberAccount != null">school_member_account,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="projectType != null">#{projectType},</if>
+            <if test="projectCategory != null">#{projectCategory},</if>
+            <if test="startDate != null">#{startDate},</if>
+            <if test="projectStatus != null">#{projectStatus},</if>
+            <if test="projectLevel != null">#{projectLevel},</if>
+            <if test="approvalNumber != null">#{approvalNumber},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="startFunds != null">#{startFunds},</if>
+            <if test="accountFunds != null">#{accountFunds},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="signUnit != null">#{signUnit},</if>
+            <if test="otherSignUnit != null">#{otherSignUnit},</if>
+            <if test="dept != null">#{dept},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="memberInfo != null">#{memberInfo},</if>
+            <if test="dataSource != null">#{dataSource},</if>
+            <if test="schoolMemberAccount != null">#{schoolMemberAccount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+    <update id="updateKyfzProject" parameterType="KyfzProject">
+        update kyfz_project
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectName != null">project_name = #{projectName},</if>
+            <if test="projectType != null">project_type = #{projectType},</if>
+            <if test="projectCategory != null">project_category = #{projectCategory},</if>
+            <if test="startDate != null">start_date = #{startDate},</if>
+            <if test="projectStatus != null">project_status = #{projectStatus},</if>
+            <if test="projectLevel != null">project_level = #{projectLevel},</if>
+            <if test="approvalNumber != null">approval_number = #{approvalNumber},</if>
+            <if test="endDate != null">end_date = #{endDate},</if>
+            <if test="startFunds != null">start_funds = #{startFunds},</if>
+            <if test="accountFunds != null">account_funds = #{accountFunds},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="signUnit != null">sign_unit = #{signUnit},</if>
+            <if test="otherSignUnit != null">other_sign_unit = #{otherSignUnit},</if>
+            <if test="dept != null">dept = #{dept},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="memberInfo != null">member_info = #{memberInfo},</if>
+            <if test="dataSource != null">data_source = #{dataSource},</if>
+            <if test="schoolMemberAccount != null">school_member_account = #{schoolMemberAccount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+    <delete id="deleteKyfzProjectByProjectId" parameterType="Long">
+        delete from kyfz_project where project_id = #{projectId}
+    </delete>
+    <delete id="deleteKyfzProjectByProjectIds" parameterType="String">
+        delete from kyfz_project where project_id in
+        <foreach item="projectId" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
+    </delete>
+    <!-- 项目列表项目信息 -->
+    <select id="selectKyfzProjectList_Projectidlist" parameterType="Long" resultMap="KyfzProjectResult">
+        <include refid="selectKyfzProjectVo"/>
+        where project_id in
+        <foreach item="projectId" index="index" collection="array" open="(" separator="," close=")">
+            #{projectId}
+        </foreach>
     </select>
 </mapper>

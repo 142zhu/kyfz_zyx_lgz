@@ -126,11 +126,6 @@ public class KyfzMatchController extends BaseController {
             for (int i = 0; i < thesisId.length; i++) {
                 String thesisName = kyfzMatchService.selectThesisName(thesisId[i]);
                 strArray1.add(thesisName);
-                // if (i == thesisId.length - 1) {
-                // thesisNames += thesisName;
-                // } else {
-                // thesisNames += thesisName + ",";
-                // }
             }
             match1.setStrArray1(strArray1);
         }

@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ruoyi.kyfz.domain.KyfzExpert;
 import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.mapper.KyfzTeamMapper;
+import com.ruoyi.kyfz.service.IKyfzExpertService;
 import com.ruoyi.kyfz.service.IKyfzTeamService;
 
 /**
@@ -19,6 +21,9 @@ import com.ruoyi.kyfz.service.IKyfzTeamService;
 public class KyfzTeamServiceImpl implements IKyfzTeamService {
     @Autowired
     private KyfzTeamMapper kyfzTeamMapper;
+
+    @Autowired
+    private IKyfzExpertService kyfzExpertService;
 
     /**
      * 查询专家团队
@@ -39,7 +44,33 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService {
      */
     @Override
     public List<KyfzTeam> selectKyfzTeamList(KyfzTeam kyfzTeam) {
-        return kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
+        List<KyfzTeam> teams = kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
+        // x为累计成果，y为累计项目
+        int accumulatedResults = 0;
+        int accumulatedItems = 0;
+        for (int i = 0; i < teams.size(); i++) {
+            accumulatedResults = 0;
+            accumulatedItems = 0;
+            String[] teamAccount = teams.get(i).getTeamAccount().split("[,、；]");
+            for (int j = 0; j < teamAccount.length; j++) {
+                KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(teamAccount[j]);
+                if (expert.getIntellectualPropertyId() != null) {
+                    accumulatedResults += expert.getIntellectualPropertyId().split("[,、；]").length;
+                }
+                if (expert.getThesisId() != null) {
+                    accumulatedResults += expert.getThesisId().split("[,、；]").length;
+                }
+                if (expert.getOtherResultsId() != null) {
+                    accumulatedResults += expert.getOtherResultsId().split("[,、；]").length;
+                }
+                if (expert.getProjectId() != null) {
+                    accumulatedItems += expert.getProjectId().split("[,、；]").length;
+                }
+            }
+            teams.get(i).setAccumulatedResults(accumulatedResults + "");
+            teams.get(i).setAccumulatedItems(accumulatedItems + "");
+        }
+        return teams;
     }
 
     /**
@@ -94,6 +125,32 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService {
      */
     @Override
     public List<KyfzTeam> searchTeams(KyfzTeam kyfzTeam) {
-        return kyfzTeamMapper.searchTeams(kyfzTeam);
+        List<KyfzTeam> teams = kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
+        // x为累计成果，y为累计项目
+        int accumulatedResults = 0;
+        int accumulatedItems = 0;
+        for (int i = 0; i < teams.size(); i++) {
+            accumulatedResults = 0;
+            accumulatedItems = 0;
+            String[] teamAccount = teams.get(i).getTeamAccount().split("[,、；]");
+            for (int j = 0; j < teamAccount.length; j++) {
+                KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(teamAccount[j]);
+                if (expert.getIntellectualPropertyId() != null) {
+                    accumulatedResults += expert.getIntellectualPropertyId().split("[,、；]").length;
+                }
+                if (expert.getThesisId() != null) {
+                    accumulatedResults += expert.getThesisId().split("[,、；]").length;
+                }
+                if (expert.getOtherResultsId() != null) {
+                    accumulatedResults += expert.getOtherResultsId().split("[,、；]").length;
+                }
+                if (expert.getProjectId() != null) {
+                    accumulatedItems += expert.getProjectId().split("[,、；]").length;
+                }
+            }
+            teams.get(i).setAccumulatedResults(accumulatedResults + "");
+            teams.get(i).setAccumulatedItems(accumulatedItems + "");
+        }
+        return teams;
     }
 }

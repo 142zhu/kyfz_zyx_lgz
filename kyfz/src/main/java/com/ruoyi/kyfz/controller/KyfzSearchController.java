@@ -23,10 +23,12 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzExpert;
+import com.ruoyi.kyfz.domain.KyfzIntellectualProperty;
 import com.ruoyi.kyfz.domain.KyfzSearch;
 import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.service.IKyfzEnterpriseService;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
+import com.ruoyi.kyfz.service.IKyfzIntellectualPropertyService;
 import com.ruoyi.kyfz.service.IKyfzSearchService;
 import com.ruoyi.kyfz.service.IKyfzTeamService;
 
@@ -50,6 +52,9 @@ public class KyfzSearchController extends BaseController {
 
     @Autowired
     private IKyfzEnterpriseService kyfzEnterpriseService;
+
+    @Autowired
+    private IKyfzIntellectualPropertyService IKyfzIntellectualPropertyService;
 
     /**
      * 查询检索列表
@@ -133,6 +138,12 @@ public class KyfzSearchController extends BaseController {
             KyfzEnterprise KyfzEnterprise = new KyfzEnterprise();
             KyfzEnterprise.setEnterpriseName(kyfzSearch.getKeyWord());
             List<KyfzEnterprise> list = kyfzEnterpriseService.selectKyfzEnterpriseList(KyfzEnterprise);
+            return getDataTable(list);
+        } else if (kyfzSearch.getMark().equals("搜成果")) {
+            KyfzIntellectualProperty kyfzIntellectualProperty = new KyfzIntellectualProperty();
+            kyfzIntellectualProperty.setIntellectualPropertyName(kyfzSearch.getKeyWord());
+            List<KyfzIntellectualProperty> list = IKyfzIntellectualPropertyService
+                    .searchKyfzIntellectualProperty(kyfzIntellectualProperty);
             return getDataTable(list);
         }
         return null;

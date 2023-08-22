@@ -22,15 +22,20 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.kyfz.domain.KyfzAward;
 import com.ruoyi.kyfz.domain.KyfzCertificate;
 import com.ruoyi.kyfz.domain.KyfzExpert;
+import com.ruoyi.kyfz.domain.KyfzIntellectualProperty;
 import com.ruoyi.kyfz.domain.KyfzProject;
 import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.domain.KyfzThesis;
 import com.ruoyi.kyfz.domain.KyfzWork;
+import com.ruoyi.kyfz.service.IKyfzAwardService;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
+import com.ruoyi.kyfz.service.IKyfzIntellectualPropertyService;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 import com.ruoyi.kyfz.service.IKyfzProjectService;
+import com.ruoyi.kyfz.service.IKyfzThesisService;
 
 /**
  * 专家管理Controller
@@ -49,6 +54,15 @@ public class KyfzExpertController extends BaseController {
 
     @Autowired
     private IKyfzProjectService iKyfzProjectService;
+
+    @Autowired
+    private IKyfzThesisService iKyfzThesisService;
+
+    @Autowired
+    private IKyfzAwardService kyfzAwardService;
+
+    @Autowired
+    private IKyfzIntellectualPropertyService kyfzIntellectualPropertyService;
 
     /**
      * 查询专家管理列表
@@ -127,37 +141,29 @@ public class KyfzExpertController extends BaseController {
         if (projectIds != null && !projectIds.isEmpty()) {
             ArrayList<KyfzProject> projectArray = new ArrayList<KyfzProject>();
             Long projectId[] = extractIds(projectIds);
-            projectArray = (ArrayList<KyfzProject>) iKyfzProjectService.selectKyfzProjectList(projectId);
+            projectArray = (ArrayList<KyfzProject>) iKyfzProjectService.selectKyfzProjectList_Projectidlist(projectId);
             expert.setProjectArray(projectArray);
         }
 
         if (thesisIds != null && !thesisIds.isEmpty()) {
-            ArrayList<String> thesisArray = new ArrayList<>();
+            ArrayList<KyfzThesis> thesisArray = new ArrayList<KyfzThesis>();
             Long thesisId[] = extractIds(thesisIds);
-            for (int i = 0; i < thesisId.length; i++) {
-                String thesisName = kyfzMatchService.selectThesisName(thesisId[i]);
-                thesisArray.add(thesisName);
-            }
+            thesisArray = (ArrayList<KyfzThesis>) iKyfzThesisService.selectKyfzThesisList_Thesisidlist(thesisId);
             expert.setThesisArray(thesisArray);
         }
 
         if (awardsIds != null && !awardsIds.isEmpty()) {
-            ArrayList<String> awardArray = new ArrayList<>();
+            ArrayList<KyfzAward> awardArray = new ArrayList<KyfzAward>();
             Long awardId[] = extractIds(awardsIds);
-            for (int i = 0; i < awardId.length; i++) {
-                String awardName = kyfzMatchService.selectAwardName(awardId[i]);
-                awardArray.add(awardName);
-            }
+            awardArray = (ArrayList<KyfzAward>) kyfzAwardService.selectKyfzAwardsList_AwardsIdlist(awardId);
             expert.setAwardArray(awardArray);
         }
 
         if (intellectualPropertyIds != null && !intellectualPropertyIds.isEmpty()) {
-            ArrayList<String> intellectualPropertArray = new ArrayList<>();
+            ArrayList<KyfzIntellectualProperty> intellectualPropertArray = new ArrayList<KyfzIntellectualProperty>();
             Long intellectualPropertyId[] = extractIds(intellectualPropertyIds);
-            for (int i = 0; i < intellectualPropertyId.length; i++) {
-                String certificateName = kyfzMatchService.selectCertificateName(intellectualPropertyId[i]);
-                intellectualPropertArray.add(certificateName);
-            }
+            intellectualPropertArray = (ArrayList<KyfzIntellectualProperty>) kyfzIntellectualPropertyService
+                    .selectKyfzPropertyList_PropertyIdlist(intellectualPropertyId);
             expert.setIntellectualPropertArray(intellectualPropertArray);
         }
         return success(expert);
@@ -174,25 +180,7 @@ public class KyfzExpertController extends BaseController {
         String markThesis = kyfzExpert.getMarkThesis();
         String markWork = kyfzExpert.getMarkWork();
         String markCertificate = kyfzExpert.getMarkCertificate();
-        System.out.println("+++++++++++++++++++++");
-        System.out.println(kyfzExpert.getExpertAccount());
-        System.out.println(markProject);
-        System.out.println(markThesis);
-        System.out.println(markWork);
-        System.out.println("1111111");
-        System.out.println(markCertificate);
-        System.out.println("2222222");
         KyfzExpert expert = kyfzExpertService.selectKyfzExpertByExpertAccount(kyfzExpert.getExpertAccount());
-
-        // kyfzExpert前端传过来的对象中已经存了人工标注的四个字段
-        // 这部分代码是完全没必要的，因为前端可以往这边传过来，
-        // KyfzExpert expert2 =
-        // kyfzExpertService.selectKyfzMatchMark(kyfzExpert.getMatchId());
-
-        // expert.setMarkWork(expert2.getMarkWork());
-        // expert.setMarkCertificate(expert2.getMarkCertificate());
-        // expert.setMarkProject(expert2.getMarkProject());
-        // expert.setMarkThesis(expert2.getMarkThesis());
 
         // 专家对应的所有项目、论文、著作、证书id
         String thesisIds = expert.getThesisId();
@@ -244,7 +232,6 @@ public class KyfzExpertController extends BaseController {
 
         if (intellectualPropertyIds != null && !intellectualPropertyIds.isEmpty()) {
             List<KyfzCertificate> certificateList = new ArrayList<KyfzCertificate>();
-
             Long certificateId[] = extractIds(intellectualPropertyIds);
             for (int i = 0; i < certificateId.length; i++) {
                 String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);

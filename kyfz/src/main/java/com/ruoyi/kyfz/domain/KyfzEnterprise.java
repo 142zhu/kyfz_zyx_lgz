@@ -44,12 +44,32 @@ public class KyfzEnterprise extends BaseEntity {
     /** 企业分类的名称(多个) */
     private String categoryNames;
 
+    /** 技术评估 */
+    @Excel(name = "技术评估")
+    private String technicalAssessment;
+
     /** 企业需求 */
     @Excel(name = "企业需求")
     private KyfzRequirement kyfzRequirement;
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+
+    public String getTechnicalAssessment() {
+        return technicalAssessment;
+    }
+
+    public KyfzRequirement getKyfzRequirement() {
+        return kyfzRequirement;
+    }
+
+    public void setTechnicalAssessment(String technicalAssessment) {
+        this.technicalAssessment = technicalAssessment;
+    }
+
+    public void setKyfzRequirement(KyfzRequirement kyfzRequirement) {
+        this.kyfzRequirement = kyfzRequirement;
     }
 
     public String getCategoryNames() {

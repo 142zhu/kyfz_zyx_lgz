@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzAwardMapper">
+    <resultMap type="KyfzAward" id="KyfzAwardResult">
+        <result property="awardId"    column="award_id"    />
+        <result property="awardCategory"    column="award_category"    />
+        <result property="awardProject"    column="award_project"    />
+        <result property="typesAwardProjects"    column="types_award_projects"    />
+        <result property="awardName"    column="award_name"    />
+        <result property="awardDate"    column="award_date"    />
+        <result property="rewardLevel"    column="reward_level"    />
+        <result property="rewardLevelSegmentation"    column="reward_level_segmentation"    />
+        <result property="awardingCountry"    column="awarding_country"    />
+        <result property="awardingUnit"    column="awarding_unit"    />
+        <result property="rewardMethod"    column="reward_method"    />
+        <result property="signatureUnit"    column="signature_unit"    />
+        <result property="belongsSecondaryUnitCode"    column="belongs_secondary_unit_code"    />
+        <result property="nameSecondaryUnit"    column="name_secondary_unit"    />
+        <result property="otherSignUnit"    column="other_sign_unit"    />
+        <result property="reasonAward"    column="reason_award"    />
+        <result property="remark"    column="remark"    />
+        <result property="performanceStatus"    column="performance_status"    />
+        <result property="memberInformation"    column="member_information"    />
+        <result property="schoolMemberAccount"    column="school_member_account"    />
+    </resultMap>
+    <sql id="selectKyfzAwardVo">
+        select award_id, award_category, award_project, types_award_projects, award_name, award_date, reward_level, reward_level_segmentation, awarding_country, awarding_unit, reward_method, signature_unit, belongs_secondary_unit_code, name_secondary_unit, other_sign_unit, reason_award, remark, performance_status, member_information, school_member_account from kyfz_award
+    </sql>
+    <select id="selectKyfzAwardList" parameterType="KyfzAward" resultMap="KyfzAwardResult">
+        <include refid="selectKyfzAwardVo"/>
+        <where>
+            <if test="awardCategory != null  and awardCategory != ''"> and award_category = #{awardCategory}</if>
+            <if test="awardProject != null  and awardProject != ''"> and award_project = #{awardProject}</if>
+            <if test="typesAwardProjects != null  and typesAwardProjects != ''"> and types_award_projects = #{typesAwardProjects}</if>
+            <if test="awardName != null  and awardName != ''"> and award_name like concat('%', #{awardName}, '%')</if>
+            <if test="awardDate != null "> and award_date = #{awardDate}</if>
+            <if test="rewardLevel != null  and rewardLevel != ''"> and reward_level = #{rewardLevel}</if>
+            <if test="rewardLevelSegmentation != null  and rewardLevelSegmentation != ''"> and reward_level_segmentation = #{rewardLevelSegmentation}</if>
+            <if test="awardingCountry != null  and awardingCountry != ''"> and awarding_country = #{awardingCountry}</if>
+            <if test="awardingUnit != null  and awardingUnit != ''"> and awarding_unit = #{awardingUnit}</if>
+            <if test="rewardMethod != null  and rewardMethod != ''"> and reward_method = #{rewardMethod}</if>
+            <if test="signatureUnit != null  and signatureUnit != ''"> and signature_unit = #{signatureUnit}</if>
+            <if test="belongsSecondaryUnitCode != null  and belongsSecondaryUnitCode != ''"> and belongs_secondary_unit_code = #{belongsSecondaryUnitCode}</if>
+            <if test="nameSecondaryUnit != null  and nameSecondaryUnit != ''"> and name_secondary_unit = #{nameSecondaryUnit}</if>
+            <if test="otherSignUnit != null  and otherSignUnit != ''"> and other_sign_unit = #{otherSignUnit}</if>
+            <if test="reasonAward != null  and reasonAward != ''"> and reason_award = #{reasonAward}</if>
+            <if test="performanceStatus != null  and performanceStatus != ''"> and performance_status = #{performanceStatus}</if>
+            <if test="memberInformation != null  and memberInformation != ''"> and member_information = #{memberInformation}</if>
+            <if test="schoolMemberAccount != null  and schoolMemberAccount != ''"> and school_member_account = #{schoolMemberAccount}</if>
+        </where>
+    </select>
+    <select id="selectKyfzAwardByAwardId" parameterType="Long" resultMap="KyfzAwardResult">
+        <include refid="selectKyfzAwardVo"/>
+        where award_id = #{awardId}
+    </select>
+    <insert id="insertKyfzAward" parameterType="KyfzAward">
+        insert into kyfz_award
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="awardId != null">award_id,</if>
+            <if test="awardCategory != null">award_category,</if>
+            <if test="awardProject != null">award_project,</if>
+            <if test="typesAwardProjects != null">types_award_projects,</if>
+            <if test="awardName != null">award_name,</if>
+            <if test="awardDate != null">award_date,</if>
+            <if test="rewardLevel != null">reward_level,</if>
+            <if test="rewardLevelSegmentation != null">reward_level_segmentation,</if>
+            <if test="awardingCountry != null">awarding_country,</if>
+            <if test="awardingUnit != null">awarding_unit,</if>
+            <if test="rewardMethod != null">reward_method,</if>
+            <if test="signatureUnit != null">signature_unit,</if>
+            <if test="belongsSecondaryUnitCode != null">belongs_secondary_unit_code,</if>
+            <if test="nameSecondaryUnit != null">name_secondary_unit,</if>
+            <if test="otherSignUnit != null">other_sign_unit,</if>
+            <if test="reasonAward != null">reason_award,</if>
+            <if test="remark != null">remark,</if>
+            <if test="performanceStatus != null">performance_status,</if>
+            <if test="memberInformation != null">member_information,</if>
+            <if test="schoolMemberAccount != null">school_member_account,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="awardId != null">#{awardId},</if>
+            <if test="awardCategory != null">#{awardCategory},</if>
+            <if test="awardProject != null">#{awardProject},</if>
+            <if test="typesAwardProjects != null">#{typesAwardProjects},</if>
+            <if test="awardName != null">#{awardName},</if>
+            <if test="awardDate != null">#{awardDate},</if>
+            <if test="rewardLevel != null">#{rewardLevel},</if>
+            <if test="rewardLevelSegmentation != null">#{rewardLevelSegmentation},</if>
+            <if test="awardingCountry != null">#{awardingCountry},</if>
+            <if test="awardingUnit != null">#{awardingUnit},</if>
+            <if test="rewardMethod != null">#{rewardMethod},</if>
+            <if test="signatureUnit != null">#{signatureUnit},</if>
+            <if test="belongsSecondaryUnitCode != null">#{belongsSecondaryUnitCode},</if>
+            <if test="nameSecondaryUnit != null">#{nameSecondaryUnit},</if>
+            <if test="otherSignUnit != null">#{otherSignUnit},</if>
+            <if test="reasonAward != null">#{reasonAward},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="performanceStatus != null">#{performanceStatus},</if>
+            <if test="memberInformation != null">#{memberInformation},</if>
+            <if test="schoolMemberAccount != null">#{schoolMemberAccount},</if>
+        </trim>
+    </insert>
+    <update id="updateKyfzAward" parameterType="KyfzAward">
+        update kyfz_award
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="awardCategory != null">award_category = #{awardCategory},</if>
+            <if test="awardProject != null">award_project = #{awardProject},</if>
+            <if test="typesAwardProjects != null">types_award_projects = #{typesAwardProjects},</if>
+            <if test="awardName != null">award_name = #{awardName},</if>
+            <if test="awardDate != null">award_date = #{awardDate},</if>
+            <if test="rewardLevel != null">reward_level = #{rewardLevel},</if>
+            <if test="rewardLevelSegmentation != null">reward_level_segmentation = #{rewardLevelSegmentation},</if>
+            <if test="awardingCountry != null">awarding_country = #{awardingCountry},</if>
+            <if test="awardingUnit != null">awarding_unit = #{awardingUnit},</if>
+            <if test="rewardMethod != null">reward_method = #{rewardMethod},</if>
+            <if test="signatureUnit != null">signature_unit = #{signatureUnit},</if>
+            <if test="belongsSecondaryUnitCode != null">belongs_secondary_unit_code = #{belongsSecondaryUnitCode},</if>
+            <if test="nameSecondaryUnit != null">name_secondary_unit = #{nameSecondaryUnit},</if>
+            <if test="otherSignUnit != null">other_sign_unit = #{otherSignUnit},</if>
+            <if test="reasonAward != null">reason_award = #{reasonAward},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="performanceStatus != null">performance_status = #{performanceStatus},</if>
+            <if test="memberInformation != null">member_information = #{memberInformation},</if>
+            <if test="schoolMemberAccount != null">school_member_account = #{schoolMemberAccount},</if>
+        </trim>
+        where award_id = #{awardId}
+    </update>
+    <delete id="deleteKyfzAwardByAwardId" parameterType="Long">
+        delete from kyfz_award where award_id = #{awardId}
+    </delete>
+    <delete id="deleteKyfzAwardByAwardIds" parameterType="String">
+        delete from kyfz_award where award_id in
+        <foreach item="awardId" collection="array" open="(" separator="," close=")">
+            #{awardId}
+        </foreach>
+    </delete>
+    <!-- 奖项列表项目信息 -->
+    <select id="selectKyfzAwardsList_AwardsIdlist" parameterType="Long" resultMap="KyfzAwardResult">
+        <include refid="selectKyfzAwardVo"/>
+        where award_id in
+        <foreach item="awardId" index="index" collection="array" open="(" separator="," close=")">
+            #{awardId}
+        </foreach>
+    </select>
+</mapper>

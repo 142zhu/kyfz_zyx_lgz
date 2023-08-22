@@ -193,6 +193,14 @@
                     </div>
                   </div>
                 </div>
+                <el-button
+                  size="mini"
+                  type="text"
+                  icon="el-icon-edit"
+                  @click="handleDetail(scope.row)"
+                >
+                  详情
+                </el-button>
               </div>
             </el-table-column>
           </el-table>
@@ -208,6 +216,7 @@
           <el-card
             v-for="item in teamList"
             :key="item.teamId"
+            v-loading="loading"
             class="box-card blue"
             style="margin-top: 20px"
           >
@@ -244,11 +253,11 @@
                 content-class-name="my-content"
               >{{ item.reseachDirections }}</el-descriptions-item>
               <el-descriptions-item
-                label="累计专利"
+                label="累计项目"
                 :span="2"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >1000 个</el-descriptions-item>
+              >{{ item.accumulatedItems }}</el-descriptions-item>
               <el-descriptions-item
                 label="操作"
                 label-class-name="my-label"
@@ -265,8 +274,7 @@
                 label="累计成果"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >
-                188 件</el-descriptions-item>
+              >{{ item.accumulatedResults }}</el-descriptions-item>
             </el-descriptions>
           </el-card>
           <pagination
@@ -333,7 +341,46 @@
             @pagination="searchAll"
           />
         </div>
-        <div v-show="activeTab === '搜成果'">搜成果的内容</div>
+        <div v-show="activeTab === '搜成果'">
+          <el-table v-loading="loading" :data="propertylist" style="width: 780px">
+            <el-table-column
+              label="成果信息"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
+              <div slot-scope="scope" class="enterprise-card">
+                <div class="enterprise-1">
+                  <div class="enterprise-2">
+                    <div class="enterprise-3">
+                      <div class="enterprise-name">
+                        {{ scope.row.intellectualPropertyName }}
+                      </div>
+                      <div class="enterprise-4">
+                        <div class="industry2">类别：{{ scope.row.patentType }}</div>
+                      </div>
+                      <div class="position-1">状态：{{ scope.row.patentStatus }}</div>
+                      <div class="position-2">
+                        编号：{{ scope.row.certificateNumber }}
+                      </div>
+                    </div>
+                    <div class="research-direction2">
+                      <div class="research-direction-text2" style="text-indent: 2em">
+                        {{ scope.row.memberInformation }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-table-column>
+          </el-table>
+          <pagination
+            v-show="total > 0"
+            :total="total"
+            :page.sync="search_queryParams.pageNum"
+            :limit.sync="search_queryParams.pageSize"
+            @pagination="searchAll"
+          />
+        </div>
       </div>
     </div>
     <!-- echart团队关系图 -->
@@ -348,13 +395,125 @@
         <div :id="echartsId" style="width: 1200px; height: 700px" />
       </div>
     </el-dialog>
+
+    <!-- 搜专家详细信息弹窗 -->
+    <el-dialog
+      :title="title"
+      :visible.sync="openDetail"
+      width="1000px"
+      append-to-body
+      class="xiangxi"
+    >
+      <div class="match-detail" style="margin-top: -20px">
+        <div class="match-detail-header">
+          <h3 class="match-detail-title">专家详细信息</h3>
+        </div>
+        <el-table :data="[expertDetail]" class="match-detail-table">
+          <el-table-column label="专家账号" align="center" prop="expertAccount" />
+          <el-table-column label="专家姓名" align="center" prop="expertName" />
+          <el-table-column label="专家职称" align="center" prop="expertPosition" />
+          <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
+          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
+          <el-table-column label="一级学科" align="center" prop="primaryDiscipline" />
+          <el-table-column label="二级学科" align="center" prop="secondaryDiscipline" />
+          <el-table-column label="三级学科" align="center" prop="researchDirection" />
+        </el-table>
+        <div class="match-detail-result">
+          <h4>专家研究成果</h4>
+          <div class="match-detail-result-info">
+            <div>
+              <h5>相关项目</h5>
+              <div class="match-detail-decorate">
+                <el-tooltip
+                  v-for="item in expertDetail.projectArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item project"
+                >
+                  <div slot="content">
+                    项目类别：{{ item.projectCategory }} ；归属二级单位：
+                    {{ item.dept }}
+                    <br>
+                    开始时间：{{ item.startTime }} ；结束时间：{{ item.endTime }}
+                    <br>
+                    金额：{{ item.startFunds }} 万元
+                  </div>
+                  <span>{{ item.projectName }} </span>
+                </el-tooltip>
+              </div>
+            </div>
+            <div>
+              <h5>相关论文</h5>
+              <div class="match-detail-decorate">
+                <el-tooltip
+                  v-for="item in expertDetail.thesisArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item thesis"
+                  content="Top center"
+                >
+                  <div slot="content">
+                    论文类型：{{ item.thesisType }} ；发表时间：
+                    {{ item.publicateTime }}
+                    <br>
+                    刊物名称：{{ item.thesisJournal }} ；刊物级别：{{ item.journalLevel }}
+                  </div>
+                  <span>{{ item.thesisName }} </span>
+                </el-tooltip>
+              </div>
+            </div>
+            <div>
+              <h5>知识产权</h5>
+              <div class="match-detail-decorate">
+                <el-tooltip
+                  v-for="item in expertDetail.intellectualPropertArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item work"
+                  content="Top center"
+                  disabled
+                >
+                  <el-badge :value="item.patentType" type="primary">
+                    <span>{{ item.intellectualPropertyName }} </span>
+                  </el-badge>
+                </el-tooltip>
+              </div>
+            </div>
+            <div>
+              <h5>奖项</h5>
+              <div class="match-detail-decorate">
+                <el-tooltip
+                  v-for="item in expertDetail.awardArray"
+                  :key="item"
+                  placement="top"
+                  class="match-detail-item certificate"
+                  content="Top center"
+                  disabled
+                >
+                  <span>{{ item.awardName }} </span>
+                </el-tooltip>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="match-detail-team">
+          <h4>专家团队</h4>
+          <div class="match-detail-team-info">
+            <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
+              item
+            }}</span>
+          </div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listClassification } from '@/api/kyfz/classification'
 import { listEnterprise } from '@/api/kyfz/enterprise'
-import { getEchartExpertData2, listExpert } from '@/api/kyfz/expert'
+import { getEchartExpertData2, getExpertDetail, listExpert } from '@/api/kyfz/expert'
+import { listProperty } from '@/api/kyfz/property'
 import {
 addSearch,
 clickSearch,
@@ -380,6 +539,8 @@ export default {
       Comprehensive_mark: null,
       // 企业管理表格数据
       enterpriseList: [],
+      // 成果列表数据
+      propertylist: [],
       // 团队列表数据
       teamList: [],
       // 专家管理表格数据
@@ -408,6 +569,7 @@ export default {
       title: '',
       // 是否显示弹出层
       open: false,
+      openDetail: false,
       // 行业标签的查询参数
       panebuttonClick_queryParams: {
         pageNum: 1,
@@ -435,6 +597,26 @@ export default {
         pageSize: 10,
         keyWord: null,
         mark: '综合搜索'
+      },
+      // 成果查询参数
+      property_queryParams: {
+        pageNum: 1,
+        pageSize: 10,
+        intellectualPropertyName: null,
+        performanceCategory: null,
+        certificateNumber: null,
+        countryOrRegion: null,
+        applicationDate: null,
+        approvalDate: null,
+        patentType: null,
+        patentStatus: null,
+        standardType: null,
+        signatureUnit: null,
+        belongsSecondaryUnitCode: null,
+        nameSecondaryUnit: null,
+        otherSignUnit: null,
+        memberInformation: null,
+        schoolMemberAccount: null
       },
       // 企业查询参数
       enterprise_queryParams: {
@@ -508,6 +690,7 @@ export default {
     this.getexpertList()
     this.getEnterpriseList()
     this.getTeam()
+    this.getPropertyList()
     this.echartsId = getEchartsId()
   },
   mounted() {
@@ -612,9 +795,9 @@ export default {
     },
     // 搜索输入框点击函数
     searchAll() {
+      this.loading = true
       this.Comprehensive_mark = '输入框搜索'
       clickSearch(this.search_queryParams).then((response) => {
-        this.loading = true
         if (this.search_queryParams.mark === '综合搜索') {
           this.expertList = response.rows
           this.total = response.total
@@ -632,6 +815,10 @@ export default {
           this.enterpriseList = response.rows
           this.total = response.total
           this.loading = false
+        } else if (this.search_queryParams.mark === '搜成果') {
+          this.propertylist = response.rows
+          this.total = response.total
+          this.loading = false
         }
       })
     },
@@ -640,6 +827,16 @@ export default {
       this.loading = true
       listTeam(this.team_queryParams).then((response) => {
         this.teamList = response.rows
+        this.total = response.total
+        this.loading = false
+      })
+    },
+    // 成果信息
+    /** 查询成果管理列表 */
+    getPropertyList() {
+      this.loading = true
+      listProperty(this.property_queryParams).then((response) => {
+        this.propertylist = response.rows
         this.total = response.total
         this.loading = false
       })
@@ -655,6 +852,35 @@ export default {
       })
     },
     // 专家信息
+    // 专家详情
+    handleDetail(row) {
+      // 表单内容重置
+      this.reset()
+      this.load = this.$loading({
+        target: '.xiangxi .el-dialog',
+        text: '正在加载',
+        spinner: 'el-icon-loading'
+      })
+      this.openDetail = true
+      const expertId = row.expertId
+      this.expertDetail.expertName = row.expertName
+      this.expertDetail.expertPosition = row.expertPosition // 职称
+      this.expertDetail.expertAffiliation = row.expertAffiliation // 所属单位
+      this.expertDetail.researchDirection = row.researchDirection // 研究方向
+      this.expertDetail.expertAccount = row.expertAccount // 账号
+
+      getExpertDetail(expertId).then((response) => {
+        this.expertDetail = response.data
+        if (response.data.teamMembers != null) {
+          this.expertDetail.teamMembersArray = response.data.teamMembers
+            .trim()
+            .split(/[,，、]/)
+        } else {
+          this.expertDetail.teamMembersArray = '无'
+        }
+        this.load.close()
+      })
+    },
     /** 查询专家管理列表 */
     // 专家搜索换页
     getexpertList() {
@@ -1303,5 +1529,211 @@ export default {
   position: relative;
   width: 573px;
   height: 73px;
+}
+</style>
+
+<style scoped>
+.string-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.string-info span {
+  display: inline-block;
+  margin: 10px;
+  border: 1px solid gray;
+  white-space: pre-wrap;
+}
+
+.match-detail {
+  padding: 20px;
+}
+
+.match-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.match-detail-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.match-detail-star {
+  display: flex;
+  align-items: center;
+}
+
+.match-detail-table {
+  margin: 10px 0;
+}
+
+.match-detail-keywords h4,
+.match-detail-result h4,
+.match-detail-team h4 {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.match-detail-keywords-info,
+.match-detail-result-info,
+.match-detail-team-info {
+  margin-top: 10px;
+  padding: 20px;
+  border: 1px solid #ebeef5;
+  border-radius: 4px;
+  background-color: #f5f7fa;
+}
+
+.match-detail-result-info > div {
+  margin-bottom: 10px;
+}
+
+.match-detail-decorate {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-detail-decorate .match-detail-item {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 40px;
+  margin-bottom: 10px;
+  padding: 10px 10px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #333;
+}
+
+.match-detail-decorate .match-detail-item:first-child {
+  margin-left: 0;
+}
+
+.match-detail-decorate .match-detail-item::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+}
+
+.match-detail-decorate .match-detail-item.project::before {
+  background-color: #3fb27f;
+}
+
+.match-detail-decorate .match-detail-item.thesis::before {
+  background-color: #ffc107;
+}
+
+.match-detail-decorate .match-detail-item.work::before {
+  background-color: #909399;
+}
+
+.match-detail-decorate .match-detail-item.certificate::before {
+  background-color: #19be6b;
+}
+
+.match-detail-team-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-detail-team-info > span {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f5f7fa;
+}
+
+.match-detail-keywords-info span {
+  display: inline-block;
+  padding: 2px 6px;
+  border: 1px solid #dcdfe6;
+  border-radius: 2px;
+  background-color: #f2f6fc;
+  color: #606266;
+  margin: 5px 5px 5px 0;
+}
+
+.match-detail-keywords-info span:hover {
+  background-color: #eef1f6;
+}
+
+.match-detail-team-info span {
+  display: inline-block;
+  background-color: #e4e7ed;
+  margin: 0 10px 10px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.match-detail-team-info span:hover {
+  display: inline-block;
+  background-color: #d8dbe2;
+}
+
+/* 调整对话框标题和内容之间的距离 */
+.el-dialog__header {
+  margin-bottom: 0px !important;
+}
+
+/* 在弹窗内容过大时添加垂直滚动条 */
+.el-dialog__body .match-detail-team-info,
+.el-dialog__body .match-detail-keywords-info {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* 匹配详情示例页面中需要增加的样式 */
+.match-detail-keywords-info span {
+  padding: 2px 6px;
+  border: 1px solid #dcdfe6;
+  border-radius: 2px;
+  background-color: #f2f6fc;
+  color: #606266;
+  margin: 5px 5px 5px 0;
+}
+
+.match-detail-keywords-info span:hover {
+  background-color: #eef1f6;
+}
+
+.match-detail-team-info span {
+  display: inline-block;
+  background-color: #e4e7ed;
+  margin: 0 10px 10px 0;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #606266;
+}
+
+.match-detail-team-info span:hover {
+  background-color: #d8dbe2;
+}
+
+.match-detail-team-info {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.match-detail-team-info button {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 5px;
 }
 </style>

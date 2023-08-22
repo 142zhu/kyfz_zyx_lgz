@@ -2,6 +2,7 @@ package com.ruoyi.kyfz.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -11,8 +12,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author zyx
  * @date 2023-07-18
  */
-public class KyfzTeam extends BaseEntity
-{
+public class KyfzTeam extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /** 团队id（团队的唯一表示符号） */
@@ -34,60 +34,82 @@ public class KyfzTeam extends BaseEntity
     @Excel(name = "研究方向")
     private String reseachDirections;
 
-    public void setTeamId(Long teamId) 
-    {
+    /** 累计成果 */
+    @Excel(name = "累计成果")
+    private String accumulatedResults;
+
+    /** 累计项目 */
+    @Excel(name = "累计项目")
+    private String accumulatedItems;
+
+    public void setAccumulatedResults(String accumulatedResults) {
+        this.accumulatedResults = accumulatedResults;
+    }
+
+    public void setAccumulatedItems(String accumulatedItems) {
+        this.accumulatedItems = accumulatedItems;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public String getAccumulatedResults() {
+        return accumulatedResults;
+    }
+
+    public String getAccumulatedItems() {
+        return accumulatedItems;
+    }
+
+    public void setTeamId(Long teamId) {
         this.teamId = teamId;
     }
 
-    public Long getTeamId() 
-    {
+    public Long getTeamId() {
         return teamId;
     }
-    public void setTeamMembers(String teamMembers) 
-    {
+
+    public void setTeamMembers(String teamMembers) {
         this.teamMembers = teamMembers;
     }
 
-    public String getTeamMembers() 
-    {
+    public String getTeamMembers() {
         return teamMembers;
     }
-    public void setTeamAccount(String teamAccount) 
-    {
+
+    public void setTeamAccount(String teamAccount) {
         this.teamAccount = teamAccount;
     }
 
-    public String getTeamAccount() 
-    {
+    public String getTeamAccount() {
         return teamAccount;
     }
-    public void setMemberScores(String memberScores) 
-    {
+
+    public void setMemberScores(String memberScores) {
         this.memberScores = memberScores;
     }
 
-    public String getMemberScores() 
-    {
+    public String getMemberScores() {
         return memberScores;
     }
-    public void setReseachDirections(String reseachDirections) 
-    {
+
+    public void setReseachDirections(String reseachDirections) {
         this.reseachDirections = reseachDirections;
     }
 
-    public String getReseachDirections() 
-    {
+    public String getReseachDirections() {
         return reseachDirections;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("teamId", getTeamId())
-            .append("teamMembers", getTeamMembers())
-            .append("teamAccount", getTeamAccount())
-            .append("memberScores", getMemberScores())
-            .append("reseachDirections", getReseachDirections())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("teamId", getTeamId())
+                .append("teamMembers", getTeamMembers())
+                .append("teamAccount", getTeamAccount())
+                .append("memberScores", getMemberScores())
+                .append("reseachDirections", getReseachDirections())
+                .toString();
     }
 }

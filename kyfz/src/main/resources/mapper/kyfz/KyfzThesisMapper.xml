@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzThesisMapper">
+    <resultMap type="KyfzThesis" id="KyfzThesisResult">
+        <result property="thesisId"    column="thesis_id"    />
+        <result property="thesisName"    column="thesis_name"    />
+        <result property="thesisType"    column="thesis_type"    />
+        <result property="publicateTime"    column="publicate_time"    />
+        <result property="thesisAbstract"    column="thesis_abstract"    />
+        <result property="thesisKeywords"    column="thesis_keywords"    />
+        <result property="thesisJournal"    column="thesis_journal"    />
+        <result property="journalLevel"    column="journal_level"    />
+        <result property="thesisAuthor"    column="thesis_author"    />
+        <result property="schoolAuthorAccount"    column="school_author_account"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+    <sql id="selectKyfzThesisVo">
+        select thesis_id, thesis_name, thesis_type, publicate_time, thesis_abstract, thesis_keywords, thesis_journal, journal_level, thesis_author, school_author_account, create_by, create_time, update_by, update_time from kyfz_thesis
+    </sql>
+    <select id="selectKyfzThesisList" parameterType="KyfzThesis" resultMap="KyfzThesisResult">
+        <include refid="selectKyfzThesisVo"/>
+        <where>
+            <if test="thesisName != null  and thesisName != ''"> and thesis_name like concat('%', #{thesisName}, '%')</if>
+            <if test="thesisType != null  and thesisType != ''"> and thesis_type = #{thesisType}</if>
+            <if test="publicateTime != null "> and publicate_time = #{publicateTime}</if>
+            <if test="thesisAbstract != null  and thesisAbstract != ''"> and thesis_abstract = #{thesisAbstract}</if>
+            <if test="thesisKeywords != null  and thesisKeywords != ''"> and thesis_keywords = #{thesisKeywords}</if>
+            <if test="thesisJournal != null  and thesisJournal != ''"> and thesis_journal = #{thesisJournal}</if>
+            <if test="journalLevel != null  and journalLevel != ''"> and journal_level = #{journalLevel}</if>
+            <if test="thesisAuthor != null  and thesisAuthor != ''"> and thesis_author = #{thesisAuthor}</if>
+            <if test="schoolAuthorAccount != null  and schoolAuthorAccount != ''"> and school_author_account = #{schoolAuthorAccount}</if>
+        </where>
+    </select>
+    <select id="selectKyfzThesisByThesisId" parameterType="Long" resultMap="KyfzThesisResult">
+        <include refid="selectKyfzThesisVo"/>
+        where thesis_id = #{thesisId}
+    </select>
+    <insert id="insertKyfzThesis" parameterType="KyfzThesis">
+        insert into kyfz_thesis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="thesisId != null">thesis_id,</if>
+            <if test="thesisName != null">thesis_name,</if>
+            <if test="thesisType != null">thesis_type,</if>
+            <if test="publicateTime != null">publicate_time,</if>
+            <if test="thesisAbstract != null">thesis_abstract,</if>
+            <if test="thesisKeywords != null">thesis_keywords,</if>
+            <if test="thesisJournal != null">thesis_journal,</if>
+            <if test="journalLevel != null">journal_level,</if>
+            <if test="thesisAuthor != null">thesis_author,</if>
+            <if test="schoolAuthorAccount != null">school_author_account,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="thesisId != null">#{thesisId},</if>
+            <if test="thesisName != null">#{thesisName},</if>
+            <if test="thesisType != null">#{thesisType},</if>
+            <if test="publicateTime != null">#{publicateTime},</if>
+            <if test="thesisAbstract != null">#{thesisAbstract},</if>
+            <if test="thesisKeywords != null">#{thesisKeywords},</if>
+            <if test="thesisJournal != null">#{thesisJournal},</if>
+            <if test="journalLevel != null">#{journalLevel},</if>
+            <if test="thesisAuthor != null">#{thesisAuthor},</if>
+            <if test="schoolAuthorAccount != null">#{schoolAuthorAccount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+    <update id="updateKyfzThesis" parameterType="KyfzThesis">
+        update kyfz_thesis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="thesisName != null">thesis_name = #{thesisName},</if>
+            <if test="thesisType != null">thesis_type = #{thesisType},</if>
+            <if test="publicateTime != null">publicate_time = #{publicateTime},</if>
+            <if test="thesisAbstract != null">thesis_abstract = #{thesisAbstract},</if>
+            <if test="thesisKeywords != null">thesis_keywords = #{thesisKeywords},</if>
+            <if test="thesisJournal != null">thesis_journal = #{thesisJournal},</if>
+            <if test="journalLevel != null">journal_level = #{journalLevel},</if>
+            <if test="thesisAuthor != null">thesis_author = #{thesisAuthor},</if>
+            <if test="schoolAuthorAccount != null">school_author_account = #{schoolAuthorAccount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where thesis_id = #{thesisId}
+    </update>
+    <delete id="deleteKyfzThesisByThesisId" parameterType="Long">
+        delete from kyfz_thesis where thesis_id = #{thesisId}
+    </delete>
+    <delete id="deleteKyfzThesisByThesisIds" parameterType="String">
+        delete from kyfz_thesis where thesis_id in
+        <foreach item="thesisId" collection="array" open="(" separator="," close=")">
+            #{thesisId}
+        </foreach>
+    </delete>
+    <!-- 论文列表项目信息 -->
+    <select id="selectKyfzThesisList_Thesisidlist" parameterType="Long" resultMap="KyfzThesisResult">
+        <include refid="selectKyfzThesisVo"/>
+        where thesis_id in
+        <foreach item="thesisId" index="index" collection="array" open="(" separator="," close=")">
+            #{thesisId}
+        </foreach>
+    </select>
+</mapper>

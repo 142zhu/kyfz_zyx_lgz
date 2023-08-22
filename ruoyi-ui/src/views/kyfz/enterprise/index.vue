@@ -224,24 +224,6 @@
       </el-table>
     </div>
 
-    <!-- 原来表格显示 -->
-    <!-- <el-table v-loading="loading" :data="enterpriseList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="企业名" align="center" prop="enterpriseName" />
-      <el-table-column label="企业信用代码" align="center" prop="enterpriseCreditCode" />
-      <el-table-column label="企业描述" align="center" :show-overflow-tooltip="true" prop="enterpriseDescribe" />
-      <el-table-column label="企业注册资本" align="center" prop="registeredCapital" />
-      <el-table-column label="企业关键词" align="center" prop="enterpriseKeywords" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
-            v-hasPermi="['kyfz:enterprise:edit']">修改</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
-            v-hasPermi="['kyfz:enterprise:remove']">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table> -->
-
     <pagination
       v-show="total > 0"
       :total="total"
@@ -294,6 +276,15 @@
             style="width: 600px"
           />
         </el-form-item>
+        <el-form-item label="技术评估" prop="technicalAssessment" label-width="250px">
+          <el-input
+            v-model="form.technicalAssessment"
+            type="textarea"
+            placeholder="请输入内容"
+            style="width: 600px"
+            :autosize="{ minRows: 4, maxRows: 8 }"
+          />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -327,34 +318,35 @@
                 :key="item"
                 placement="top"
                 class="match-detail-item project"
-                :content="
-                  '状态：' +
-                    item.requirementStatus +
-                    '，总预算：' +
-                    item.totalBudget +
-                    '万元'
-                "
               >
+                <div slot="content">
+                  状态：{{ item.requirementStatus }} ；总预算：
+                  {{ item.totalBudget }} 万元
+                  <br>
+                  学院：{{ item.projectLeaderUnit }} ；负责人：{{ item.projectLeader }}
+                  <br>
+                  时间：{{ item.startProjectTime }} 至 {{ item.endProjectTime }}
+                </div>
                 <span>{{ item.projectName }} </span>
               </el-tooltip>
             </div>
           </div>
           <div>
-            <h5>企业亮点</h5>
+            <h5>技术特点</h5>
             <el-tag
               v-for="item in enterpriseKeyWordList"
               :key="item"
               type="success"
               effect="dark"
               size="medium"
-              style="margin-left: 10px; margin-right: 10px;"
+              style="margin-left: 10px; margin-right: 10px"
             >
               {{ item }}
             </el-tag>
           </div>
           <div>
             <h5>技术评估</h5>
-            <el-skeleton :rows="3" animated />
+            <span> {{ enterpriseDetail.technicalAssessment }}</span>
           </div>
         </div>
       </div>
@@ -414,7 +406,8 @@ export default {
         enterpriseDescribe: null,
         registeredCapital: null,
         enterpriseKeywords: null,
-        categoryId: null
+        categoryId: null,
+        technicalAssessment: null
       },
       // 表单参数
       form: {},

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.kyfz.mapper.KyfzIntellectualPropertyMapper">
+    <resultMap type="KyfzIntellectualProperty" id="KyfzIntellectualPropertyResult">
+        <result property="intellectualPropertyId"    column="intellectual_property_id"    />
+        <result property="intellectualPropertyName"    column="intellectual_property_name"    />
+        <result property="performanceCategory"    column="performance_category"    />
+        <result property="certificateNumber"    column="certificate_number"    />
+        <result property="countryOrRegion"    column="Country_or_region"    />
+        <result property="applicationDate"    column="application_date"    />
+        <result property="approvalDate"    column="approval_date"    />
+        <result property="patentType"    column="patent_type"    />
+        <result property="patentStatus"    column="patent_status"    />
+        <result property="standardType"    column="standard_type"    />
+        <result property="signatureUnit"    column="signature_unit"    />
+        <result property="belongsSecondaryUnitCode"    column="belongs_secondary_unit_code"    />
+        <result property="nameSecondaryUnit"    column="name_secondary_unit"    />
+        <result property="otherSignUnit"    column="other_sign_unit"    />
+        <result property="memberInformation"    column="member_information"    />
+        <result property="schoolMemberAccount"    column="school_member_account"    />
+    </resultMap>
+    <sql id="selectKyfzIntellectualPropertyVo">
+        select intellectual_property_id, intellectual_property_name, performance_category, certificate_number, Country_or_region, application_date, approval_date, patent_type, patent_status, standard_type, signature_unit, belongs_secondary_unit_code, name_secondary_unit, other_sign_unit, member_information, school_member_account from kyfz_intellectual_property
+    </sql>
+    <select id="selectKyfzIntellectualPropertyList" parameterType="KyfzIntellectualProperty" resultMap="KyfzIntellectualPropertyResult">
+        <include refid="selectKyfzIntellectualPropertyVo"/>
+        <where>
+            <if test="intellectualPropertyName != null  and intellectualPropertyName != ''"> and intellectual_property_name like concat('%', #{intellectualPropertyName}, '%')</if>
+            <if test="performanceCategory != null  and performanceCategory != ''"> and performance_category = #{performanceCategory}</if>
+            <if test="certificateNumber != null  and certificateNumber != ''"> and certificate_number = #{certificateNumber}</if>
+            <if test="countryOrRegion != null  and countryOrRegion != ''"> and Country_or_region = #{countryOrRegion}</if>
+            <if test="applicationDate != null "> and application_date = #{applicationDate}</if>
+            <if test="approvalDate != null "> and approval_date = #{approvalDate}</if>
+            <if test="patentType != null  and patentType != ''"> and patent_type = #{patentType}</if>
+            <if test="patentStatus != null  and patentStatus != ''"> and patent_status = #{patentStatus}</if>
+            <if test="standardType != null  and standardType != ''"> and standard_type = #{standardType}</if>
+            <if test="signatureUnit != null  and signatureUnit != ''"> and signature_unit = #{signatureUnit}</if>
+            <if test="belongsSecondaryUnitCode != null  and belongsSecondaryUnitCode != ''"> and belongs_secondary_unit_code = #{belongsSecondaryUnitCode}</if>
+            <if test="nameSecondaryUnit != null  and nameSecondaryUnit != ''"> and name_secondary_unit = #{nameSecondaryUnit}</if>
+            <if test="otherSignUnit != null  and otherSignUnit != ''"> and other_sign_unit = #{otherSignUnit}</if>
+            <if test="memberInformation != null  and memberInformation != ''"> and member_information = #{memberInformation}</if>
+            <if test="schoolMemberAccount != null  and schoolMemberAccount != ''"> and school_member_account = #{schoolMemberAccount}</if>
+        </where>
+    </select>
+    <select id="selectKyfzIntellectualPropertyByIntellectualPropertyId" parameterType="Long" resultMap="KyfzIntellectualPropertyResult">
+        <include refid="selectKyfzIntellectualPropertyVo"/>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </select>
+    <insert id="insertKyfzIntellectualProperty" parameterType="KyfzIntellectualProperty">
+        insert into kyfz_intellectual_property
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="intellectualPropertyId != null">intellectual_property_id,</if>
+            <if test="intellectualPropertyName != null">intellectual_property_name,</if>
+            <if test="performanceCategory != null">performance_category,</if>
+            <if test="certificateNumber != null">certificate_number,</if>
+            <if test="countryOrRegion != null">Country_or_region,</if>
+            <if test="applicationDate != null">application_date,</if>
+            <if test="approvalDate != null">approval_date,</if>
+            <if test="patentType != null">patent_type,</if>
+            <if test="patentStatus != null">patent_status,</if>
+            <if test="standardType != null">standard_type,</if>
+            <if test="signatureUnit != null">signature_unit,</if>
+            <if test="belongsSecondaryUnitCode != null">belongs_secondary_unit_code,</if>
+            <if test="nameSecondaryUnit != null">name_secondary_unit,</if>
+            <if test="otherSignUnit != null">other_sign_unit,</if>
+            <if test="memberInformation != null">member_information,</if>
+            <if test="schoolMemberAccount != null">school_member_account,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="intellectualPropertyId != null">#{intellectualPropertyId},</if>
+            <if test="intellectualPropertyName != null">#{intellectualPropertyName},</if>
+            <if test="performanceCategory != null">#{performanceCategory},</if>
+            <if test="certificateNumber != null">#{certificateNumber},</if>
+            <if test="countryOrRegion != null">#{countryOrRegion},</if>
+            <if test="applicationDate != null">#{applicationDate},</if>
+            <if test="approvalDate != null">#{approvalDate},</if>
+            <if test="patentType != null">#{patentType},</if>
+            <if test="patentStatus != null">#{patentStatus},</if>
+            <if test="standardType != null">#{standardType},</if>
+            <if test="signatureUnit != null">#{signatureUnit},</if>
+            <if test="belongsSecondaryUnitCode != null">#{belongsSecondaryUnitCode},</if>
+            <if test="nameSecondaryUnit != null">#{nameSecondaryUnit},</if>
+            <if test="otherSignUnit != null">#{otherSignUnit},</if>
+            <if test="memberInformation != null">#{memberInformation},</if>
+            <if test="schoolMemberAccount != null">#{schoolMemberAccount},</if>
+        </trim>
+    </insert>
+    <update id="updateKyfzIntellectualProperty" parameterType="KyfzIntellectualProperty">
+        update kyfz_intellectual_property
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="intellectualPropertyName != null">intellectual_property_name = #{intellectualPropertyName},</if>
+            <if test="performanceCategory != null">performance_category = #{performanceCategory},</if>
+            <if test="certificateNumber != null">certificate_number = #{certificateNumber},</if>
+            <if test="countryOrRegion != null">Country_or_region = #{countryOrRegion},</if>
+            <if test="applicationDate != null">application_date = #{applicationDate},</if>
+            <if test="approvalDate != null">approval_date = #{approvalDate},</if>
+            <if test="patentType != null">patent_type = #{patentType},</if>
+            <if test="patentStatus != null">patent_status = #{patentStatus},</if>
+            <if test="standardType != null">standard_type = #{standardType},</if>
+            <if test="signatureUnit != null">signature_unit = #{signatureUnit},</if>
+            <if test="belongsSecondaryUnitCode != null">belongs_secondary_unit_code = #{belongsSecondaryUnitCode},</if>
+            <if test="nameSecondaryUnit != null">name_secondary_unit = #{nameSecondaryUnit},</if>
+            <if test="otherSignUnit != null">other_sign_unit = #{otherSignUnit},</if>
+            <if test="memberInformation != null">member_information = #{memberInformation},</if>
+            <if test="schoolMemberAccount != null">school_member_account = #{schoolMemberAccount},</if>
+        </trim>
+        where intellectual_property_id = #{intellectualPropertyId}
+    </update>
+    <delete id="deleteKyfzIntellectualPropertyByIntellectualPropertyId" parameterType="Long">
+        delete from kyfz_intellectual_property where intellectual_property_id = #{intellectualPropertyId}
+    </delete>
+    <delete id="deleteKyfzIntellectualPropertyByIntellectualPropertyIds" parameterType="String">
+        delete from kyfz_intellectual_property where intellectual_property_id in
+        <foreach item="intellectualPropertyId" collection="array" open="(" separator="," close=")">
+            #{intellectualPropertyId}
+        </foreach>
+    </delete>
+    <!-- 知识产权列表项目信息 -->
+    <select id="selectKyfzPropertyList_PropertyIdlist" parameterType="Long" resultMap="KyfzIntellectualPropertyResult">
+        <include refid="selectKyfzIntellectualPropertyVo"/>
+        where intellectual_property_id in
+        <foreach item="intellectualPropertyId" index="index" collection="array" open="(" separator="," close=")">
+            #{intellectualPropertyId}
+        </foreach>
+    </select>
+    <!-- 检索模块查成果 -->
+    <select id="searchKyfzIntellectualProperty" parameterType="KyfzIntellectualProperty" resultMap="KyfzIntellectualPropertyResult">
+        <include refid="selectKyfzIntellectualPropertyVo"/>
+        <where>
+            <if test="intellectualPropertyName != null  and intellectualPropertyName != ''"> or intellectual_property_name like concat('%', #{intellectualPropertyName}, '%')</if>
+            <if test="intellectualPropertyName != null  and intellectualPropertyName != ''"> or patent_type like concat('%', #{intellectualPropertyName}, '%')</if>
+            <if test="intellectualPropertyName != null  and intellectualPropertyName != ''"> or patent_status like concat('%', #{intellectualPropertyName}, '%')</if>
+            <if test="intellectualPropertyName != null  and intellectualPropertyName != ''"> or member_information like concat('%', #{intellectualPropertyName}, '%')</if>
+        </where>
+    </select>
+</mapper>

@@ -57,9 +57,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="awardsId != null  and awardsId != ''"> and awards_id = #{awardsId}</if>
             <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
             <if test="expertTeams != null  and expertTeams != ''"> and expert_teams = #{expertTeams}</if>
-            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
+            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, SUBSTRING_INDEX(category_id, '、', -1))</if>
         </where>
-        ORDER BY expert_id DESC
+            ORDER BY CASE
+                WHEN expert_position = '教授' THEN 0
+                WHEN expert_position = '副教授' THEN 1
+                WHEN expert_position = '主任医师' THEN 2
+                WHEN expert_position = '主治医师' THEN 3
+                WHEN expert_position = '医师' THEN 4
+                WHEN expert_position = '讲师（高校）' THEN 5
+                ELSE 6 
+            END
     </select>
     <select id="selectKyfzExpertByExpertId" parameterType="Long" resultMap="KyfzExpertResult">
         <include refid="selectKyfzExpertVo"/>
@@ -304,8 +312,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="awardsId != null  and awardsId != ''"> and awards_id = #{awardsId}</if>
             <if test="requirementId != null  and requirementId != ''"> and requirement_id = #{requirementId}</if>
             <if test="expertName != null  and expertName != ''"> or expert_teams like concat('%', #{expertName}, '%')</if>
-            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
+            <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, SUBSTRING_INDEX(category_id, '、', -1))</if>
         </where>
-        ORDER BY expert_id DESC
+            ORDER BY CASE
+                WHEN expert_position = '教授' THEN 0
+                WHEN expert_position = '副教授' THEN 1
+                WHEN expert_position = '主任医师' THEN 2
+                WHEN expert_position = '主治医师' THEN 3
+                WHEN expert_position = '医师' THEN 4
+                WHEN expert_position = '讲师（高校）' THEN 5
+                ELSE 6 
+            END
     </select>
 </mapper>

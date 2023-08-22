@@ -370,10 +370,15 @@
                   :key="item"
                   placement="top"
                   class="match-detail-item project"
-                  :content="
-                    '项目来源：' + item.dataSource + '，金额：' + item.startFunds + '万元'
-                  "
                 >
+                  <div slot="content">
+                    项目类别：{{ item.projectCategory }} ；归属二级单位：
+                    {{ item.dept }}
+                    <br>
+                    开始时间：{{ item.startTime }} ；结束时间：{{ item.endTime }}
+                    <br>
+                    金额：{{ item.startFunds }} 万元
+                  </div>
                   <span>{{ item.projectName }} </span>
                 </el-tooltip>
               </div>
@@ -387,9 +392,14 @@
                   placement="top"
                   class="match-detail-item thesis"
                   content="Top center"
-                  disabled
                 >
-                  <span>{{ item }} </span>
+                  <div slot="content">
+                    论文类型：{{ item.thesisType }} ；发表时间：
+                    {{ item.publicateTime }}
+                    <br>
+                    刊物名称：{{ item.thesisJournal }} ；刊物级别：{{ item.journalLevel }}
+                  </div>
+                  <span>{{ item.thesisName }} </span>
                 </el-tooltip>
               </div>
             </div>
@@ -404,7 +414,9 @@
                   content="Top center"
                   disabled
                 >
-                  <span>{{ item }} </span>
+                  <el-badge :value="item.patentType" type="primary">
+                    <span>{{ item.intellectualPropertyName }} </span>
+                  </el-badge>
                 </el-tooltip>
               </div>
             </div>
@@ -419,7 +431,7 @@
                   content="Top center"
                   disabled
                 >
-                  <span>{{ item }} </span>
+                  <span>{{ item.awardName }} </span>
                 </el-tooltip>
               </div>
             </div>
@@ -448,8 +460,8 @@
       append-to-body
       width="1200px"
     >
-      <div id="graph-chart" style="width: 1200px; height: 700px">
-        <div :id="echartsId" style="width: 1200px; height: 700px" />
+      <div id="graph-chart" style="width: 1250px; height: 600px">
+        <div :id="echartsId" style="width: 1100px; height: 600px" />
       </div>
     </el-dialog>
   </div>
@@ -569,6 +581,7 @@ export default {
     // 学院分类触发函数
     handleNodeClick(nodeData) {
       if (this.isLastChildNode(nodeData)) {
+        this.queryParams.pageNum = 1
         this.queryParams.expertAffiliation = nodeData.label
         this.queryParams.categoryId = null
         this.ReminderInformation = '专家信息——已选择  ' + nodeData.label + '  单位'
@@ -578,7 +591,6 @@ export default {
           this.loading = false
         })
       }
-      this.queryParams.expertAffiliation = null
     },
     isLastChildNode(nodeData) {
       // 获取当前节点的子节点
@@ -597,6 +609,7 @@ export default {
     },
     // 行业分类下拉菜单触发函数
     handleCommand(command) {
+      this.queryParams.pageNum = 1
       this.queryParams.categoryId = command
       this.queryParams.expertAffiliation = null
       listExpert(this.queryParams).then((response) => {
@@ -639,10 +652,10 @@ export default {
       const option = {
         // 添加你的配置
         title: {
-          text: '',
-          subtext: '',
-          top: 'bottom',
-          left: 'right'
+          text: '\n\n\n\n研究方向——' + this.expertDetail.researchDirection,
+          top: 'top',
+          left: 'left',
+          fontSize: 10
         },
         tooltip: {},
         legend: [
@@ -1007,9 +1020,9 @@ export default {
 .match-detail-decorate .match-detail-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 40px;
   margin-bottom: 10px;
-  padding: 4px 8px;
+  padding: 10px 10px;
   border-radius: 16px;
   font-size: 14px;
   color: #333;
