@@ -115,9 +115,6 @@ public class KyfzIntellectualPropertyServiceImpl implements IKyfzIntellectualPro
             KyfzIntellectualProperty KyfzIntellectualProperty) {
         List<KyfzIntellectualProperty> kyfzIntellectualProperties = kyfzIntellectualPropertyMapper
                 .selectKyfzIntellectualPropertyList(KyfzIntellectualProperty);
-        for (int i = 0; i < kyfzIntellectualProperties.size(); i++) {
-            kyfzIntellectualProperties.get(i).getMemberInformation().replaceAll("\\([^)]*\\)", "");
-        }
         return kyfzIntellectualProperties;
     }
 }

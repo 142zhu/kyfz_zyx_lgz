@@ -108,6 +108,12 @@ public class KyfzMatch extends BaseEntity {
     /** 最大匹配分值 */
     private double maxMatchScore;
 
+    private KyfzRequirement kyfzRequirement;
+
+    public KyfzRequirement getKyfzRequirement() {
+        return kyfzRequirement;
+    }
+
     public void setMarkAward(String markAward) {
         this.markAward = markAward;
     }
@@ -391,5 +397,9 @@ public class KyfzMatch extends BaseEntity {
                 .append("thesisNames", getThesisNames())
                 .append("score", getScore())
                 .toString();
+    }
+
+    public void setKyfzRequirement(KyfzRequirement kyfzRequirement) {
+        this.kyfzRequirement = kyfzRequirement;
     }
 }

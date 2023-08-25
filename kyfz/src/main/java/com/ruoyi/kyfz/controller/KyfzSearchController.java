@@ -144,6 +144,10 @@ public class KyfzSearchController extends BaseController {
             kyfzIntellectualProperty.setIntellectualPropertyName(kyfzSearch.getKeyWord());
             List<KyfzIntellectualProperty> list = IKyfzIntellectualPropertyService
                     .searchKyfzIntellectualProperty(kyfzIntellectualProperty);
+            for (int i = 0; i < list.size(); i++) {
+                list.get(i).setMemberInformation(
+                        list.get(i).getMemberInformation().replaceAll("\\（[^\\）]*\\）", ""));
+            }
             return getDataTable(list);
         }
         return null;

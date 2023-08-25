@@ -122,13 +122,15 @@ public class KyfzRequirementController extends BaseController {
     public AjaxResult handleMatch(String requirementId) {
         // return toAjax(kyfzMatchService.updatePushRecord(kyfzMatch));
         // String url = "http://127.0.0.1:8083";
-        String url = "http://172.18.166.90:6666/infer";
+
+        // String url = "http://172.18.166.90:6666/infer";
+        String url = "http://47.113.145.216:6666/infer";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("OtherHeadersxxx", "xxxx"); // Other headers
         MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
-        paramMap.add("requirement_id", requirementId);
+        paramMap.add("requirement_id", Integer.valueOf(requirementId));
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(paramMap, headers);
         ResponseEntity<String> responseEntity;
         try {
@@ -186,7 +188,6 @@ public class KyfzRequirementController extends BaseController {
     public AjaxResult remove_staging(@PathVariable Long[] requirementIds) {
         return toAjax(kyfzRequirementService.deleteKyfzRequirementByRequirementIds_staging(requirementIds));
     }
-
 
     /**
      * 获取暂时的需求管理详细信息

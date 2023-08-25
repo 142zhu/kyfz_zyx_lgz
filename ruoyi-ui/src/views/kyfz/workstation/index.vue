@@ -1,17 +1,44 @@
 <template>
   <div class="app-container">
-    <el-form v-show="showSearch" ref="queryForm" :model="queryParams" size="small" :inline="true" label-width="80px">
+    <el-form
+      v-show="showSearch"
+      ref="queryForm"
+      :model="queryParams"
+      size="small"
+      :inline="true"
+      label-width="80px"
+    >
       <el-form-item label="任务名称" prop="taskName">
-        <el-input v-model="queryParams.taskName" placeholder="请输入任务名称" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.taskName"
+          placeholder="请输入任务名称"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item label="任务来源" prop="taskSource">
-        <el-input v-model="queryParams.taskSource" placeholder="请输入任务来源" clearable @keyup.enter.native="handleQuery" />
+        <el-input
+          v-model="queryParams.taskSource"
+          placeholder="请输入任务来源"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
-      <el-form-item label="任务数量" prop="taskNumber">
-        <el-input v-model="queryParams.taskNumber" placeholder="请输入任务数量" clearable @keyup.enter.native="handleQuery" />
+      <el-form-item label="需求数量" prop="taskNumber">
+        <el-input
+          v-model="queryParams.taskNumber"
+          placeholder="请输入任务数量"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+        <el-button
+          type="primary"
+          icon="el-icon-search"
+          size="mini"
+          @click="handleQuery"
+        >搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -62,15 +89,24 @@
       <right-toolbar :show-search.sync="showSearch" @queryTable="getList" />
     </el-row>
 
-    <el-table v-loading="loading" :data="workstationList" @selection-change="handleSelectionChange">
+    <el-table
+      v-loading="loading"
+      :data="workstationList"
+      @selection-change="handleSelectionChange"
+    >
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="任务名称" align="center" prop="taskName" />
       <el-table-column label="任务来源" align="center" prop="taskSource" />
-      <el-table-column label="任务数量" align="center" prop="taskNumber" />
+      <el-table-column label="需求数量" align="center" prop="taskNumber" />
       <el-table-column label="任务状态" align="center" prop="taskStatus" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-plus" @click="handleAddRequirement(scope.row)">添加需求</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-plus"
+            @click="handleAddRequirement(scope.row)"
+          >添加需求</el-button>
           <el-button
             v-hasPermi="['kyfz:workstation:edit']"
             size="mini"
@@ -120,12 +156,27 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="任务数量" prop="taskNumber">
-          <el-input-number v-model="form.taskNumber" :min="0" :step="1" controls-position="right" />
+        <el-form-item label="需求数量" prop="taskNumber">
+          <el-input-number
+            v-model="form.taskNumber"
+            :min="0"
+            :step="1"
+            controls-position="right"
+          />
         </el-form-item>
         <el-form-item label="任务状态" prop="taskStatus">
-          <el-select v-model="form.taskStatus" filterable placeholder="" style="width: 380px">
-            <el-option v-for="item in dict.type.task_status" :key="item.value" :label="item.label" :value="item.label" />
+          <el-select
+            v-model="form.taskStatus"
+            filterable
+            placeholder=""
+            style="width: 380px"
+          >
+            <el-option
+              v-for="item in dict.type.task_status"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label"
+            />
           </el-select>
         </el-form-item>
       </el-form>
@@ -136,7 +187,12 @@
     </el-dialog>
 
     <!-- 任务中的需求 -->
-    <el-dialog :title="title" :visible.sync="open_requirement" width="800px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="open_requirement"
+      width="800px"
+      append-to-body
+    >
       <el-table
         ref="multipleTable"
         :data="requirementList"
@@ -148,8 +204,15 @@
         <el-table-column prop="projectName" label="需求名称" width="500" />
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit_requirement(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete_requirement(scope.row)">删除</el-button>
+            <el-button
+              size="mini"
+              @click="handleEdit_requirement(scope.row)"
+            >编辑</el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="handleDelete_requirement(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -161,13 +224,26 @@
     </el-dialog>
 
     <!-- 上传需求管理对话框 -->
-    <el-dialog :title="title" :visible.sync="add_requirement_open" width="1000px" append-to-body>
+    <el-dialog
+      :title="title"
+      :visible.sync="add_requirement_open"
+      width="1000px"
+      append-to-body
+    >
       <el-form ref="form" :model="form" :rules="rules" label-width="250px">
         <el-form-item label="需求名称" prop="projectName">
-          <el-input v-model="form.projectName" placeholder="请输入需求名称" style="width: 600px" />
+          <el-input
+            v-model="form.projectName"
+            placeholder="请输入需求名称"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求关键词" prop="requirementKeywords">
-          <el-input v-model="form.requirementKeywords" placeholder="请输入需求关键词" style="width: 600px" />
+          <el-input
+            v-model="form.requirementKeywords"
+            placeholder="请输入需求关键词"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item label="需求描述" prop="requirementDescription">
           <el-input
@@ -179,10 +255,19 @@
           />
         </el-form-item>
         <el-form-item label="需求类型" prop="projectCategory">
-          <el-input v-model="form.projectCategory" placeholder="请输入需求类型" style="width: 600px" />
+          <el-input
+            v-model="form.projectCategory"
+            placeholder="请输入需求类型"
+            style="width: 600px"
+          />
         </el-form-item>
         <el-form-item v-if="false" label="需求状态" prop="requirementStatus">
-          <el-select v-model="form.requirementStatus" filterable placeholder="请选择需求状态" style="width: 600px">
+          <el-select
+            v-model="form.requirementStatus"
+            filterable
+            placeholder="请选择需求状态"
+            style="width: 600px"
+          >
             <el-option
               v-for="item in dict.type.requirement_status"
               :key="item.value"
@@ -193,7 +278,11 @@
           </el-select>
         </el-form-item>
         <el-form-item label="" prop="taskId" class="inputDeep">
-          <el-input ref="idInput" v-model="form.taskId" style="width: 600px;display: none;" />
+          <el-input
+            ref="idInput"
+            v-model="form.taskId"
+            style="width: 600px; display: none"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -213,7 +302,13 @@ listRequirement_staging,
 listenterprise,
 updateRequirement_staging
 } from '@/api/kyfz/requirement'
-import { addWorkstation, delWorkstation, getWorkstation, listWorkstation, updateWorkstation } from '@/api/kyfz/workstation'
+import {
+addWorkstation,
+delWorkstation,
+getWorkstation,
+listWorkstation,
+updateWorkstation
+} from '@/api/kyfz/workstation'
 import DictData from '@/components/DictData'
 DictData.install()
 
@@ -262,8 +357,7 @@ export default {
       // 表单参数
       form: {},
       // 表单校验
-      rules: {
-      }
+      rules: {}
     }
   },
   created() {
@@ -343,7 +437,7 @@ export default {
     /** 查询工作站列表 */
     getList() {
       this.loading = true
-      listWorkstation(this.queryParams).then(response => {
+      listWorkstation(this.queryParams).then((response) => {
         this.workstationList = response.rows
         this.total = response.total
         this.loading = false
@@ -381,7 +475,7 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.taskId)
+      this.ids = selection.map((item) => item.taskId)
       this.single = selection.length !== 1
       this.multiple = !selection.length
     },
@@ -403,7 +497,7 @@ export default {
       this.reset()
       this.getenterpriseList()
       const taskId = row.taskId || this.ids
-      getWorkstation(taskId).then(response => {
+      getWorkstation(taskId).then((response) => {
         this.form = response.data
         this.open = true
         this.title = '修改工作站'
@@ -411,16 +505,16 @@ export default {
     },
     /** 提交按钮 */
     submitForm_requirement() {
-      this.$refs['form'].validate(valid => {
+      this.$refs['form'].validate((valid) => {
         if (valid) {
           if (this.form.taskId != null) {
-            updateWorkstation(this.form).then(response => {
+            updateWorkstation(this.form).then((response) => {
               this.$modal.msgSuccess('修改成功')
               this.open = false
               this.getList()
             })
           } else {
-            addWorkstation(this.form).then(response => {
+            addWorkstation(this.form).then((response) => {
               this.$modal.msgSuccess('新增成功')
               this.open = false
               this.getList()
@@ -432,12 +526,16 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const taskIds = row.taskId || this.ids
-      this.$modal.confirm('是否确认删除工作站编号为"' + taskIds + '"的数据项？').then(function() {
-        return delWorkstation(taskIds)
-      }).then(() => {
-        this.getList()
-        this.$modal.msgSuccess('删除成功')
-      }).catch(() => { })
+      this.$modal
+        .confirm('是否确认删除工作站编号为"' + taskIds + '"的数据项？')
+        .then(function() {
+          return delWorkstation(taskIds)
+        })
+        .then(() => {
+          this.getList()
+          this.$modal.msgSuccess('删除成功')
+        })
+        .catch(() => {})
     },
     /** 删除需求按钮操作 */
     handleDelete_requirement(row) {
@@ -451,13 +549,17 @@ export default {
           this.getList_requirement()
           this.$modal.msgSuccess('删除成功')
         })
-        .catch(() => { })
+        .catch(() => {})
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('kyfz/workstation/export', {
-        ...this.queryParams
-      }, `workstation_${new Date().getTime()}.xlsx`)
+      this.download(
+        'kyfz/workstation/export',
+        {
+          ...this.queryParams
+        },
+        `workstation_${new Date().getTime()}.xlsx`
+      )
     }
   }
 }
