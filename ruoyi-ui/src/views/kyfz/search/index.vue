@@ -215,6 +215,7 @@
         <div v-show="activeTab === '搜团队'">
           <el-card
             v-for="item in teamList"
+            v-if="teamList"
             :key="item.teamId"
             v-loading="loading"
             class="box-card blue"

@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime" column="update_time" />
         <result property="pushstatus" column="push_status" />
         <result property="userId" column="user_id" />
+        <result property="otherId" column="other_id" />
         <!-- 按需求添加 -->
         <result property="expertName" column="expert_name" />
         <result property="expertId" column="expert_id" />
@@ -217,7 +218,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 匹配api返回的json数据写入数据库 -->
     <insert id="insert_json_KyfzMatch" parameterType="KyfzMatch" useGeneratedKeys="true" keyProperty="matchId">
         INSERT INTO kyfz_match
-        (expert_account, requirement_id, match_score, thesis_id, award_id, certificate_id, project_id, create_by, create_time, update_by, update_time, user_id)
+        (expert_account, requirement_id, match_score, thesis_id, award_id, certificate_id, project_id, create_by, create_time, update_by, update_time, user_id, other_id)
         VALUES
         <foreach item="item" collection="list" separator=",">
         (
@@ -232,7 +233,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         #{item.createTime},
         #{item.updateBy},
         #{item.updateTime},
-        #{item.userId}
+        #{item.userId},
+        #{item.otherId}
         )
     </foreach>
     </insert>

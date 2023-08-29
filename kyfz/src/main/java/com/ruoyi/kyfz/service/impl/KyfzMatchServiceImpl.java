@@ -205,6 +205,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
                         .setProjectId(json_match.get(i).getProject_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch
                         .setThesisId(json_match.get(i).getThesis_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch
+                        .setOtherId(json_match.get(i).getOther_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch.setExpertAccount(json_match.get(i).getExpert_account());
                 kyfzMatch.setMatchScore(json_match.get(i).getMatch_score());
                 // 写入用户信息

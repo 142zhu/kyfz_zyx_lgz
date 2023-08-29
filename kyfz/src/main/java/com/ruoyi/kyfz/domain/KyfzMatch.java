@@ -43,6 +43,10 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "相关论文", readConverterExp = "多个论文id")
     private String thesisId;
 
+    /** 其他成果 */
+    @Excel(name = "其他成果")
+    private String otherId;
+
     /** 相关著作（多个著作id） */
     @Excel(name = "相关奖项", readConverterExp = "多个奖项id")
     private String awardId;
@@ -116,6 +120,10 @@ public class KyfzMatch extends BaseEntity {
     private double maxMatchScore;
 
     private KyfzRequirement kyfzRequirement;
+
+    public String getOtherId() {
+        return otherId;
+    }
 
     public KyfzRequirement getKyfzRequirement() {
         return kyfzRequirement;
@@ -428,5 +436,9 @@ public class KyfzMatch extends BaseEntity {
 
     public void setExpertId(String expertId) {
         this.expertId = expertId;
+    }
+
+    public void setOtherId(String otherId) {
+        this.otherId = otherId;
     }
 }

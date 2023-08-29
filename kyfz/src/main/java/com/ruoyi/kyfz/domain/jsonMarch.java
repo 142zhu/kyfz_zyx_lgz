@@ -9,6 +9,7 @@ public class jsonMarch {
     private List<String> award_id;
     private List<String> certificate_id;
     private List<String> thesis_id;
+    private List<String> other_id;
 
     public void setProject_id(List<String> project_id) {
         this.project_id = project_id;
@@ -56,6 +57,14 @@ public class jsonMarch {
 
     public List<String> getThesis_id() {
         return thesis_id;
+    }
+
+    public void setOther_id(List<String> other_id) {
+        this.other_id = other_id;
+    }
+
+    public List<String> getOther_id() {
+        return other_id;
     }
 
 }
