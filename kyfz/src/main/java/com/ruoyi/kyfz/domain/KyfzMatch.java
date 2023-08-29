@@ -45,15 +45,15 @@ public class KyfzMatch extends BaseEntity {
 
     /** 其他成果 */
     @Excel(name = "其他成果")
-    private String otherId;
+    private String otherResultId;
 
     /** 相关著作（多个著作id） */
     @Excel(name = "相关奖项", readConverterExp = "多个奖项id")
     private String awardId;
 
     /** 相关证书（多个证书id） */
-    @Excel(name = "相关证书", readConverterExp = "多个证书id")
-    private String certificateId;
+    @Excel(name = "知识产权")
+    private String intellectualPropertyId;
 
     /** 相关项目（多个项目id） */
     @Excel(name = "相关项目", readConverterExp = "多个项目id")
@@ -120,10 +120,6 @@ public class KyfzMatch extends BaseEntity {
     private double maxMatchScore;
 
     private KyfzRequirement kyfzRequirement;
-
-    public String getOtherId() {
-        return otherId;
-    }
 
     public KyfzRequirement getKyfzRequirement() {
         return kyfzRequirement;
@@ -371,14 +367,6 @@ public class KyfzMatch extends BaseEntity {
         return awardId;
     }
 
-    public void setCertificateId(String certificateId) {
-        this.certificateId = certificateId;
-    }
-
-    public String getCertificateId() {
-        return certificateId;
-    }
-
     public void setProjectId(String projectId) {
         this.projectId = projectId;
     }
@@ -404,7 +392,6 @@ public class KyfzMatch extends BaseEntity {
                 .append("matchScore", getMatchScore())
                 .append("thesisId", getThesisId())
                 .append("awardId", getAwardId())
-                .append("certificateId", getCertificateId())
                 .append("projectId", getProjectId())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
@@ -438,7 +425,20 @@ public class KyfzMatch extends BaseEntity {
         this.expertId = expertId;
     }
 
-    public void setOtherId(String otherId) {
-        this.otherId = otherId;
+    public void setOtherResultId(String otherResultId) {
+        this.otherResultId = otherResultId;
     }
+
+    public void setIntellectualPropertyId(String intellectualPropertyId) {
+        this.intellectualPropertyId = intellectualPropertyId;
+    }
+
+    public String getOtherResultId() {
+        return otherResultId;
+    }
+
+    public String getIntellectualPropertyId() {
+        return intellectualPropertyId;
+    }
+
 }

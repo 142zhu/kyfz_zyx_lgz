@@ -531,10 +531,10 @@ export default {
       this.loading = true
       listRequirement(this.queryParams).then((response) => {
         if (response.rows.length !== 0) {
-        this.requirementList = response.rows
-        this.queryParams.requirementId = response.rows[0].requirementId
-        this.total = response.total
-        this.loading = false
+          this.requirementList = response.rows
+          this.queryParams.requirementId = response.rows[0].requirementId
+          this.total = response.total
+          this.loading = false
         } else {
           this.requirementList = null
           this.loading = false
@@ -685,9 +685,14 @@ export default {
 
     async handleMatch(row) {
       debugger
+      var messageInstance = this.$message({
+        message: '正在匹配中，请稍等',
+        duration: 0
+      })
       handleMatch({ requirementId: row.requirementId })
         .then((res) => {
           if (res.code === 200) {
+            messageInstance.close()
             this.$modal.msgSuccess('算法调用成功')
           } else {
             this.$modal.msgError('算法调用失败')

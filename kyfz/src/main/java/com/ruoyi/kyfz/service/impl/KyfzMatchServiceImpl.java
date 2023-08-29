@@ -198,15 +198,16 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
             for (int i = 0; i < json_match.size(); i++) {
                 KyfzMatch kyfzMatch = new KyfzMatch();
                 // 写入数据信息
-                kyfzMatch.setAwardId(json_match.get(i).getAward_id().stream().collect(Collectors.joining("、")));
-                kyfzMatch.setCertificateId(
-                        json_match.get(i).getCertificate_id().stream().collect(Collectors.joining("、")));
+                // kyfzMatch.setAwardId(json_match.get(i).getAward_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch.setIntellectualPropertyId(
+                        json_match.get(i).getIntellectual_property_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch
                         .setProjectId(json_match.get(i).getProject_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch
                         .setThesisId(json_match.get(i).getThesis_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch
-                        .setOtherId(json_match.get(i).getOther_id().stream().collect(Collectors.joining("、")));
+                        .setOtherResultId(
+                                json_match.get(i).getOther_result_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch.setExpertAccount(json_match.get(i).getExpert_account());
                 kyfzMatch.setMatchScore(json_match.get(i).getMatch_score());
                 // 写入用户信息
@@ -216,12 +217,11 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
                 kyfzMatch.setRequirementId(requirementId);
                 kyfzMatchList.add(i, kyfzMatch);
             }
-
+            return kyfzMatchMapper.insert_json_KyfzMatch(kyfzMatchList);
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
         }
-        return kyfzMatchMapper.insert_json_KyfzMatch(kyfzMatchList);
-
     }
 
 }

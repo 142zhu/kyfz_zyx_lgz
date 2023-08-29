@@ -96,9 +96,6 @@ public class KyfzMatchController extends BaseController {
         // 从索引出的匹配表中获取匹配出来的著作id（多个id用逗号分隔开了）
         String awardIds = match1.getAwardId();
 
-        // 从索引出的匹配表中获取匹配出来的证书id（多个id用逗号分隔开了）
-        String certificateIds = match1.getCertificateId();
-
         // 把索引到的所有id用分隔函数分开，存在数组中
         if (projectIds != null && !projectIds.isEmpty()) {
             // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
@@ -142,26 +139,6 @@ public class KyfzMatchController extends BaseController {
 
             }
             match1.setStrArray2(strArray2);
-        }
-
-        if (certificateIds != null && !certificateIds.isEmpty()) {
-            // 按照得到的项目id，索引出每一个项目的名称，然后项目名称都放进projectNames中
-            String certificateNames = "";
-            ArrayList strArray3 = new ArrayList();
-
-            Long certificateId[] = extractIds(certificateIds);
-            for (int i = 0; i < certificateId.length; i++) {
-                String certificateName = kyfzMatchService.selectCertificateName(certificateId[i]);
-                // if (i == certificateId.length - 1) {
-                // certificateNames += certificateName;
-                // } else {
-                // certificateNames += certificateName + ",";
-                // }
-
-                strArray3.add(certificateName);
-
-            }
-            match1.setStrArray3(strArray3);
         }
         // 把projectNames变量传进工具类match1中
 

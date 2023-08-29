@@ -144,13 +144,9 @@ public class KyfzRequirementController extends BaseController {
             return AjaxResult.error();
         }
         String body = responseEntity.getBody();
-        // TODO:更新需求匹配状态
-        Long requirementIds = Long.parseLong(requirementId);
 
         // json 转为kyfzmatch对象写入数据库
-        kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
-
-        int s = kyfzRequirementService.updateKyfzRequirementStatusById(requirementIds);
+        int s = kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
 
         return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
     }

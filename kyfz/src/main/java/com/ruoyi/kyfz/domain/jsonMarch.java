@@ -7,9 +7,9 @@ public class jsonMarch {
     private String expert_account;
     private String match_score;
     private List<String> award_id;
-    private List<String> certificate_id;
+    private List<String> intellectual_property_id;
     private List<String> thesis_id;
-    private List<String> other_id;
+    private List<String> other_result_id;
 
     public void setProject_id(List<String> project_id) {
         this.project_id = project_id;
@@ -25,10 +25,6 @@ public class jsonMarch {
 
     public void setAward_id(List<String> award_id) {
         this.award_id = award_id;
-    }
-
-    public void setCertificate_id(List<String> certificate_id) {
-        this.certificate_id = certificate_id;
     }
 
     public void setThesis_id(List<String> thesis_id) {
@@ -51,20 +47,24 @@ public class jsonMarch {
         return award_id;
     }
 
-    public List<String> getCertificate_id() {
-        return certificate_id;
-    }
-
     public List<String> getThesis_id() {
         return thesis_id;
     }
 
-    public void setOther_id(List<String> other_id) {
-        this.other_id = other_id;
+    public void setIntellectual_property_id(List<String> intellectual_property_id) {
+        this.intellectual_property_id = intellectual_property_id;
     }
 
-    public List<String> getOther_id() {
-        return other_id;
+    public void setOther_result_id(List<String> other_result_id) {
+        this.other_result_id = other_result_id;
+    }
+
+    public List<String> getIntellectual_property_id() {
+        return intellectual_property_id;
+    }
+
+    public List<String> getOther_result_id() {
+        return other_result_id;
     }
 
 }
