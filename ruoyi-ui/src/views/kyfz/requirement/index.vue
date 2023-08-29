@@ -695,10 +695,12 @@ export default {
             messageInstance.close()
             this.$modal.msgSuccess('算法调用成功')
           } else {
+            messageInstance.close()
             this.$modal.msgError('算法调用失败')
           }
         })
         .catch((e) => {
+          messageInstance.close()
           this.$modal.msgError('算法调用失败')
         })
     }
