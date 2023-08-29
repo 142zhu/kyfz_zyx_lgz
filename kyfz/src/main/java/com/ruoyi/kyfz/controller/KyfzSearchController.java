@@ -24,11 +24,14 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzExpert;
 import com.ruoyi.kyfz.domain.KyfzIntellectualProperty;
+import com.ruoyi.kyfz.domain.KyfzRequirement;
 import com.ruoyi.kyfz.domain.KyfzSearch;
 import com.ruoyi.kyfz.domain.KyfzTeam;
 import com.ruoyi.kyfz.service.IKyfzEnterpriseService;
 import com.ruoyi.kyfz.service.IKyfzExpertService;
 import com.ruoyi.kyfz.service.IKyfzIntellectualPropertyService;
+import com.ruoyi.kyfz.service.IKyfzMatchService;
+import com.ruoyi.kyfz.service.IKyfzRequirementService;
 import com.ruoyi.kyfz.service.IKyfzSearchService;
 import com.ruoyi.kyfz.service.IKyfzTeamService;
 
@@ -55,6 +58,12 @@ public class KyfzSearchController extends BaseController {
 
     @Autowired
     private IKyfzIntellectualPropertyService IKyfzIntellectualPropertyService;
+
+    @Autowired
+    private IKyfzRequirementService IKyfzRequirementService;
+
+    @Autowired
+    private IKyfzMatchService IKyfzMatchService;
 
     /**
      * 查询检索列表
@@ -125,9 +134,13 @@ public class KyfzSearchController extends BaseController {
     public TableDataInfo clickSearch(KyfzSearch kyfzSearch) {
         startPage();
         if (kyfzSearch.getMark().equals("AI搜索") || kyfzSearch.getMark().equals("搜人才")) {
-            KyfzExpert kyfzExpert = new KyfzExpert();
-            kyfzExpert.setExpertName(kyfzSearch.getKeyWord());
-            List<KyfzExpert> list = kyfzExpertService.searchExperts(kyfzExpert);
+            KyfzRequirement requirement = new KyfzRequirement();
+            requirement.setProjectName(kyfzSearch.getKeyWord());
+            IKyfzRequirementService.insertKyfzRequirement(requirement);
+            String id = Long
+                    .toString(IKyfzRequirementService.selectKyfzRequirementList(requirement).get(0).getRequirementId());
+            List<String> Account = IKyfzMatchService.search_jsonExpert_account(id);
+            List<KyfzExpert> list = kyfzExpertService.selectKyfzExpertByExpertAccounts(Account);
             return getDataTable(list);
         } else if (kyfzSearch.getMark().equals("搜团队")) {
             KyfzTeam kyfzTeam = new KyfzTeam();

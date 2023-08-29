@@ -125,7 +125,12 @@ public class KyfzTeamServiceImpl implements IKyfzTeamService {
      */
     @Override
     public List<KyfzTeam> searchTeams(KyfzTeam kyfzTeam) {
-        List<KyfzTeam> teams = kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
+        List<KyfzTeam> teams;
+        if (kyfzTeam.getTeamMembers() == null) {
+            teams = kyfzTeamMapper.selectKyfzTeamList(kyfzTeam);
+        } else {
+            teams = kyfzTeamMapper.searchTeams(kyfzTeam);
+        }
         // x为累计成果，y为累计项目
         int accumulatedResults = 0;
         int accumulatedItems = 0;

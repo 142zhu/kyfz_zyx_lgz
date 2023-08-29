@@ -5,7 +5,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -224,4 +232,38 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
         }
     }
 
+    /**
+     * ai搜索匹配数据并返回专家账号列表
+     * 
+     */
+    public List<String> search_jsonExpert_account(String requirementId) {
+        // 获取api数据
+        String url = "http://47.113.145.216:6666/infer";
+        String jsonData;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("OtherHeadersxxx", "xxxx"); // Other headers
+        MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("requirement_id", Integer.valueOf(requirementId));
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(paramMap, headers);
+        ResponseEntity<String> responseEntity;
+        List<String> AccountList = new ArrayList<>();
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+            jsonData = responseEntity.getBody();
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<List<jsonMarch>> json_match_lists = objectMapper.readValue(jsonData,
+                    new TypeReference<List<List<jsonMarch>>>() {
+                    });
+            List<jsonMarch> json_match = json_match_lists.get(0);
+            for (int i = 0; i < json_match.size(); i++) {
+                AccountList.add(i, json_match.get(i).getExpert_account());
+            }
+            return AccountList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return AccountList;
+    }
 }

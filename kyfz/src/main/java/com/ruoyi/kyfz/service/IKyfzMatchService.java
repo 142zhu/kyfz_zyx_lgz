@@ -138,4 +138,10 @@ public interface IKyfzMatchService {
      */
     public int insert_json_KyfzMatch(String jsonData, String requirementId);
 
+    /**
+     * ai搜索匹配数据并返回专家账号列表
+     * 
+     */
+    public List<String> search_jsonExpert_account(String requirementId);
+
 }

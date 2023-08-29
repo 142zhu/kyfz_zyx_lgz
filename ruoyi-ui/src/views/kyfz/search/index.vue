@@ -213,76 +213,70 @@
           />
         </div>
         <div v-show="activeTab === '搜团队'">
-          <div v-if="teamList">
-            <el-card
-              v-for="item in teamList"
-              :key="item.teamId"
-              v-loading="loading"
-              class="box-card blue"
-              style="margin-top: 20px"
+          <el-card
+            v-for="item in teamList"
+            :key="item.teamId"
+            v-loading="loading"
+            class="box-card blue"
+            style="margin-top: 20px"
+          >
+            <el-descriptions
+              class="margin-top"
+              title="团队信息"
+              :column="3"
+              direction="vertical"
+              style="color: white"
             >
-              <el-descriptions
-                class="margin-top"
-                title="团队信息"
-                :column="3"
-                direction="vertical"
-                style="color: white"
+              <el-descriptions-item
+                label="团队成员"
+                label-class-name="my-label"
+                content-class-name="my-content"
               >
-                <el-descriptions-item
-                  label="团队成员"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                >
-                  <template v-if="item.teamMembers.length > 18">
-                    {{ item.teamMembers.slice(0, 18) }}
-                    ...
-                    <el-popover
-                      placement="right"
-                      width="400"
-                      trigger="click"
-                      :content="item.teamMembers"
-                    >
-                      <el-button slot="reference" type="text">查看全部</el-button>
-                    </el-popover>
-                  </template>
-                  <template v-else>
-                    {{ item.teamMembers }}
-                  </template></el-descriptions-item>
-                <el-descriptions-item
-                  label="研究方向"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                >{{ item.reseachDirections }}</el-descriptions-item>
-                <el-descriptions-item
-                  label="累计项目"
-                  :span="2"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                >{{ item.accumulatedItems }}</el-descriptions-item>
-                <el-descriptions-item
-                  label="操作"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                >
-                  <el-button @click="handleECharts(item)">成员关系图</el-button>
-                </el-descriptions-item>
-                <el-descriptions-item
-                  label="备注"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                />
-                <el-descriptions-item
-                  label="累计成果"
-                  label-class-name="my-label"
-                  content-class-name="my-content"
-                >{{ item.accumulatedResults }}</el-descriptions-item>
-              </el-descriptions>
-            </el-card>
-          </div>
-          <div v-else>
-            <!-- 在 teamList 为 null 时显示的内容 -->
-            <p>暂无团队信息可显示。</p>
-          </div>
+                <template v-if="item.teamMembers.length > 18">
+                  {{ item.teamMembers.slice(0, 18) }}
+                  ...
+                  <el-popover
+                    placement="right"
+                    width="400"
+                    trigger="click"
+                    :content="item.teamMembers"
+                  >
+                    <el-button slot="reference" type="text">查看全部</el-button>
+                  </el-popover>
+                </template>
+                <template v-else>
+                  {{ item.teamMembers }}
+                </template></el-descriptions-item>
+              <el-descriptions-item
+                label="研究方向"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >{{ item.reseachDirections }}</el-descriptions-item>
+              <el-descriptions-item
+                label="累计项目"
+                :span="2"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >{{ item.accumulatedItems }}</el-descriptions-item>
+              <el-descriptions-item
+                label="操作"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >
+                <el-button @click="handleECharts(item)">成员关系图</el-button>
+              </el-descriptions-item>
+              <el-descriptions-item
+                label="备注"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              />
+              <el-descriptions-item
+                label="累计成果"
+                label-class-name="my-label"
+                content-class-name="my-content"
+              >{{ item.accumulatedResults }}</el-descriptions-item>
+            </el-descriptions>
+          </el-card>
           <pagination
             v-show="total > 0"
             :total="total"
@@ -803,6 +797,10 @@ export default {
     searchAll() {
       this.loading = true
       this.Comprehensive_mark = '输入框搜索'
+      var messageInstance = this.$message({
+        message: '正在搜索，请稍等',
+        duration: 0
+      })
       clickSearch(this.search_queryParams).then((response) => {
         if (this.search_queryParams.mark === 'AI搜索') {
           this.expertList = response.rows
@@ -826,6 +824,7 @@ export default {
           this.total = response.total
           this.loading = false
         }
+        messageInstance.close()
       })
     },
     // 团队信息

@@ -324,4 +324,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 ELSE 6 
             END
     </select>
+    <!-- 专家账号列表查专家 -->
+    <select id="selectKyfzExpertByExpertAccounts" parameterType="String" resultMap="KyfzExpertResult">
+        SELECT * FROM kyfz_expert WHERE expert_account IN
+        <foreach item="expertAccount" index="index" collection="list" open="(" separator="," close=")">
+            #{expertAccount}
+        </foreach>
+    </select>
 </mapper>

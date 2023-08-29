@@ -64,12 +64,12 @@
           size="mini"
           @click="handleQuery"
         >搜索</el-button>
-        <el-button
+        <!-- <el-button
           type="primary"
           icon="el-icon-document"
           size="mini"
           @click="handleMatch_2"
-        >匹配</el-button>
+        >匹配</el-button> -->
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>

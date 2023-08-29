@@ -69,6 +69,14 @@ public interface IKyfzExpertService {
     public KyfzExpert selectKyfzExpertByExpertAccount(String expertAccount);
 
     /**
+     * 批量查询专家管理
+     * 
+     * @param expertId 专家管理主键
+     * @return 专家管理
+     */
+    public List<KyfzExpert> selectKyfzExpertByExpertAccounts(List<String> expertAccount);
+
+    /**
      * 修改专家管理
      * 
      * @param kyfzExpert 专家管理(人工标记)

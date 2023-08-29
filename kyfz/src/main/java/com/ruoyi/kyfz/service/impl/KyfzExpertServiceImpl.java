@@ -110,6 +110,16 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
     }
 
     /**
+     * 批量查询专家管理
+     * 
+     * @param expertId 专家管理主键
+     * @return 专家管理
+     */
+    public List<KyfzExpert> selectKyfzExpertByExpertAccounts(List<String> expertAccount) {
+        return kyfzExpertMapper.selectKyfzExpertByExpertAccounts(expertAccount);
+    }
+
+    /**
      * 查询专家管理
      * 
      * @param expertId 专家管理主键
