@@ -50,3 +50,11 @@ export function getEnterpriseRequirement(enterpriseName) {
     method: 'get'
   })
 }
+
+// 根据企业名查询企业信息
+export function getEnterprisefromName(enterpriseName) {
+  return request({
+    url: '/kyfz/enterprise/getEnterprisefromName/' + enterpriseName,
+    method: 'get'
+  })
+}

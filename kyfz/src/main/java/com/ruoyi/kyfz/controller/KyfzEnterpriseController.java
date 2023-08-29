@@ -112,4 +112,13 @@ public class KyfzEnterpriseController extends BaseController {
         return success(list);
     }
 
+    /**
+     * 根据企业名查询企业信息
+     */
+    @GetMapping(value = "/getEnterprisefromName/{enterpriseName}")
+    public AjaxResult getEnterprisefromName(@PathVariable("enterpriseName") String enterpriseName) {
+        KyfzEnterprise kyfzEnterprise = kyfzEnterpriseService.getEnterprisefromName(enterpriseName);
+        return success(kyfzEnterpriseService.getEnterprisefromName(enterpriseName));
+    }
+
 }

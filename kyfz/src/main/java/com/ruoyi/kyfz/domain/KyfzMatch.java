@@ -20,6 +20,9 @@ public class KyfzMatch extends BaseEntity {
     /** 匹配编号（专家匹配表的唯一表示符号） */
     private Long matchId;
 
+    /** 用户编号 */
+    private Long userId;
+
     /** 专家账号 */
     @Excel(name = "专家账号")
     private String expertAccount;
@@ -122,6 +125,14 @@ public class KyfzMatch extends BaseEntity {
 
     public String getMarkAward() {
         return markAward;
+    }
+
+    public static long getSerialversionuid() {
+        return serialVersionUID;
+    }
+
+    public Long getUserId() {
+        return userId;
     }
 
     private String markAward;
@@ -401,5 +412,9 @@ public class KyfzMatch extends BaseEntity {
 
     public void setKyfzRequirement(KyfzRequirement kyfzRequirement) {
         this.kyfzRequirement = kyfzRequirement;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

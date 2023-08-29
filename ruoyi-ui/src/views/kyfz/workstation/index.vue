@@ -190,7 +190,7 @@
     <el-dialog
       :title="title"
       :visible.sync="open_requirement"
-      width="800px"
+      width="1100px"
       append-to-body
     >
       <el-table
@@ -201,7 +201,9 @@
         @selection-change="handleSelectionChange_requirement"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="projectName" label="需求名称" width="500" />
+        <el-table-column prop="projectName" label="需求名称" width="350" />
+        <el-table-column prop="totalBudget" label="金额" width="150" />
+        <el-table-column prop="endProjectTime" label="完成时间" width="300" />
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button
@@ -218,12 +220,11 @@
       </el-table>
       <div slot="footer" class="dialog-footer">
         <el-button @click="add_requirement">添加需求</el-button>
-        <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
 
-    <!-- 上传需求管理对话框 -->
+    <!-- 添加具体需求表单 -->
     <el-dialog
       :title="title"
       :visible.sync="add_requirement_open"
@@ -261,6 +262,23 @@
             style="width: 600px"
           />
         </el-form-item>
+        <el-form-item label="完成时间" prop="endProjectTime">
+          <el-date-picker
+            v-model="queryParams.endProjectTime"
+            clearable
+            type="date"
+            value-format="yyyy-MM-dd"
+            placeholder="请输入完成时间"
+            @keyup.enter.native="handleQuery"
+          />
+        </el-form-item>
+        <el-form-item label="金额（万元）" prop="totalBudget">
+          <el-input
+            v-model="form.totalBudget"
+            placeholder="请输入金额"
+            style="width: 600px"
+          />
+        </el-form-item>
         <el-form-item v-if="false" label="需求状态" prop="requirementStatus">
           <el-select
             v-model="form.requirementStatus"
@@ -294,6 +312,7 @@
 </template>
 
 <script>
+import { getEnterprisefromName } from '@/api/kyfz/enterprise'
 import {
 addRequirement_staging,
 delRequirement_staging,
@@ -362,6 +381,7 @@ export default {
   },
   created() {
     this.getList()
+    this.getenterpriseList()
   },
   methods: {
     /** 查询暂时的需求管理列表 */
@@ -426,13 +446,14 @@ export default {
     // 打开添加需求面板
     handleAddRequirement(row) {
       this.main_taskid = row.taskId
-      this.selectedEnterprise = this.enterpriseList.find(
-        (item) => item.enterpriseName === row.taskSource
-      )
+      getEnterprisefromName(row.taskSource).then((response) => {
+        this.selectedEnterprise = response.data
+      })
       this.reset()
       this.getList_requirement()
       this.open_requirement = true
       this.title = '添加需求'
+      this.loading = false
     },
     /** 查询工作站列表 */
     getList() {
@@ -448,6 +469,7 @@ export default {
       this.open = false
       this.open_requirement = false
       this.add_requirement_open = false
+      this.loading = false
       this.reset()
     },
     // 表单重置
@@ -488,14 +510,12 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset()
-      this.getenterpriseList()
       this.open = true
       this.title = '添加工作站'
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
-      this.getenterpriseList()
       const taskId = row.taskId || this.ids
       getWorkstation(taskId).then((response) => {
         this.form = response.data

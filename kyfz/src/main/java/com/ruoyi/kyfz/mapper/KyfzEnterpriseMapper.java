@@ -66,4 +66,10 @@ public interface KyfzEnterpriseMapper {
      * @return 企业管理集合
      */
     public List<KyfzEnterprise> searchEnterprises(KyfzEnterprise kyfzEnterprise);
+
+    /**
+     * 企业名查询企业信息
+     * 
+     */
+    public KyfzEnterprise getEnterprisefromName(String enterpriseName);
 }

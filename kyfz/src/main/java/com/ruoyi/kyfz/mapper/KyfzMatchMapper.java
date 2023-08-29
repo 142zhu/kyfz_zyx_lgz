@@ -147,4 +147,10 @@ public interface KyfzMatchMapper {
      * @return 结果
      */
     public int updateKyfzMatchByMatchIds_pushState(Long[] matchIds);
+
+    /**
+     * 匹配api返回的json数据写入数据库
+     * 
+     */
+    public int insert_json_KyfzMatch(List<KyfzMatch> kyfzMatchList);
 }

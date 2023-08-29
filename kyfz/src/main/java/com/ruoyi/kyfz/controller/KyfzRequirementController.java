@@ -31,6 +31,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
+import com.ruoyi.kyfz.service.IKyfzMatchService;
 import com.ruoyi.kyfz.service.IKyfzRequirementService;
 
 /**
@@ -44,6 +45,9 @@ import com.ruoyi.kyfz.service.IKyfzRequirementService;
 public class KyfzRequirementController extends BaseController {
     @Autowired
     private IKyfzRequirementService kyfzRequirementService;
+
+    @Autowired
+    private IKyfzMatchService kyfzMatchService;
 
     /**
      * 查询需求管理列表
@@ -142,9 +146,12 @@ public class KyfzRequirementController extends BaseController {
         String body = responseEntity.getBody();
         // TODO:更新需求匹配状态
         Long requirementIds = Long.parseLong(requirementId);
+
+        // json 转为kyfzmatch对象写入数据库
+        kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
+
         int s = kyfzRequirementService.updateKyfzRequirementStatusById(requirementIds);
 
-        System.out.println("responseBody:" + body);
         return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
     }
 

@@ -112,4 +112,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         ORDER BY subquery.sum DESC
     </select>
+    <!-- 企业名查企业信息 -->
+    <select id="getEnterprisefromName" parameterType="String" resultMap="KyfzEnterpriseResult">
+        <include refid="selectKyfzEnterpriseVo"/>
+        where enterprise_name = #{enterpriseName}
+    </select>
 </mapper>

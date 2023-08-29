@@ -113,4 +113,13 @@ public class KyfzEnterpriseServiceImpl implements IKyfzEnterpriseService {
         }
         return kyfzEnterpriseList;
     }
+
+    /**
+     * 企业名查询企业信息
+     * 
+     */
+    @Override
+    public KyfzEnterprise getEnterprisefromName(String enterpriseName) {
+        return kyfzEnterpriseMapper.getEnterprisefromName(enterpriseName);
+    }
 }

@@ -1,13 +1,19 @@
 package com.ruoyi.kyfz.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
+import com.ruoyi.kyfz.domain.jsonMarch;
 import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 
@@ -53,6 +59,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
     @Override
     public int insertKyfzMatch(KyfzMatch kyfzMatch) {
         kyfzMatch.setCreateTime(DateUtils.getNowDate());
+        kyfzMatch.setCreateBy(SecurityUtils.getUsername());
+        kyfzMatch.setUserId(SecurityUtils.getUserId());
         return kyfzMatchMapper.insertKyfzMatch(kyfzMatch);
     }
 
@@ -65,6 +73,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
     @Override
     public int updateKyfzMatch(KyfzMatch kyfzMatch) {
         kyfzMatch.setUpdateTime(DateUtils.getNowDate());
+        kyfzMatch.setUpdateBy(SecurityUtils.getUsername());
         return kyfzMatchMapper.updateKyfzMatch(kyfzMatch);
     }
 
@@ -170,8 +179,47 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
         return kyfzMatchMapper.updatePushRecord(kyfzMatch);
     }
 
-    @Override
     public int updateKyfzMatchByMatchIds_pushState(Long[] matchIds) {
         return kyfzMatchMapper.updateKyfzMatchByMatchIds_pushState(matchIds);
     }
+
+    /**
+     * 匹配api返回的json数据写入数据库
+     * 
+     */
+    public int insert_json_KyfzMatch(String jsonData, String requirementId) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<KyfzMatch> kyfzMatchList = new ArrayList<>();
+        try {
+            List<List<jsonMarch>> json_match_lists = objectMapper.readValue(jsonData,
+                    new TypeReference<List<List<jsonMarch>>>() {
+                    });
+            List<jsonMarch> json_match = json_match_lists.get(0);
+            for (int i = 0; i < json_match.size(); i++) {
+                KyfzMatch kyfzMatch = new KyfzMatch();
+                // 写入数据信息
+                kyfzMatch.setAwardId(json_match.get(i).getAward_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch.setCertificateId(
+                        json_match.get(i).getCertificate_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch
+                        .setProjectId(json_match.get(i).getProject_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch
+                        .setThesisId(json_match.get(i).getThesis_id().stream().collect(Collectors.joining("、")));
+                kyfzMatch.setExpertAccount(json_match.get(i).getExpert_account());
+                kyfzMatch.setMatchScore(json_match.get(i).getMatch_score());
+                // 写入用户信息
+                kyfzMatch.setCreateTime(DateUtils.getNowDate());
+                kyfzMatch.setCreateBy(SecurityUtils.getUsername());
+                kyfzMatch.setUserId(SecurityUtils.getUserId());
+                kyfzMatch.setRequirementId(requirementId);
+                kyfzMatchList.add(i, kyfzMatch);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return kyfzMatchMapper.insert_json_KyfzMatch(kyfzMatchList);
+
+    }
+
 }
