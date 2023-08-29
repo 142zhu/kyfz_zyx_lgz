@@ -4,10 +4,10 @@
       <div class="button-container">
         <el-button-group>
           <el-button
-            :type="activeTab === '综合搜索' ? 'primary' : 'default'"
+            :type="activeTab === 'AI搜索' ? 'primary' : 'default'"
             style="width: 90px"
-            @click="showContent('综合搜索')"
-          >综合搜索</el-button>
+            @click="showContent('AI搜索')"
+          >AI搜索</el-button>
           <el-button
             :type="activeTab === '搜人才' ? 'primary' : 'default'"
             style="width: 90px"
@@ -47,7 +47,7 @@
     </div>
     <div style="margin-top: 40px">
       <div id="content">
-        <div v-show="activeTab === '综合搜索'">
+        <div v-show="activeTab === 'AI搜索'">
           <div v-show="activeTab2 === '行业标签'">
             <el-tabs
               ref="myTabs"
@@ -535,7 +535,7 @@ export default {
     return {
       // echar json数据
       jsonData: {},
-      // 综合搜索两种换页的标记
+      // AI搜索两种换页的标记
       Comprehensive_mark: null,
       // 企业管理表格数据
       enterpriseList: [],
@@ -596,7 +596,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         keyWord: null,
-        mark: '综合搜索'
+        mark: 'AI搜索'
       },
       // 成果查询参数
       property_queryParams: {
@@ -665,7 +665,7 @@ export default {
       form: {},
       // 表单校验
       rules: {},
-      activeTab: '综合搜索',
+      activeTab: 'AI搜索',
       activeTab2: '行业标签',
       defaultProps: {
         children: 'children',
@@ -785,7 +785,7 @@ export default {
       }
       return option
     },
-    // 综合搜索两种换页的函数
+    // AI搜索两种换页的函数
     Comprehensive_search_page_change() {
       if (this.Comprehensive_mark === '输入框搜索') {
         this.searchAll()
@@ -798,7 +798,7 @@ export default {
       this.loading = true
       this.Comprehensive_mark = '输入框搜索'
       clickSearch(this.search_queryParams).then((response) => {
-        if (this.search_queryParams.mark === '综合搜索') {
+        if (this.search_queryParams.mark === 'AI搜索') {
           this.expertList = response.rows
           this.total = response.total
           this.activeTab2 = '选择行业后数据显示'
@@ -940,7 +940,7 @@ export default {
     showContent(tabName) {
       this.activeTab = tabName
       this.search_queryParams.mark = tabName
-      if (this.activeTab === '综合搜索') {
+      if (this.activeTab === 'AI搜索') {
         this.activeTab2 = '行业标签'
       }
     },
@@ -1176,7 +1176,7 @@ export default {
 </style>
 
 <style scoped>
-/* 综合搜索标签页 */
+/* AI搜索标签页 */
 .tab-container {
   margin-bottom: 100px;
   /* 添加下间隔 */

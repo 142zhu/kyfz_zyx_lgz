@@ -27,6 +27,10 @@ public class KyfzMatch extends BaseEntity {
     @Excel(name = "专家账号")
     private String expertAccount;
 
+    /** 专家id */
+    @Excel(name = "专家id")
+    private String expertId;
+
     /** 需求表的id */
     @Excel(name = "需求表的id")
     private String requirementId;
@@ -416,5 +420,13 @@ public class KyfzMatch extends BaseEntity {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getExpertId() {
+        return expertId;
+    }
+
+    public void setExpertId(String expertId) {
+        this.expertId = expertId;
     }
 }

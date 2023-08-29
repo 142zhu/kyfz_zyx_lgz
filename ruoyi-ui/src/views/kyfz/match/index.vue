@@ -157,18 +157,8 @@
       <div class="match-detail" style="margin-top: -20px">
         <div class="match-detail-header">
           <h3 class="match-detail-title">匹配详情</h3>
-          <div class="match-detail-star">
-            <span>为匹配结果评分</span>
-            <el-rate
-              v-model="matchDetails.value2"
-              :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-              @change="changeStarValue(matchDetails.matchId, matchDetails.value2)"
-            />
-          </div>
         </div>
         <el-table :data="[matchDetails]" class="match-detail-table">
-          <!-- <el-table-column label="匹配编号" align="center" prop="matchId" />
-          <el-table-column label="需求编号" align="center" prop="requirementId" /> -->
           <el-table-column label="需求" align="center" prop="projectName" />
           <el-table-column label="企业" align="center" prop="client" />
           <el-table-column label="推荐专家" align="center" prop="expertName" />
@@ -190,177 +180,80 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="match-detail-keywords">
-          <h4>需求关键词</h4>
-          <div class="match-detail-keywords-info">
-            <span
-              v-for="item in matchDetails.requirementKeywordsArray"
-              :key="item"
-            >{{ item }}<br></span>
-          </div>
-        </div>
         <div class="match-detail-result">
           <h4>专家研究成果</h4>
           <div class="match-detail-result-info">
             <div>
               <h5>相关项目</h5>
               <div class="match-detail-decorate">
-                <span
-                  v-for="item in matchDetails.strArray"
+                <el-tooltip
+                  v-for="item in expertDetail.projectArray"
                   :key="item"
+                  placement="top"
                   class="match-detail-item project"
-                >{{ item }}</span>
+                >
+                  <div slot="content">
+                    项目类别：{{ item.projectCategory }} ；归属二级单位：
+                    {{ item.dept }}
+                    <br>
+                    开始时间：{{ item.startTime }} ；结束时间：{{ item.endTime }}
+                    <br>
+                    金额：{{ item.startFunds }} 万元
+                  </div>
+                  <span>{{ item.projectName }} </span>
+                </el-tooltip>
               </div>
             </div>
             <div>
               <h5>相关论文</h5>
               <div class="match-detail-decorate">
-                <span
-                  v-for="item in matchDetails.strArray1"
+                <el-tooltip
+                  v-for="item in expertDetail.thesisArray"
                   :key="item"
+                  placement="top"
                   class="match-detail-item thesis"
-                >{{ item }}</span>
+                  content="Top center"
+                >
+                  <div slot="content">
+                    论文类型：{{ item.thesisType }} ；发表时间：
+                    {{ item.publicateTime }}
+                    <br>
+                    刊物名称：{{ item.thesisJournal }} ；刊物级别：{{ item.journalLevel }}
+                  </div>
+                  <span>{{ item.thesisName }} </span>
+                </el-tooltip>
               </div>
             </div>
             <div>
-              <h5>相关著作</h5>
+              <h5>知识产权</h5>
               <div class="match-detail-decorate">
-                <span
-                  v-for="item in matchDetails.strArray2"
+                <el-tooltip
+                  v-for="item in expertDetail.intellectualPropertArray"
                   :key="item"
+                  placement="top"
                   class="match-detail-item work"
-                >{{ item }}</span>
+                  content="Top center"
+                  disabled
+                >
+                  <el-badge :value="item.patentType" type="primary">
+                    <span>{{ item.intellectualPropertyName }} </span>
+                  </el-badge>
+                </el-tooltip>
               </div>
             </div>
             <div>
-              <h5>相关证书</h5>
+              <h5>奖项</h5>
               <div class="match-detail-decorate">
-                <span
-                  v-for="item in matchDetails.strArray3"
+                <el-tooltip
+                  v-for="item in expertDetail.awardArray"
                   :key="item"
+                  placement="top"
                   class="match-detail-item certificate"
-                >{{ item }}</span>
-              </div>
-            </div>
-            <div style="padding-bottom: 20px; padding-right: 0px !important">
-              <el-button
-                :disabled="SearchButton"
-                type="primary"
-                style="float: right; margin-right: 0px"
-                :title="buttonTitle"
-                @click="handleAllAchievement()"
-              >所有研究成果</el-button>
-            </div>
-          </div>
-        </div>
-        <div class="match-detail-team">
-          <h4>专家团队</h4>
-          <div class="match-detail-team-info">
-            <span v-for="item in matchDetails.teamMembersArray" :key="item">{{
-              item
-            }}</span>
-            <el-button
-              :disabled="relationshipButton"
-              type="primary"
-              style="float: right; margin-right: 0px"
-              :title="buttonTitle"
-              @click="handleECharts()"
-            >
-              团队关系图
-            </el-button>
-          </div>
-        </div>
-      </div>
-    </el-dialog>
-
-    <el-dialog :title="chartTitle" :visible.sync="openECharts" append-to-body>
-      <div id="graph-chart" style="width: 500px; height: 500px">
-        <div :id="echartsId" style="width: 500px; height: 500px" />
-      </div>
-    </el-dialog>
-    <!-- 展示专家所有成果 -->
-    <el-dialog :title="ExpertInfo" :visible.sync="openExpert" append-to-body>
-      <div class="match-detail" style="margin-top: -20px">
-        <div class="match-detail-header">
-          <h3 class="match-detail-title">专家详细信息</h3>
-        </div>
-        <el-table :data="[expertDetail]" class="match-detail-table">
-          <el-table-column label="专家账号" align="center" prop="expertAccount" />
-          <el-table-column label="专家姓名" align="center" prop="expertName" />
-          <el-table-column label="专家职称" align="center" prop="expertPosition" />
-          <el-table-column label="专家所属单位" align="center" prop="expertAffiliation" />
-          <el-table-column label="专家研究方向" align="center" prop="researchDirection" />
-          <el-table-column label="一级学科" align="center" prop="primaryDiscipline" />
-          <el-table-column label="二级学科" align="center" prop="secondaryDiscipline" />
-          <el-table-column label="三级学科" align="center" prop="tertiaryDiscipline" />
-        </el-table>
-        <div class="match-detail-result">
-          <h4>专家研究成果</h4>
-          <div class="match-detail-result-info">
-            <div>
-              <h5>相关项目</h5>
-              <div class="match-detail-decorate">
-                <ul>
-                  <li
-                    v-for="item in expertDetail.projectList"
-                    :key="item.projectId"
-                    style=""
-                    @click="sendProjectId(item.projectId)"
-                  >
-                    <span :class="{ highlight: isHighlighted(item.projectId) }">
-                      {{ item.projectName }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div>
-              <h5>相关论文</h5>
-              <div class="match-detail-decorate">
-                <ul>
-                  <li
-                    v-for="item in expertDetail.thesisList"
-                    :key="item.thesisId"
-                    style=""
-                    @click="sendThesisId(item.thesisId)"
-                  >
-                    <span :class="{ highlight: isHighlighted1(item.thesisId) }">
-                      {{ item.thesisName }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div>
-              <h5>相关著作</h5>
-              <div class="match-detail-decorate">
-                <ul>
-                  <li
-                    v-for="item in expertDetail.workList"
-                    :key="item.workId"
-                    style=""
-                    @click="sendWorkId(item.workId)"
-                  >
-                    <span :class="{ highlight: isHighlighted2(item.workId) }">
-                      {{ item.workName }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div>
-              <h5>相关证书</h5>
-              <div class="match-detail-decorate">
-                <ul>
-                  <li
-                    v-for="item in expertDetail.certificateList"
-                    :key="item.certificateId"
-                    style=""
-                    @click="sendCertificateId(item.certificateId)"
-                  >
-                    <span
-                      :class="{ highlight: isHighlighted3(item.certificateId) }"
-                    >
-                      {{ item.certificateName }}</span>
-                  </li>
-                </ul>
+                  content="Top center"
+                  disabled
+                >
+                  <span>{{ item.awardName }} </span>
+                </el-tooltip>
               </div>
             </div>
           </div>
@@ -375,7 +268,6 @@ import {
 addMatch,
 delMatch,
 getMatch,
-getMatchDetails,
 listMatch,
 pushMatch,
 updateMatch,
@@ -383,6 +275,7 @@ updatePushRecord
 } from '@/api/kyfz/match'
 
 import {
+getExpertDetail,
 getExpertDetailByAccount,
 updateMarkCertificate,
 updateMarkProject,
@@ -694,15 +587,11 @@ export default {
       // 表单内容重置
       this.reset()
       this.loading = false
-      // 获取到当前行匹配信息的id
-      // const matchId = (number)((String)(row.matchId).trim());
-      const matchId = row.matchId
-      this.matchDetails.expertAccount = row.expertAccount
+      this.matchDetails = row
       this.expertAccount = row.expertAccount
-      // alert(row.expertAccount);
-      // alert(this.matchDetails.expertAccount);
-      this.matchDetails.expertName = row.expertName
-
+      getExpertDetail(row.expertId).then((response) => {
+        this.expertDetail = response.data
+      })
       if (
         this.matchDetails.expertName === '' ||
         this.matchDetails.expertName === null ||
@@ -716,65 +605,8 @@ export default {
         this.relationshipButton = false
         this.buttonTitle = null
       }
-      getMatchDetails(matchId).then((response) => {
-        this.matchDetails = response.data
-        this.markProject = response.data.markProject
-        this.markWork = response.data.markWork
-        this.markCertificate = response.data.markCertificate
-        this.markThesis = response.data.markThesis
-
-        if (response.data.requirementKeywords !== null) {
-          this.matchDetails.requirementKeywordsArray = response.data.requirementKeywords
-            .trim()
-            .split(/[,，、]/)
-        } else {
-          this.matchDetails.requirementKeywordsArray = '无'
-        }
-        if (response.data.strArray !== null) {
-          const list = response.data.strArray
-          this.matchDetails.strArray = list.filter((item) => item !== '' && item !== null)
-        } else {
-          this.matchDetails.strArray = '无'
-        }
-        if (response.data.teamMembers !== null) {
-          this.matchDetails.teamMembersArray = response.data.teamMembers
-            .trim()
-            .split(/[,，、]/)
-        } else {
-          this.matchDetails.teamMembersArray = '无'
-        }
-        if (response.data.strArray1 !== null) {
-          const list = response.data.strArray1
-          this.matchDetails.strArray1 = list.filter(
-            (item) => item !== '' && item !== null
-          )
-        } else {
-          this.matchDetails.strArray1 = '无'
-        }
-        if (response.data.strArray2 !== null) {
-          const list = response.data.strArray2
-          this.matchDetails.strArray2 = list.filter(
-            (item) => item !== '' && item !== null
-          )
-        } else {
-          this.matchDetails.strArray2 = '无'
-        }
-        if (response.data.strArray3 !== null) {
-          const list = response.data.strArray3
-          this.matchDetails.strArray3 = list.filter(
-            (item) => item !== '' && item !== null
-          )
-        } else {
-          this.matchDetails.strArray3 = '无'
-        }
-        if (response.data.score !== null) {
-          this.matchDetails.value2 = response.data.score
-        } else {
-          this.matchDetails.value2 = null
-        }
-        this.openDetail = true
-        this.title = '详细信息'
-      })
+      this.openDetail = true
+      this.title = '详细信息'
     },
 
     handlePush(row) {
@@ -829,7 +661,6 @@ export default {
         this.thesisIds = []
         this.workIds = []
         this.certificateIds = []
-        this.expertDetail = response.data
         // 人工标注的id（还没处理的）
         if (response.data.markProjectId !== null) {
           this.projectIds = response.data.markProjectId
@@ -1040,9 +871,9 @@ export default {
 .match-detail-decorate .match-detail-item {
   display: inline-flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 40px;
   margin-bottom: 10px;
-  padding: 4px 8px;
+  padding: 10px 10px;
   border-radius: 16px;
   font-size: 14px;
   color: #333;

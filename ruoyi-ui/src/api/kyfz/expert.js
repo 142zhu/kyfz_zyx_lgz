@@ -79,9 +79,9 @@ export function updateMarkThesis(data) {
 }
 
 // 修改专家管理
-export function updateMarkWork(data) {
+export function updateMarkintellectualProperty(data) {
   return request({
-    url: '/kyfz/expert/updateMarkWork',
+    url: '/kyfz/expert/updateMarkintellectualProperty',
     method: 'put',
     data: data
   })

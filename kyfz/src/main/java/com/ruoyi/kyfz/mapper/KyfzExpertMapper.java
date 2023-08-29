@@ -62,8 +62,6 @@ public interface KyfzExpertMapper {
     /**
      * 查询专家管理
      * 
-     * @param expertId 专家管理主键
-     * @return 专家管理
      */
     public KyfzExpert selectKyfzExpertByExpertAccount(String expertAccount);
 

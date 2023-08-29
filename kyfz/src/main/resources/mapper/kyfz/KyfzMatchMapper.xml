@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userId" column="user_id" />
         <!-- 按需求添加 -->
         <result property="expertName" column="expert_name" />
+        <result property="expertId" column="expert_id" />
         <result property="researchDirection" column="research_direction" />
         <result property="projectName" column="project_name" />
         <result property="client" column="client" />
@@ -39,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
         select m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.award_id ,m.match_score,m.push_status,
-        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords,m.score
+        m.project_id,r.project_name,r.client,e.expert_id,e.expert_name,e.research_direction,t.team_members,r.requirement_keywords,m.score
         from kyfz_match m
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
         left join kyfz_expert e on m.expert_account=e.expert_account
@@ -48,7 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
         select m.user_id,m.match_id, m.expert_account, m.requirement_id,m.project_id,m.thesis_id,m.certificate_id,m.award_id ,m.match_score,m.push_status,
-        m.project_id,r.project_name,r.client,e.expert_name,e.research_direction,r.requirement_keywords,m.score
+        m.project_id,r.project_name,r.client,e.expert_id,e.expert_name,e.research_direction,r.requirement_keywords,m.score
         from kyfz_match m
         left join kyfz_requirement r on r.requirement_id = m.requirement_id
         left join kyfz_expert e on e.expert_account= m.expert_account
@@ -149,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectKyfzMatchDetailByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
         select match_id,m.requirement_id,m.match_score,m.award_id,m.certificate_id,m.thesis_id,m.project_id,m.project_id,m.thesis_id,m.certificate_id,m.award_id,m.mark_work,m.mark_thesis,m.mark_project,m.mark_certificate,m.score,
         r.project_name, r.client, 		
-        e.expert_name, e.research_direction,
+        e.expert_name, e.research_direction,e.expert_id,
         t.team_members
         from kyfz_match m
         left join kyfz_requirement r on r.requirement_id=m.requirement_id

@@ -124,7 +124,7 @@ public class KyfzSearchController extends BaseController {
     @GetMapping("/list/clickSearch")
     public TableDataInfo clickSearch(KyfzSearch kyfzSearch) {
         startPage();
-        if (kyfzSearch.getMark().equals("综合搜索") || kyfzSearch.getMark().equals("搜人才")) {
+        if (kyfzSearch.getMark().equals("AI搜索") || kyfzSearch.getMark().equals("搜人才")) {
             KyfzExpert kyfzExpert = new KyfzExpert();
             kyfzExpert.setExpertName(kyfzSearch.getKeyWord());
             List<KyfzExpert> list = kyfzExpertService.searchExperts(kyfzExpert);
