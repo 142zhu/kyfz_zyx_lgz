@@ -502,6 +502,13 @@
             <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
               item
             }}</span>
+            <el-button
+              type="primary"
+              style="position: absolute; bottom: 10px; right: 10px"
+              @click="handleECharts2(expertDetail)"
+            >
+              团队关系图
+            </el-button>
           </div>
         </div>
       </div>
@@ -712,6 +719,10 @@ export default {
       })
       this.myChart.resize() // 自适应大小
     },
+    handleECharts2(row) {
+      row.teamId = row.expertTeams
+      this.handleECharts(row)
+    },
     initChart: function() {
       const myChart = echarts.init(document.getElementById(this.echartsId))
       myChart.setOption(this.setOption())
@@ -797,16 +808,17 @@ export default {
     searchAll() {
       this.loading = true
       this.Comprehensive_mark = '输入框搜索'
-      var messageInstance = this.$message({
-        message: '正在搜索，请稍等',
-        duration: 0
-      })
       clickSearch(this.search_queryParams).then((response) => {
         if (this.search_queryParams.mark === 'AI搜索') {
+          var messageInstance = this.$message({
+            message: '正在搜索，请稍等',
+            duration: 0
+          })
           this.expertList = response.rows
           this.total = response.total
           this.activeTab2 = '选择行业后数据显示'
           this.loading = false
+          messageInstance.close()
         } else if (this.search_queryParams.mark === '搜人才') {
           this.expertList = response.rows
           this.total = response.total
@@ -824,7 +836,6 @@ export default {
           this.total = response.total
           this.loading = false
         }
-        messageInstance.close()
       })
     },
     // 团队信息

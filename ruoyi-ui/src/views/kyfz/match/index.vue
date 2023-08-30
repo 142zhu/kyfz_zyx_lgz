@@ -256,8 +256,34 @@
                 </el-tooltip>
               </div>
             </div>
+            <div class="match-detail-team">
+              <h4>专家团队</h4>
+              <div class="match-detail-team-info">
+                <span v-for="item in expertDetail.teamMembersArray" :key="item">{{
+                  item
+                }}</span>
+                <el-button
+                  type="primary"
+                  style="position: absolute; bottom: 10px; right: 10px"
+                  @click="handleECharts(expertDetail)"
+                >
+                  团队关系图
+                </el-button>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+    </el-dialog>
+    <!-- 团队关系图 -->
+    <el-dialog
+      :title="chartTitle"
+      :visible.sync="openECharts"
+      append-to-body
+      width="1200px"
+    >
+      <div id="graph-chart" style="width: 1250px; height: 600px">
+        <div :id="echartsId" style="width: 1100px; height: 600px" />
       </div>
     </el-dialog>
   </div>
@@ -275,6 +301,7 @@ updatePushRecord
 } from '@/api/kyfz/match'
 
 import {
+getEchartExpertData,
 getExpertDetail,
 getExpertDetailByAccount,
 updateMarkCertificate,
@@ -378,95 +405,87 @@ export default {
     this.echartsId = getEchartsId()
   },
   methods: {
+    // echart
+    handleECharts(row) {
+      this.chartTitle = '团队成员关系图'
+      this.openECharts = true
+      this.$nextTick(() => {
+        this.initChart()
+      })
+      this.myChart.resize() // 自适应大小
+    },
+    selsect_echart_data(row) {
+      const expertId = row.expertId || this.ids
+      getEchartExpertData(expertId).then((response) => {
+        this.jsonData = response.data
+        this.load.close()
+      })
+    },
     // echarts
     initChart: function() {
       const myChart = echarts.init(document.getElementById(this.echartsId))
       myChart.setOption(this.setOption())
       myChart.resize() // 自适应大小
     },
-
     // echatrs 数据
     setOption: function() {
-      const experts = this.matchDetails.teamMembersArray
-      const nodes = []
-      const links = []
+      const myChart = echarts.init(document.getElementById(this.echartsId))
+      myChart.showLoading()
+      const graph = this.jsonData // 引入json
+      myChart.hideLoading()
 
-      // 构造nodes数组
-      for (let i = 0; i < experts.length; i++) {
-        nodes.push({
-          name: experts[i],
-          category: i >= 1 ? 1 : 0,
-          itemStyle: {
-            color: experts[i] !== this.matchDetails.expertName ? '#5470C6' : '#EE6666'
-          }
-        })
-      }
-
-      // 构造links数组
-      for (let j = 1; j < experts.length; j++) {
-        links.push({
-          source: experts[0],
-          target: experts[j]
-        })
-      }
-
+      graph.nodes.forEach(function(node) {
+        node.label = {
+          show: node.symbolSize > 30
+        }
+      })
       const option = {
+        // 添加你的配置
         title: {
-          text: ''
+          text: '\n\n\n\n研究方向——' + this.expertDetail.researchDirection,
+          top: 'top',
+          left: 'left',
+          fontSize: 10
         },
-        tooltip: {
-          formatter: function(params) {
-            if (params.data.category !== 0) {
-              return '团队成员'
-            }
-            return '团队负责人'
+        tooltip: {},
+        legend: [
+          {
+            // selectedMode: 'single',
+            data: graph.categories.map(function(a) {
+              return a.name
+            })
           }
-        }, // 提示框
-        animationDurationUpdate: 1500,
+        ],
+        animationDuration: 1500,
         animationEasingUpdate: 'quinticInOut',
         series: [
           {
+            name: '专家',
             type: 'graph',
-            layout: 'force',
-            // symbolSize: 50, //倘若该属性不在link里，则其表示节点的大小；否则即为线两端标记的大小
-            symbolSize: (value, params) => {
-              switch (params.data.category) {
-                case 0:
-                  return 100
-
-                case 1:
-                  return 50
-              }
-            },
-            roam: true, // 鼠标缩放功能
+            layout: 'circular',
+            data: graph.nodes,
+            links: graph.links,
+            categories: graph.categories,
+            roam: true,
             label: {
-              show: true // 是否显示标签
+              position: 'right',
+              formatter: '{b}'
             },
-            focusNodeAdjacency: true, // 鼠标移到节点上时突出显示结点以及邻节点和边
-            edgeSymbol: ['none', 'arrow'], // 关系两边的展现形式，也即图中线两端的展现形式。arrow为箭头
-            edgeSymbolSize: [4, 10],
-            draggable: true,
-            edgeLabel: {
-              fontSize: 20 // 关系（也即线）上的标签字体大小
-            },
-            force: {
-              repulsion: 200,
-              edgeLength: 120
-            },
-
-            data: nodes,
-            links: links,
             lineStyle: {
-              opacity: 0.9,
-              width: 2,
-              curveness: 0
+              color: 'source',
+              curveness: 0.3
+            },
+            emphasis: {
+              focus: 'adjacency',
+              lineStyle: {
+                width: 10
+              }
             }
           }
         ]
       }
       return option
     },
-
     /** 查询匹配列表列表 */
     getList() {
       this.loading = true
@@ -591,6 +610,14 @@ export default {
       this.expertAccount = row.expertAccount
       getExpertDetail(row.expertId).then((response) => {
         this.expertDetail = response.data
+        if (response.data.teamMembers != null) {
+          this.expertDetail.teamMembersArray = response.data.teamMembers
+            .trim()
+            .split(/[,，、]/)
+        } else {
+          this.expertDetail.teamMembersArray = '无'
+        }
+        this.selsect_echart_data(row)
       })
       if (
         this.matchDetails.expertName === '' ||
@@ -631,14 +658,6 @@ export default {
         this.openDetail = false
         this.openDetail = true
       })
-    },
-    handleECharts() {
-      this.chartTitle = '团队成员关系图'
-      this.openECharts = true
-      this.$nextTick(() => {
-        this.initChart()
-      })
-      this.myChart.resize() // 自适应大小
     },
 
     handleAllAchievement() {

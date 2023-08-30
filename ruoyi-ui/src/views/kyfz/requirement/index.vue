@@ -64,12 +64,12 @@
           size="mini"
           @click="handleQuery"
         >搜索</el-button>
-        <!-- <el-button
+        <el-button
           type="primary"
           icon="el-icon-document"
           size="mini"
           @click="handleMatch_2"
-        >匹配</el-button> -->
+        >匹配</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
@@ -598,7 +598,7 @@ export default {
         this.$modal.msgSuccess('新增成功,正在匹配中')
         this.open1 = false
         this.getList()
-        this.handleMatch(this.queryParams)
+        handleMatch(response.data[0])
       })
     },
     /** 重置按钮操作 */
@@ -675,13 +675,6 @@ export default {
         `requirement_${new Date().getTime()}.xlsx`
       )
     },
-
-    // handleMatch2(row) {
-    //   const requirementId = row.requirementId
-    //   pushRequirementId(requirementId).then((response) => {
-    //     this.$modal.msgSuccess('推送匹配成功')
-    //   })
-    // },
 
     async handleMatch(row) {
       debugger

@@ -88,7 +88,8 @@ public class KyfzRequirementController extends BaseController {
     @Log(title = "需求管理", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody KyfzRequirement kyfzRequirement) {
-        return toAjax(kyfzRequirementService.insertKyfzRequirement(kyfzRequirement));
+        kyfzRequirementService.insertKyfzRequirement(kyfzRequirement);
+        return success(kyfzRequirementService.selectKyfzRequirementList(kyfzRequirement));
     }
 
     /**

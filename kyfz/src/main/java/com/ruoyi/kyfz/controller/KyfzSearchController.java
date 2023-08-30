@@ -133,7 +133,7 @@ public class KyfzSearchController extends BaseController {
     @GetMapping("/list/clickSearch")
     public TableDataInfo clickSearch(KyfzSearch kyfzSearch) {
         startPage();
-        if (kyfzSearch.getMark().equals("AI搜索") || kyfzSearch.getMark().equals("搜人才")) {
+        if (kyfzSearch.getMark().equals("AI搜索")) {
             KyfzRequirement requirement = new KyfzRequirement();
             requirement.setProjectName(kyfzSearch.getKeyWord());
             IKyfzRequirementService.insertKyfzRequirement(requirement);
@@ -161,6 +161,11 @@ public class KyfzSearchController extends BaseController {
                 list.get(i).setMemberInformation(
                         list.get(i).getMemberInformation().replaceAll("\\（[^\\）]*\\）", ""));
             }
+            return getDataTable(list);
+        } else if (kyfzSearch.getMark().equals("搜人才")) {
+            KyfzExpert expert = new KyfzExpert();
+            expert.setExpertName(kyfzSearch.getKeyWord());
+            List<KyfzExpert> list = kyfzExpertService.searchExperts(expert);
             return getDataTable(list);
         }
         return null;
