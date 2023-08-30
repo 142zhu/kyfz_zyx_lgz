@@ -147,7 +147,10 @@ public class KyfzRequirementController extends BaseController {
 
         // json 转为kyfzmatch对象写入数据库
         int s = kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
-
+        KyfzRequirement kyfzRequirement = new KyfzRequirement();
+        kyfzRequirement.setRequirementId(Long.valueOf(requirementId));
+        kyfzRequirement.setRequirementStatus("已匹配");
+        kyfzRequirementService.updateKyfzRequirement(kyfzRequirement);
         return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
     }
 
