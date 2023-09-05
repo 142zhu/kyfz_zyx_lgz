@@ -528,4 +528,65 @@
     <select id="getEnterpriseRequirementInfo" parameterType="String" resultMap="KyfzRequirementResult">
         select * from kyfz_requirement where client = #{client}
     </select>
+    <!-- 工作站匹配查找需求id -->
+    <select id="selectKyfzRequirementForRequirementId" parameterType="KyfzRequirement" resultMap="KyfzRequirementResult">
+        <include refid="selectKyfzRequirementVo" />
+        <where>
+            <if test="projectName != null  and projectName != ''"> and project_name like concat('%',
+        #{projectName}, '%')</if>
+            <if test="contractNumber != null  and contractNumber != ''"> and
+        contract_number = #{contractNumber}</if>
+            <if test="client != null  and client != ''"> and
+        client = #{client}</if>
+            <if test="projectLeader != null  and projectLeader != ''"> and
+        project_leader = #{projectLeader}</if>
+            <if test="projectLeaderJobNumber != null  and projectLeaderJobNumber != ''"> and
+        project_leader_job_number = #{projectLeaderJobNumber}</if>
+            <if test="projectMembers != null  and projectMembers != ''"> and project_members =
+        #{projectMembers}</if>
+            <if test="supportUnit != null  and supportUnit != ''"> and
+        support_unit = #{supportUnit}</if>
+            <if test="supportUnitNumber != null  and supportUnitNumber != ''"> and
+        support_unit_number = #{supportUnitNumber}</if>
+            <if test="projectCategory != null  and projectCategory != ''"> and project_category like
+        concat('%', #{projectCategory}, '%')</if>
+            <if test="projectType != null  and projectType != ''"> and project_type like concat('%',
+        #{projectType}, '%')</if>
+            <if test="projectClassification != null  and projectClassification != ''"> and
+        project_classification = #{projectClassification}</if>
+            <if test="projectNature != null  and projectNature != ''"> and project_nature =
+        #{projectNature}</if>
+            <if test="serviceNationalEconomy != null  and serviceNationalEconomy != ''"> and
+        service_national_economy = #{serviceNationalEconomy}</if>
+            <if test="nationalEconomySubIndustry != null  and nationalEconomySubIndustry != ''"> and
+        national_economy_sub_industry = #{nationalEconomySubIndustry}</if>
+            <if test="socioEconomicObjective != null  and socioEconomicObjective != ''"> and
+        socio_economic_objective = #{socioEconomicObjective}</if>
+            <if test="startProjectTime != null "> and start_project_time = #{startProjectTime}</if>
+            <if test="endProjectTime != null "> and end_project_time = #{endProjectTime}</if>
+            <if test="totalBudget != null  and totalBudget != ''"> and total_budget = #{totalBudget}</if>
+            <if test="contractType != null  and contractType != ''"> and contract_type =
+        #{contractType}</if>
+            <if test="firstDiscipline != null  and firstDiscipline != ''"> and
+        first_discipline = #{firstDiscipline}</if>
+            <if test="secondaryDiscipline != null  and secondaryDiscipline != ''"> and
+        secondary_discipline = #{secondaryDiscipline}</if>
+            <if test="projectLeaderUnit != null  and projectLeaderUnit != ''"> and
+        project_leader_unit = #{projectLeaderUnit}</if>
+            <if test="enterpriseName != null  and enterpriseName != ''"> and enterprise_name like
+        concat('%', #{enterpriseName}, '%')</if>
+            <if test="campusMemberAccount != null  and campusMemberAccount != ''"> and
+        campus_member_account = #{campusMemberAccount}</if>
+            <if test="requirementStatus != null  and requirementStatus != ''"> and
+        requirement_status like concat('%', #{requirementStatus}, '%')</if>
+            <if test="creatBy != null  and creatBy != ''"> and creat_by = #{creatBy}</if>
+            <if test="requirementKeywords != null  and requirementKeywords != ''"> and
+        requirement_keywords = #{requirementKeywords}</if>
+            <if test="requirementDescription != null  and requirementDescription != ''"> and
+        requirement_description = #{requirementDescription}</if>
+            <if test="requirementReleaseTime != null "> and DATE_FORMAT(requirement_release_time,
+        '%Y-%m') = DATE_FORMAT(#{requirementReleaseTime}, '%Y-%m')</if> ${params.dataScope}
+        </where>
+        ORDER BY requirement_id DESC
+    </select>
 </mapper>

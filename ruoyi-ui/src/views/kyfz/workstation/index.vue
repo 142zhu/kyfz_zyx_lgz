@@ -204,12 +204,17 @@
         <el-table-column prop="projectName" label="需求名称" width="350" />
         <el-table-column prop="totalBudget" label="金额" width="150" />
         <el-table-column prop="endProjectTime" label="完成时间" width="300" />
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="250">
           <template slot-scope="scope">
             <el-button
               size="mini"
               @click="handleEdit_requirement(scope.row)"
             >编辑</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              @click="handleMatch(scope.row)"
+            >匹配</el-button>
             <el-button
               size="mini"
               type="danger"
@@ -308,6 +313,25 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 需求匹配结果 -->
+    <el-dialog
+      title="匹配结果"
+      :visible.sync="open_match_result"
+      width="1000px"
+      append-to-body
+    >
+      <el-table
+        v-loading="loading"
+        :data="matchResult"
+        :default-sort="{ prop: 'matchScore', order: 'descending' }"
+        max-height="500"
+      >
+        <el-table-column label="专家姓名" align="center" prop="expertName" />
+        <el-table-column label="研究方向" align="center" prop="researchDirection" />
+        <el-table-column label="匹配分值" align="center" prop="matchScore" sortable />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -317,6 +341,7 @@ import {
 addRequirement_staging,
 delRequirement_staging,
 getRequirement_staging,
+handleMatch_workstation,
 listRequirement_staging,
 listenterprise,
 updateRequirement_staging
@@ -357,12 +382,15 @@ export default {
       workstationList: [],
       // 企业列表
       enterpriseList: [],
+      // 匹配结果
+      matchResult: [],
       // 弹出层标题
       title: '',
       // 是否显示弹出层
       open: false,
       open_requirement: false,
       add_requirement_open: false,
+      open_match_result: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -384,6 +412,30 @@ export default {
     this.getenterpriseList()
   },
   methods: {
+    // 需求匹配
+    async handleMatch(row) {
+      debugger
+      var messageInstance = this.$message({
+        message: '正在匹配中，请稍等',
+        duration: 0
+      })
+      handleMatch_workstation({ requirement: row })
+        .then((res) => {
+          if (res.code === 200) {
+            messageInstance.close()
+            this.matchResult = res.data
+            this.$modal.msgSuccess('算法调用成功')
+            this.open_match_result = true
+          } else {
+            messageInstance.close()
+            this.$modal.msgError('算法调用失败')
+          }
+        })
+        .catch((e) => {
+          messageInstance.close()
+          this.$modal.msgError('算法调用失败')
+        })
+    },
     /** 查询暂时的需求管理列表 */
     getList_requirement() {
       this.loading = true

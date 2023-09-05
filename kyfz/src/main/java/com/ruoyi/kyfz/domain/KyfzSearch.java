@@ -1,5 +1,7 @@
 package com.ruoyi.kyfz.domain;
 
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -22,6 +24,8 @@ public class KyfzSearch extends BaseEntity {
 
     /** 检索标志 */
     private String mark;
+
+    private List<String> Account;
 
     public static long getSerialversionuid() {
         return serialVersionUID;
@@ -56,5 +60,13 @@ public class KyfzSearch extends BaseEntity {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
                 .append("searchId", getSearchId())
                 .toString();
+    }
+
+    public void setAccount(List<String> account) {
+        Account = account;
+    }
+
+    public List<String> getAccount() {
+        return Account;
     }
 }

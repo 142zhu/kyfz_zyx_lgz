@@ -136,7 +136,7 @@ public interface IKyfzMatchService {
      * 匹配api返回的json数据写入数据库
      * 
      */
-    public int insert_json_KyfzMatch(String jsonData, String requirementId);
+    public List<KyfzMatch> insert_json_KyfzMatch(String jsonData, String requirementId);
 
     /**
      * ai搜索匹配数据并返回专家账号列表

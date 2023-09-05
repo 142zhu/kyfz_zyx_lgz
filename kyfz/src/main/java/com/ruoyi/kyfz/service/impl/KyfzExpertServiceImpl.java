@@ -116,7 +116,12 @@ public class KyfzExpertServiceImpl implements IKyfzExpertService {
      * @return 专家管理
      */
     public List<KyfzExpert> selectKyfzExpertByExpertAccounts(List<String> expertAccount) {
-        return kyfzExpertMapper.selectKyfzExpertByExpertAccounts(expertAccount);
+        List<KyfzExpert> ExpertList = kyfzExpertMapper.selectKyfzExpertByExpertAccounts(expertAccount);
+        for (KyfzExpert e : ExpertList) {
+            e.setCategoryNames(
+                    kyfzIndustryClassificationMapper.selectKyfzIndustryClassificationByCategoryIds(e.getCategoryId()));
+        }
+        return ExpertList;
     }
 
     /**

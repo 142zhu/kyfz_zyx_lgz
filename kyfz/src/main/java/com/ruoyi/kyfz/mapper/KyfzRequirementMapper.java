@@ -122,4 +122,10 @@ public interface KyfzRequirementMapper {
      */
     public List<KyfzRequirement> getEnterpriseRequirementInfo(String client);
 
+    /**
+     * 查找需求id
+     * 
+     */
+    public KyfzRequirement selectKyfzRequirementForRequirementId(KyfzRequirement kyfzRequirement);
+
 }

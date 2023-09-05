@@ -36,7 +36,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="maxMatchScore" column="match_score" />
     </resultMap>
     <sql id="selectKyfzMatchVo">
-        select match_id, expert_account, requirement_id, match_score, thesis_id, award_id, intellectual_property_id, project_id, create_by, create_time, update_by, update_time,push_status from kyfz_match
+        select match_id, expert_account, requirement_id, match_score, thesis_id, award_id, intellectual_property_id, project_id, create_by, create_time, update_by, update_time,push_status 
+        from kyfz_match m
+        left join sys_user u on m.user_id=u.user_id
+        left join sys_dept d on d.dept_id=u.dept_id
     </sql>
     <!-- 按照需求添加的 -->
     <sql id="selectKyfzMatchVo2">
@@ -46,6 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join kyfz_requirement r on m.requirement_id=r.requirement_id
         left join kyfz_expert e on m.expert_account=e.expert_account
         left join kyfz_team t on t.team_id=e.expert_teams
+        left join sys_user u on m.user_id=u.user_id
+        left join sys_dept d on d.dept_id=u.dept_id
         order by m.match_id desc
     </sql>
     <select id="selectKyfzMatchList" parameterType="KyfzMatch" resultMap="KyfzMatchResult">
@@ -87,7 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <select id="selectKyfzMatchByMatchId" parameterType="Long" resultMap="KyfzMatchResult">
         <include refid="selectKyfzMatchVo"/>
-        where match_id = #{matchId}
+        where match_id = #{matchId} and ${params.dataScope}
     </select>
     <insert id="insertKyfzMatch" parameterType="KyfzMatch" useGeneratedKeys="true" keyProperty="matchId">
         insert into kyfz_match

@@ -132,29 +132,37 @@ public class KyfzSearchController extends BaseController {
      */
     @GetMapping("/list/clickSearch")
     public TableDataInfo clickSearch(KyfzSearch kyfzSearch) {
-        startPage();
         if (kyfzSearch.getMark().equals("AI搜索")) {
             KyfzRequirement requirement = new KyfzRequirement();
             requirement.setProjectName(kyfzSearch.getKeyWord());
             IKyfzRequirementService.insertKyfzRequirement(requirement);
             String id = Long
                     .toString(IKyfzRequirementService.selectKyfzRequirementList(requirement).get(0).getRequirementId());
-            List<String> Account = IKyfzMatchService.search_jsonExpert_account(id);
-            List<KyfzExpert> list = kyfzExpertService.selectKyfzExpertByExpertAccounts(Account);
-            return getDataTable(list);
+            kyfzSearch.setAccount(IKyfzMatchService.search_jsonExpert_account(id));
+            IKyfzRequirementService.deleteKyfzRequirementByRequirementId(Long.parseLong(id));
+            if (kyfzSearch.getAccount() == null) {
+                return null;
+            } else {
+                startPage();
+                List<KyfzExpert> list = kyfzExpertService.selectKyfzExpertByExpertAccounts(kyfzSearch.getAccount());
+                return getDataTable(list);
+            }
         } else if (kyfzSearch.getMark().equals("搜团队")) {
             KyfzTeam kyfzTeam = new KyfzTeam();
             kyfzTeam.setTeamMembers(kyfzSearch.getKeyWord());
+            startPage();
             List<KyfzTeam> list = kyfzTeamService.searchTeams(kyfzTeam);
             return getDataTable(list);
         } else if (kyfzSearch.getMark().equals("搜企业")) {
             KyfzEnterprise KyfzEnterprise = new KyfzEnterprise();
             KyfzEnterprise.setEnterpriseName(kyfzSearch.getKeyWord());
+            startPage();
             List<KyfzEnterprise> list = kyfzEnterpriseService.selectKyfzEnterpriseList(KyfzEnterprise);
             return getDataTable(list);
         } else if (kyfzSearch.getMark().equals("搜成果")) {
             KyfzIntellectualProperty kyfzIntellectualProperty = new KyfzIntellectualProperty();
             kyfzIntellectualProperty.setIntellectualPropertyName(kyfzSearch.getKeyWord());
+            startPage();
             List<KyfzIntellectualProperty> list = IKyfzIntellectualPropertyService
                     .searchKyfzIntellectualProperty(kyfzIntellectualProperty);
             for (int i = 0; i < list.size(); i++) {
@@ -165,6 +173,7 @@ public class KyfzSearchController extends BaseController {
         } else if (kyfzSearch.getMark().equals("搜人才")) {
             KyfzExpert expert = new KyfzExpert();
             expert.setExpertName(kyfzSearch.getKeyWord());
+            startPage();
             List<KyfzExpert> list = kyfzExpertService.searchExperts(expert);
             return getDataTable(list);
         }

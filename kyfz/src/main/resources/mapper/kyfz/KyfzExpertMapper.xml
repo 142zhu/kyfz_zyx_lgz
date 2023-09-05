@@ -326,7 +326,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     <!-- 专家账号列表查专家 -->
     <select id="selectKyfzExpertByExpertAccounts" parameterType="String" resultMap="KyfzExpertResult">
-        SELECT * FROM kyfz_expert WHERE expert_account IN
+        SELECT * FROM kyfz_expert e
+        left join kyfz_team t on t.team_id=e.expert_teams 
+        WHERE expert_account IN
         <foreach item="expertAccount" index="index" collection="list" open="(" separator="," close=")">
             #{expertAccount}
         </foreach>

@@ -190,4 +190,13 @@ public class KyfzRequirementServiceImpl implements IKyfzRequirementService {
     public List<KyfzRequirement> getEnterpriseRequirementInfo(String enterpriseName) {
         return kyfzRequirementMapper.getEnterpriseRequirementInfo(enterpriseName);
     }
+
+    /**
+     * 查找需求id
+     * 
+     */
+    @Override
+    public KyfzRequirement selectKyfzRequirementForRequirementId(KyfzRequirement kyfzRequirement) {
+        return kyfzRequirementMapper.selectKyfzRequirementForRequirementId(kyfzRequirement);
+    }
 }

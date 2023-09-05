@@ -59,6 +59,14 @@ export function handleMatch(data) {
   })
 }
 
+export function handleMatch_workstation(data) {
+  return request({
+    url: '/kyfz/requirement/handleMatch_workstation',
+    method: 'post',
+    params: data
+  })
+}
+
 // 查询暂时的需求管理列表
 export function listRequirement_staging(query) {
   return request({

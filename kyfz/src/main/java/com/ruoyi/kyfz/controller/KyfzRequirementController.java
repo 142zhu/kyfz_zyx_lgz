@@ -30,6 +30,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.kyfz.domain.KyfzEnterprise;
+import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzRequirement;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 import com.ruoyi.kyfz.service.IKyfzRequirementService;
@@ -128,8 +129,8 @@ public class KyfzRequirementController extends BaseController {
         // return toAjax(kyfzMatchService.updatePushRecord(kyfzMatch));
         // String url = "http://127.0.0.1:8083";
 
-        // String url = "http://172.18.166.90:6666/infer";
-        String url = "http://47.113.145.216:6666/infer";
+        String url = "http://172.18.166.90:6666/infer";
+        // String url = "http://47.113.145.216:6666/infer";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -147,12 +148,12 @@ public class KyfzRequirementController extends BaseController {
         String body = responseEntity.getBody();
 
         // json 转为kyfzmatch对象写入数据库
-        int s = kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
+        List<KyfzMatch> kyfzMatchList = kyfzMatchService.insert_json_KyfzMatch(body, requirementId);
         KyfzRequirement kyfzRequirement = new KyfzRequirement();
         kyfzRequirement.setRequirementId(Long.valueOf(requirementId));
         kyfzRequirement.setRequirementStatus("已匹配");
         kyfzRequirementService.updateKyfzRequirement(kyfzRequirement);
-        return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(s);
+        return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(kyfzMatchList);
     }
 
     /**
@@ -204,4 +205,49 @@ public class KyfzRequirementController extends BaseController {
     public AjaxResult getInfo_staging(@PathVariable("requirementId") Long requirementId) {
         return success(kyfzRequirementService.selectKyfzRequirementByRequirementId_staging(requirementId));
     }
+
+    // 工作站匹配需求
+    @PostMapping("/handleMatch_workstation")
+    public AjaxResult handleMatch_workstation(KyfzRequirement requirement) {
+        // return toAjax(kyfzMatchService.updatePushRecord(kyfzMatch));
+        // String url = "http://127.0.0.1:8083";
+
+        String url = "http://172.18.166.90:6666/infer";
+        // String url = "http://47.113.145.216:6666/infer";
+
+        // 临时需求id写为空
+        requirement.setRequirementId(null);
+
+        // 工作站临时需求插入主需求表
+        kyfzRequirementService.insertKyfzRequirement(requirement);
+
+        // 查出需求表的id
+        Long requirementId = kyfzRequirementService.selectKyfzRequirementForRequirementId(requirement)
+                .getRequirementId();
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("OtherHeadersxxx", "xxxx"); // Other headers
+        MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
+        paramMap.add("requirement_id", requirementId);
+        HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity(paramMap, headers);
+        ResponseEntity<String> responseEntity;
+        try {
+            responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error();
+        }
+        String body = responseEntity.getBody();
+
+        // json 转为kyfzmatch对象写入数据库
+        List<KyfzMatch> kyfzMatchList = kyfzMatchService.insert_json_KyfzMatch(body, String.valueOf(requirementId));
+        requirement.setRequirementId(Long.valueOf(requirementId));
+        requirement.setRequirementStatus("已匹配");
+        kyfzRequirementService.updateKyfzRequirement(requirement);
+        kyfzRequirementService.updateKyfzRequirement_staging(requirement);
+        return "-1".equals(body) ? AjaxResult.error() : AjaxResult.success(kyfzMatchList);
+    }
+
 }

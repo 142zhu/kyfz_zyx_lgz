@@ -17,12 +17,15 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.kyfz.domain.KyfzExpert;
 import com.ruoyi.kyfz.domain.KyfzMatch;
 import com.ruoyi.kyfz.domain.KyfzPushRecord;
 import com.ruoyi.kyfz.domain.jsonMarch;
 import com.ruoyi.kyfz.mapper.KyfzMatchMapper;
+import com.ruoyi.kyfz.service.IKyfzExpertService;
 import com.ruoyi.kyfz.service.IKyfzMatchService;
 
 /**
@@ -36,6 +39,9 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
     @Autowired
     private KyfzMatchMapper kyfzMatchMapper;
 
+    @Autowired
+    private IKyfzExpertService kyfzExpertService;
+
     /**
      * 查询匹配列表
      * 
@@ -43,6 +49,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * @return 匹配列表
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public KyfzMatch selectKyfzMatchByMatchId(Long matchId) {
         return kyfzMatchMapper.selectKyfzMatchByMatchId(matchId);
     }
@@ -54,6 +61,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * @return 匹配列表
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<KyfzMatch> selectKyfzMatchList(KyfzMatch kyfzMatch) {
         return kyfzMatchMapper.selectKyfzMatchList(kyfzMatch);
     }
@@ -113,6 +121,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * @param matchId 匹配列表主键
      * @return 匹配列表
      */
+    @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public KyfzMatch selectKyfzMatchDetailByMatchId(Long matchId) {
         return kyfzMatchMapper.selectKyfzMatchDetailByMatchId(matchId);
     }
@@ -123,6 +133,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * @param projectId 项目表主键
      * @return 项目名称
      */
+    @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public String selectProjectName(Long projectId) {
         return kyfzMatchMapper.selectProjectName(projectId);
     }
@@ -195,7 +207,7 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      * 匹配api返回的json数据写入数据库
      * 
      */
-    public int insert_json_KyfzMatch(String jsonData, String requirementId) {
+    public List<KyfzMatch> insert_json_KyfzMatch(String jsonData, String requirementId) {
         ObjectMapper objectMapper = new ObjectMapper();
         List<KyfzMatch> kyfzMatchList = new ArrayList<>();
         try {
@@ -217,7 +229,10 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
                         .setOtherResultId(
                                 json_match.get(i).getOther_result_id().stream().collect(Collectors.joining("、")));
                 kyfzMatch.setExpertAccount(json_match.get(i).getExpert_account());
+                KyfzExpert kyfzExpert = kyfzExpertService.selectKyfzExpertByExpertAccount(kyfzMatch.getExpertAccount());
                 kyfzMatch.setMatchScore(json_match.get(i).getMatch_score());
+                kyfzMatch.setExpertName(kyfzExpert.getExpertName());
+                kyfzMatch.setResearchDirection(kyfzExpert.getResearchDirection());
                 // 写入用户信息
                 kyfzMatch.setCreateTime(DateUtils.getNowDate());
                 kyfzMatch.setCreateBy(SecurityUtils.getUsername());
@@ -225,10 +240,11 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
                 kyfzMatch.setRequirementId(requirementId);
                 kyfzMatchList.add(i, kyfzMatch);
             }
-            return kyfzMatchMapper.insert_json_KyfzMatch(kyfzMatchList);
+            kyfzMatchMapper.insert_json_KyfzMatch(kyfzMatchList);
+            return kyfzMatchList;
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return null;
         }
     }
 
@@ -238,7 +254,8 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
      */
     public List<String> search_jsonExpert_account(String requirementId) {
         // 获取api数据
-        String url = "http://47.113.145.216:6666/infer";
+        // String url = "http://47.113.145.216:6666/infer";
+        String url = "http://172.18.166.90:6666/infer";
         String jsonData;
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -252,6 +269,9 @@ public class KyfzMatchServiceImpl implements IKyfzMatchService {
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, String.class);
             jsonData = responseEntity.getBody();
+            if (jsonData.equals("-1\n")) {
+                return null;
+            }
             ObjectMapper objectMapper = new ObjectMapper();
             List<List<jsonMarch>> json_match_lists = objectMapper.readValue(jsonData,
                     new TypeReference<List<List<jsonMarch>>>() {

@@ -29,6 +29,14 @@
             style="width: 90px"
             @click="showContent('搜成果')"
           >搜成果</el-button>
+          <el-button
+            v-show="
+              activeTab2 === '选择行业后数据显示' || activeTab2 === 'ai搜索点击搜索后'
+            "
+            type="text"
+            style="margin-left: 20px"
+            @click="showContent('AI搜索')"
+          >返回主界面</el-button>
         </el-button-group>
       </div>
       <el-input
@@ -119,7 +127,7 @@
                         </el-descriptions-item>
                       </el-descriptions>
                     </el-col>
-                    <el-col :span="20">
+                    <el-col :span="18">
                       <el-descriptions>
                         <el-descriptions-item label="专家名称" :span="1">{{
                           scope.row.expertName
@@ -144,6 +152,16 @@
                         }}</el-descriptions-item>
                       </el-descriptions>
                     </el-col>
+                    <el-col :span="2">
+                      <el-button
+                        size="mini"
+                        type="text"
+                        icon="el-icon-edit"
+                        @click="handleDetail(scope.row)"
+                      >
+                        详情
+                      </el-button>
+                    </el-col>
                   </el-card>
                 </template>
               </el-table-column>
@@ -156,9 +174,134 @@
               @pagination="Comprehensive_search_page_change"
             />
           </div>
+          <!-- ai搜索输入框展示数据 -->
+          <div v-show="activeTab2 === 'ai搜索点击搜索后'">
+            <el-table v-loading="loading" style="width: 1000px" :data="expertList">
+              <el-table-column
+                label="相关信息"
+                align="center"
+                class-name="small-padding fixed-width"
+              >
+                <template slot-scope="scope">
+                  <el-card class="card-item">
+                    <el-col :span="4">
+                      <el-descriptions>
+                        <div class="card-expertName" />
+                        <el-descriptions-item>
+                          <div class="card-expertName">
+                            {{ scope.row.expertName }}
+                          </div>
+                        </el-descriptions-item>
+                      </el-descriptions>
+                    </el-col>
+                    <el-col :span="18">
+                      <el-descriptions>
+                        <el-descriptions-item label="专家名称" :span="1">{{
+                          scope.row.expertName
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家账号">{{
+                          scope.row.expertAccount
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家职称">{{
+                          scope.row.expertPosition
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="所在单位">{{
+                          scope.row.expertAffiliation
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="所属行业">{{
+                          scope.row.categoryNames
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="研究方向">{{
+                          scope.row.researchDirection
+                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家团队">{{
+                          scope.row.teamMembers
+                        }}</el-descriptions-item>
+                      </el-descriptions>
+                    </el-col>
+                    <el-col :span="2">
+                      <el-button
+                        size="mini"
+                        type="text"
+                        icon="el-icon-edit"
+                        @click="handleDetail(scope.row)"
+                      >
+                        详情
+                      </el-button>
+                    </el-col>
+                  </el-card>
+                </template>
+              </el-table-column>
+            </el-table>
+            <pagination
+              v-show="total >= 0"
+              :total="total"
+              :page.sync="search_queryParams.pageNum"
+              :limit.sync="search_queryParams.pageSize"
+              @pagination="searchAll"
+            />
+          </div>
         </div>
         <div v-show="activeTab === '搜人才'">
-          <el-table v-loading="loading" :data="expertList" style="width: 1020px">
+          <el-table v-loading="loading" style="width: 1000px" :data="expertList">
+            <el-table-column
+              label="人才信息"
+              align="center"
+              class-name="small-padding fixed-width"
+            >
+              <template slot-scope="scope">
+                <el-card class="card-item">
+                  <el-col :span="4">
+                    <el-descriptions>
+                      <div class="card-expertName" />
+                      <el-descriptions-item>
+                        <div class="card-expertName">
+                          {{ scope.row.expertName }}
+                        </div>
+                      </el-descriptions-item>
+                    </el-descriptions>
+                  </el-col>
+                  <el-col :span="18">
+                    <el-descriptions>
+                      <el-descriptions-item label="专家名称" :span="1">{{
+                        scope.row.expertName
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="专家账号">{{
+                        scope.row.expertAccount
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="专家职称">{{
+                        scope.row.expertPosition
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="所在单位">{{
+                        scope.row.expertAffiliation
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="所属行业">{{
+                        scope.row.categoryNames
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="研究方向">{{
+                        scope.row.researchDirection
+                      }}</el-descriptions-item>
+                      <el-descriptions-item label="专家团队">{{
+                        scope.row.teamMembers
+                      }}</el-descriptions-item>
+                    </el-descriptions>
+                  </el-col>
+                  <el-col :span="2">
+                    <el-button
+                      size="mini"
+                      type="text"
+                      icon="el-icon-edit"
+                      @click="handleDetail(scope.row)"
+                    >
+                      详情
+                    </el-button>
+                  </el-col>
+                </el-card>
+              </template>
+            </el-table-column>
+          </el-table>
+          <!-- 另一样式人才信息 -->
+          <!-- <el-table v-loading="loading" :data="expertList" style="width: 1020px">
             <el-table-column
               label="人才信息"
               align="center"
@@ -203,7 +346,7 @@
                 </el-button>
               </div>
             </el-table-column>
-          </el-table>
+          </el-table> -->
           <pagination
             v-show="total > 0"
             :total="total"
@@ -531,6 +674,7 @@ updateSearch
 } from '@/api/kyfz/search'
 import { listTeam } from '@/api/kyfz/team'
 import * as echarts from 'echarts'
+import { Message } from 'element-ui'
 
 const getEchartsId = () => {
   return new Date().getTime()
@@ -574,6 +718,8 @@ export default {
       classificationList: [],
       // 弹出层标题
       title: '',
+      // 提示框
+      messageInstance: null,
       // 是否显示弹出层
       open: false,
       openDetail: false,
@@ -808,17 +954,19 @@ export default {
     searchAll() {
       this.loading = true
       this.Comprehensive_mark = '输入框搜索'
+      if (this.search_queryParams.mark === 'AI搜索') {
+        Message({
+          message: '正在搜索，请稍等',
+          duration: 0
+        })
+      }
       clickSearch(this.search_queryParams).then((response) => {
         if (this.search_queryParams.mark === 'AI搜索') {
-          var messageInstance = this.$message({
-            message: '正在搜索，请稍等',
-            duration: 0
-          })
           this.expertList = response.rows
           this.total = response.total
-          this.activeTab2 = '选择行业后数据显示'
+          this.activeTab2 = 'ai搜索点击搜索后'
+          Message.closeAll()
           this.loading = false
-          messageInstance.close()
         } else if (this.search_queryParams.mark === '搜人才') {
           this.expertList = response.rows
           this.total = response.total
