@@ -401,6 +401,7 @@ export default {
     }
   },
   created() {
+    // alert(this.$route.query.id)
     this.getList()
     this.echartsId = getEchartsId()
   },

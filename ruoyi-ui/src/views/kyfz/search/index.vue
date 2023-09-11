@@ -41,7 +41,7 @@
       </div>
       <el-input
         v-model="search_queryParams.keyWord"
-        placeholder="请输入内容"
+        :placeholder="placeholder"
         class="input-with-select"
         style="width: 448px"
       >
@@ -62,6 +62,7 @@
               v-model="el_tab_pane1"
               type="border-card"
               class="tab-container"
+              stretch="true"
             >
               <el-tab-pane
                 v-for="item in firstTenCategories"
@@ -70,10 +71,12 @@
                 :label="item.categoryName"
                 :name="item.categoryId"
               >
-                <span
-                  slot="label"
-                  class="pane-span"
-                ><i class="el-icon-date" />{{ item.categoryName }}</span>
+                <span slot="label" class="pane-span">
+                  <i>
+                    <svg-icon
+                      :icon-class="item.categoryName"
+                      style="font-size: 18px"
+                    /> </i>{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -95,7 +98,11 @@
                 <span
                   slot="label"
                   class="pane-span"
-                ><i class="el-icon-date" />{{ item.categoryName }}</span>
+                ><i>
+                  <svg-icon
+                    :icon-class="item.categoryName"
+                    style="font-size: 18px"
+                  /> </i>{{ item.categoryName }}</span>
                 <el-button
                   v-for="childItem in item.children"
                   :key="childItem.categoryId"
@@ -196,27 +203,32 @@
                     </el-col>
                     <el-col :span="18">
                       <el-descriptions>
-                        <el-descriptions-item label="专家名称" :span="1">{{
-                          scope.row.expertName
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="专家账号">{{
-                          scope.row.expertAccount
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="专家职称">{{
-                          scope.row.expertPosition
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="所在单位">{{
-                          scope.row.expertAffiliation
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="所属行业">{{
-                          scope.row.categoryNames
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="研究方向">{{
-                          scope.row.researchDirection
-                        }}</el-descriptions-item>
-                        <el-descriptions-item label="专家团队">{{
-                          scope.row.teamMembers
-                        }}</el-descriptions-item>
+                        <el-descriptions-item label="专家名称" :span="1">
+                          <span
+                            v-html="highlightMatchedText(scope.row.expertName)"
+                          /></el-descriptions-item>
+                        <el-descriptions-item label="专家账号">
+                          <span v-html="highlightMatchedText(scope.row.expertAccount)" />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="专家职称">
+                          <span v-html="highlightMatchedText(scope.row.expertPosition)" />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="所在单位">
+                          <span
+                            v-html="highlightMatchedText(scope.row.expertAffiliation)"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="所属行业">
+                          <span v-html="highlightMatchedText(scope.row.categoryNames)" />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="研究方向">
+                          <span
+                            v-html="highlightMatchedText(scope.row.researchDirection)"
+                          />
+                        </el-descriptions-item>
+                        <el-descriptions-item label="专家团队">
+                          <span v-html="highlightMatchedText(scope.row.teamMembers)" />
+                        </el-descriptions-item>
                       </el-descriptions>
                     </el-col>
                     <el-col :span="2">
@@ -263,27 +275,38 @@
                   </el-col>
                   <el-col :span="18">
                     <el-descriptions>
-                      <el-descriptions-item label="专家名称" :span="1">{{
-                        scope.row.expertName
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="专家账号">{{
-                        scope.row.expertAccount
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="专家职称">{{
-                        scope.row.expertPosition
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="所在单位">{{
-                        scope.row.expertAffiliation
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="所属行业">{{
-                        scope.row.categoryNames
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="研究方向">{{
-                        scope.row.researchDirection
-                      }}</el-descriptions-item>
-                      <el-descriptions-item label="专家团队">{{
-                        scope.row.teamMembers
-                      }}</el-descriptions-item>
+                      <el-descriptions-item label="专家名称" :span="1">
+                        <span v-html="highlightMatchedText(scope.row.expertName)" />
+                      </el-descriptions-item>
+                      <el-descriptions-item
+                        label="专家账号"
+                      ><span v-html="highlightMatchedText(scope.row.expertAccount)" />
+                      </el-descriptions-item>
+                      <el-descriptions-item
+                        label="专家职称"
+                      ><span
+                        v-html="highlightMatchedText(scope.row.expertPosition)"
+                      /></el-descriptions-item>
+                      <el-descriptions-item
+                        label="所在单位"
+                      ><span
+                        v-html="highlightMatchedText(scope.row.expertAffiliation)"
+                      /></el-descriptions-item>
+                      <el-descriptions-item
+                        label="所属行业"
+                      ><span
+                        v-html="highlightMatchedText(scope.row.categoryNames)"
+                      /></el-descriptions-item>
+                      <el-descriptions-item
+                        label="研究方向"
+                      ><span
+                        v-html="highlightMatchedText(scope.row.researchDirection)"
+                      /></el-descriptions-item>
+                      <el-descriptions-item
+                        label="专家团队"
+                      ><span
+                        v-html="highlightMatchedText(scope.row.teamMembers)"
+                      /></el-descriptions-item>
                     </el-descriptions>
                   </el-col>
                   <el-col :span="2">
@@ -394,7 +417,9 @@
                 label="研究方向"
                 label-class-name="my-label"
                 content-class-name="my-content"
-              >{{ item.reseachDirections }}</el-descriptions-item>
+              >
+                <span v-html="highlightMatchedText(item.reseachDirections)" />
+              </el-descriptions-item>
               <el-descriptions-item
                 label="累计项目"
                 :span="2"
@@ -445,16 +470,21 @@
                   <div class="enterprise-2">
                     <div class="enterprise-3">
                       <div class="enterprise-name">
-                        {{ scope.row.enterpriseName }}
+                        <span v-html="highlightMatchedText(scope.row.enterpriseName)" />
                       </div>
                       <div class="enterprise-4">
-                        <div class="industry2">行业：{{ scope.row.categoryNames }}</div>
+                        <div class="industry2">
+                          行业：
+                          <span v-html="highlightMatchedText(scope.row.categoryNames)" />
+                        </div>
                       </div>
                       <div class="position-1">
                         注册资金：{{ scope.row.registeredCapital }}
                       </div>
                       <div class="position-2">
-                        {{ scope.row.enterpriseKeywords }}
+                        <span
+                          v-html="highlightMatchedText(scope.row.enterpriseKeywords)"
+                        />
                       </div>
                     </div>
                     <div class="research-direction2">
@@ -496,19 +526,31 @@
                   <div class="enterprise-2">
                     <div class="enterprise-3">
                       <div class="enterprise-name">
-                        {{ scope.row.intellectualPropertyName }}
+                        <span
+                          v-html="
+                            highlightMatchedText(scope.row.intellectualPropertyName)
+                          "
+                        />
                       </div>
                       <div class="enterprise-4">
-                        <div class="industry2">类别：{{ scope.row.patentType }}</div>
+                        <div class="industry2">
+                          类别：
+                          <span v-html="highlightMatchedText(scope.row.patentType)" />
+                        </div>
                       </div>
-                      <div class="position-1">状态：{{ scope.row.patentStatus }}</div>
+                      <div class="position-1">
+                        状态：
+                        <span v-html="highlightMatchedText(scope.row.patentStatus)" />
+                      </div>
                       <div class="position-2">
                         编号：{{ scope.row.certificateNumber }}
                       </div>
                     </div>
                     <div class="research-direction2">
                       <div class="research-direction-text2" style="text-indent: 2em">
-                        {{ scope.row.memberInformation }}
+                        <span
+                          v-html="highlightMatchedText(scope.row.memberInformation)"
+                        />
                       </div>
                     </div>
                   </div>
@@ -684,6 +726,10 @@ export default {
   name: 'Search',
   data() {
     return {
+      // 搜索出的数据条数
+      numberOfRow: null,
+      // 输入框提示词
+      placeholder: '输入关键词、研究方向、行业等',
       // echar json数据
       jsonData: {},
       // AI搜索两种换页的标记
@@ -850,6 +896,12 @@ export default {
     this.setMenuPosition()
   },
   methods: {
+    // 文字匹配关键词并标红
+    highlightMatchedText(text) {
+      if (!this.search_queryParams.keyWord) return text
+      const regex = new RegExp(this.search_queryParams.keyWord, 'gi')
+      return text.replace(regex, (match) => `<span class="highlight">${match}</span>`)
+    },
     // echart
     handleECharts(row) {
       this.chartTitle = '团队成员关系图'
@@ -961,25 +1013,33 @@ export default {
         })
       }
       clickSearch(this.search_queryParams).then((response) => {
+        this.numberOfRow = response.rows.length
         if (this.search_queryParams.mark === 'AI搜索') {
           this.expertList = response.rows
           this.total = response.total
           this.activeTab2 = 'ai搜索点击搜索后'
           Message.closeAll()
+          Message({
+            message: '共为您找到 ' + this.numberOfRow + ' 位相关人员'
+          })
           this.loading = false
         } else if (this.search_queryParams.mark === '搜人才') {
+          this.placeholder = '输入姓名、研究方向、所属行业等'
           this.expertList = response.rows
           this.total = response.total
           this.loading = false
         } else if (this.search_queryParams.mark === '搜团队') {
+          this.placeholder = '输入团队成员姓名、研究方向等'
           this.teamList = response.rows
           this.total = response.total
           this.loading = false
         } else if (this.search_queryParams.mark === '搜企业') {
+          this.placeholder = '输入企业名称、行业等'
           this.enterpriseList = response.rows
           this.total = response.total
           this.loading = false
         } else if (this.search_queryParams.mark === '搜成果') {
+          this.placeholder = '输入成果名称、成果类别、成果状态等'
           this.propertylist = response.rows
           this.total = response.total
           this.loading = false
@@ -1106,6 +1166,17 @@ export default {
       this.search_queryParams.mark = tabName
       if (this.activeTab === 'AI搜索') {
         this.activeTab2 = '行业标签'
+      }
+      if (this.search_queryParams.mark === 'AI搜索') {
+        this.placeholder = '输入关键词、研究方向、行业等'
+      } else if (this.search_queryParams.mark === '搜人才') {
+        this.placeholder = '输入姓名、研究方向、所属行业等'
+      } else if (this.search_queryParams.mark === '搜团队') {
+        this.placeholder = '输入团队成员姓名、研究方向等'
+      } else if (this.search_queryParams.mark === '搜企业') {
+        this.placeholder = '输入企业名称、行业等'
+      } else if (this.search_queryParams.mark === '搜成果') {
+        this.placeholder = '输入成果名称、成果类别、成果状态等'
       }
     },
     /** 查询检索列表 */
@@ -1899,5 +1970,12 @@ export default {
   align-items: center;
   position: absolute;
   right: 5px;
+}
+</style>
+
+<style>
+.highlight {
+  color: red; /* 标红色 */
+  font-weight: bold; /* 加粗文字 */
 }
 </style>

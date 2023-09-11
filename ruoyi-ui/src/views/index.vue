@@ -107,6 +107,7 @@
     </div>
     <!-- echarts -->
     <div id="container" style="height: 100%" />
+    <!-- <el-button type="primary" @click="test">主要按钮</el-button> -->
   </div>
 </template>
 
@@ -138,6 +139,11 @@ export default {
     this.getCount()
   },
   methods: {
+    // test() {
+    //   const url = '/biz/match'
+    //   const p = { id: 1 }
+    //   this.$tab.openPage('test', url, p)
+    // },
     getCount() {
       this.expertCount = 11
       getAllCount().then((response) => {

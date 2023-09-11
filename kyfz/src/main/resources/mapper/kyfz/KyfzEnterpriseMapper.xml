@@ -103,11 +103,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="searchEnterprises" parameterType="KyfzEnterprise" resultMap="KyfzEnterpriseResult">
         <include refid="selectKyfzEnterpriseVo"/>
         <where>
+            <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_keywords like concat('%', #{enterpriseName}, '%')</if>
             <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_name like concat('%', #{enterpriseName}, '%')</if>
             <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_credit_code like concat('%', #{enterpriseName}, '%')</if>
-            <if test="enterpriseDescribe != null  and enterpriseDescribe != ''"> and enterprise_describe like concat('%', #{enterpriseDescribe}, '%')</if>
-            <if test="enterpriseName != null  and enterpriseName != ''"> or registered_capital like like concat('%', #{enterpriseName}, '%')</if>
-            <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_keywords like like concat('%', #{enterpriseName}, '%')</if>
+            <if test="enterpriseName != null  and enterpriseName != ''"> or enterprise_describe like concat('%', #{enterpriseDescribe}, '%')</if>
+            <if test="enterpriseName != null  and enterpriseName != ''"> or registered_capital like concat('%', #{enterpriseName}, '%')</if>
             <if test="categoryId != null and categoryId != ''"> AND FIND_IN_SET(#{categoryId}, category_id)</if>
         </where>
         ORDER BY subquery.sum DESC

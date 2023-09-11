@@ -157,7 +157,7 @@ public class KyfzSearchController extends BaseController {
             KyfzEnterprise KyfzEnterprise = new KyfzEnterprise();
             KyfzEnterprise.setEnterpriseName(kyfzSearch.getKeyWord());
             startPage();
-            List<KyfzEnterprise> list = kyfzEnterpriseService.selectKyfzEnterpriseList(KyfzEnterprise);
+            List<KyfzEnterprise> list = kyfzEnterpriseService.searchEnterprises(KyfzEnterprise);
             return getDataTable(list);
         } else if (kyfzSearch.getMark().equals("搜成果")) {
             KyfzIntellectualProperty kyfzIntellectualProperty = new KyfzIntellectualProperty();
